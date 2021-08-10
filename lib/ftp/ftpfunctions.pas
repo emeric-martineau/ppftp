@@ -32,7 +32,8 @@ function TryIntParse(const asIntegerString : String; var aiInteger : Integer) : 
 //
 // @param asString string
 // @param char to add
-function AddTrailing(const asString : String; const asChar : String) : String ;
+function AddTrailing(const asString : String; const asChar : String;
+    const abUtf8 : Boolean) : String ;
 
 
 //
@@ -105,7 +106,7 @@ function EscapeChar(const asString : String; const asEscapeChar : String;
 
 // Convert a FTP path to OS path
 //
-// @param asRootPath sys user root. Must and by DirectorySeparator
+// @param asRootPath sys user root. Must and by DirectorySeparator and in UTF8
 // @param asFtpCurrentPath current ftp path
 // @param asFtpPath ftp path
 // @param abUtf8 true if use Utf8 file name
@@ -140,7 +141,7 @@ function GetAbsoluteFtpPath(const asFtpPath : String) : String ;
 //
 // Check if root in path
 //
-// @param asRoot root of path
+// @param asRoot root of path. Must be UTF8
 // @param asPath path to check
 function IsRootInPath(asRoot : String;
     asPath : String; const abUtf8 : Boolean) : Boolean ;
@@ -191,12 +192,14 @@ procedure OpenTextFileForRead(const asFileName : String; var asFile : TextFile);
 procedure OpenTextFileForWrite(const asFileName : String; var asFile : TextFile);
 
 //
-// Return file attributs
+// Return is file read only
 //
 // @param asFileName file name
 // @param abUtf8 if utf8 mode is used
-function GetFileAttribut(const asFileName : String;
-    const abUtf8 : Boolean) : Longint ;
+//
+// Return true if readonly
+function IsFileReadOnly(const asFileName : String;
+    const abUtf8 : Boolean) : Boolean ;
 
 //
 // Open text file in write
@@ -246,6 +249,16 @@ function InternalMakeDirectory(const asFileName : String;
 function InternalRemoveDirectory(const asFileName : String;
     const abUtf8 : Boolean) : Boolean ;
 
+//
+// Copy a string like Copy() function with utf8 option
+function InternalCopyStr(const asSource : string; const aiStartChar : Integer;
+    const aiCount  : Integer; const abUtf8 : Boolean) : String ;
+
+//
+// Length with utf8 option
+function InternalLengthStr(const asString : String;
+    const abUtf8 : Boolean) : Integer ;
+
 implementation
 
 var
@@ -270,15 +283,16 @@ end ;
 
 //
 // Add a char at end if no yet
-function AddTrailing(const asString : String; const asChar : String) : String ;
+function AddTrailing(const asString : String; const asChar : String;
+    const abUtf8 : Boolean) : String ;
 var
    liLength : Integer ;
 begin
-    liLength := Length(asString) ;
+    liLength := InternalLengthStr(asString, abUtf8) ;
 
     if liLength > 0
     then begin
-        if (asString[liLength] <> asChar)
+        if (InternalCopyStr(asString, liLength, 1, abUtf8) <> asChar)//  (asString[liLength] <> asChar)
         then begin
             Result := asString + asChar ;
         end
@@ -561,13 +575,13 @@ var
     // Lenght of current path
     liLength : Integer ;
 begin
-    liLength := Length(asFtpCurrentPath) ;
+    liLength := InternalLengthStr(asFtpCurrentPath, abUtf8) ;
 
     // Make sure end '/' exists
     if (liLength > 0) and
         (asFtpCurrentPath[liLength] <> '/')
     then begin
-        lsFtpCurrentPath := AddTrailing(asFtpCurrentPath, '/') ;
+        lsFtpCurrentPath := AddTrailing(asFtpCurrentPath, '/', abUtf8) ;
     end
     else begin
         lsFtpCurrentPath := asFtpCurrentPath ;
@@ -575,7 +589,7 @@ begin
 
     lsPath := asFtpPath ;
 
-    liLengthPath := Length(lsPath) ;
+    liLengthPath := InternalLengthStr(lsPath, abUtf8) ;
 
     // If lsPath start by /, don't use current directory
     if (liLengthPath > 0) and (lsPath[1] = '/')
@@ -586,13 +600,13 @@ begin
         lsFtpPath := lsFtpCurrentPath + lsPath ;
     end ;
 
-    liLengthPath := Length(lsFtpPath) ;
+    liLengthPath := InternalLengthStr(lsFtpPath, abUtf8) ;
 
     // If lsPath convert in lsPath start by '/', we
     // delete it.
-    if (liLengthPath > 0) and (lsFtpPath[1] = '/')
+    if (liLengthPath > 0) and (InternalCopyStr(lsFtpPath, 1, 1, abUtf8) = '/')
     then begin
-        lsFtpPath := Copy(lsFtpPath, 2, liLengthPath) ;
+        lsFtpPath := InternalCopyStr(lsFtpPath, 2, liLengthPath, abUtf8) ;
     end ;
 
     // Convert all '/' to '\'
@@ -602,7 +616,13 @@ begin
     lsPath := lsFtpPath ;
     {$ENDIF}
 
-    lsPath := AddTrailing(asRootPath, DirectorySeparator) + lsPath ;
+    if abUtf8
+    then begin
+        lsPath := AddTrailing(asRootPath, DirectorySeparator, false) + lsPath ;
+    end
+    else begin
+        lsPath := UTF8ToSys(AddTrailing(asRootPath, DirectorySeparator, false)) + lsPath ;
+    end ;
 
     if abUtf8
     then begin
@@ -711,8 +731,13 @@ var
     // Case sensitive
     lbCaseSensitive : Boolean ;
 begin
-    asRoot := AddTrailing(asRoot, DirectorySeparator) ;
-    asPath := AddTrailing(asPath, DirectorySeparator) ;
+    asRoot := AddTrailing(asRoot, DirectorySeparator, true) ;
+    asPath := AddTrailing(asPath, DirectorySeparator, abUtf8) ;
+
+    if not abUtf8
+    then begin
+        asRoot := UTF8ToSys(asRoot) ;
+    end ;
 
     // FileNameCaseSensitive : http://bugs.freepascal.org/view.php?id=9455
     {$IFDEF WINDOWS}
@@ -845,15 +870,15 @@ end ;
 
 //
 // Return file attributs
-function GetFileAttribut(const asFileName : String;
-    const abUtf8 : Boolean) : Longint ;
+function IsFileReadOnly(const asFileName : String;
+    const abUtf8 : Boolean) : boolean ;
 begin
     if abUtf8
     then begin
-        Result := FileGetAttrUTF8(asFileName) ;
+        Result := FileIsReadOnlyUTF8(asFileName) ;
     end
     else begin
-        Result := FileGetAttr(asFileName) ;
+        Result := FileIsReadOnly(asFileName) ;
     end ;
 end ;
 
@@ -933,6 +958,34 @@ begin
         Result := RemoveDir(asFileName) ;
     end ;
     {$IOChecks on}
+end;
+
+//
+// Copy a string like Copy() function with utf8 option
+function InternalCopyStr(const asSource : string; const aiStartChar : Integer;
+    const aiCount  : Integer; const abUtf8 : Boolean) : String ;
+begin
+    if abUtf8
+    then begin
+        Result := UTF8Copy(asSource, aiStartChar, aiCount) ;
+    end
+    else begin
+        Result := Copy(asSource, aiStartChar, aiCount) ;
+    end ;
+end ;
+
+//
+// Length with utf8 option
+function InternalLengthStr(const asString : String;
+    const abUtf8 : Boolean) : Integer ;
+begin
+    if abUtf8
+    then begin
+        Result := UTF8Length(asString) ;
+    end
+    else begin
+        Result := Length(asString) ;
+    end ;
 end;
 
 initialization

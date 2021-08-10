@@ -162,6 +162,8 @@ var
     liIndexParamStr : Integer ;
     // Lauch at startup ?
     lbLauch : Boolean ;
+    // Option value
+    lsOptionValue : String ;
 begin
     gbShutdown := False ;
 
@@ -184,7 +186,7 @@ begin
             Inc(liIndexParamStr) ;
 
             giRootConfigDirectory := AddTrailing(
-                ParamStr(liIndexParamStr), DirectorySeparator) ;
+                ParamStr(liIndexParamStr), DirectorySeparator, false) ;
         end
         else if (ParamStr(liIndexParamStr) = '-notrayicon')
         then begin
@@ -201,6 +203,31 @@ begin
 
         Inc(liIndexParamStr) ;
     end ;
+
+    { More usefull but slower
+    if Application.HasOption('root')
+    then begin
+        lsOptionValue := Application.GetOptionValue('root') ;
+
+        giRootConfigDirectory := AddTrailing(
+                lsOptionValue, DirectorySeparator, false) ;
+    end ;
+
+    if Application.HasOption('notrayicon')
+    then begin
+        pbSystray := False ;
+    end ;
+
+    if Application.HasOption('launch')
+    then begin
+        lbLauch := False ;
+    end ;
+
+    if Application.HasOption('minimize')
+    then begin
+        pbMinimizeOnStartup := False ;
+    end ;
+    }
 
     // Defaut log format
     gsLogFormat := '%Y/%M/%d %H:%m:%s ' ;
@@ -223,11 +250,11 @@ procedure TFormMain.FormShow(Sender: TObject);
 begin
     if pbMinimizeOnStartup
     then begin
-        HideForm ;
+        //HideForm ;
 
         if pbMinimizeOnStartup and not pbSystray
         then begin
-            Self.WindowState := wsMinimized ;
+            Application.Minimize;
         end ;
 
         pbMinimizeOnStartup:= False ;
@@ -240,10 +267,14 @@ end;
 // @param Sender sender to send minimize
 procedure TFormMain.FormWindowStateChange(Sender: TObject);
 begin
-    if FormMain.WindowState = wsMinimized
+    if (FormMain.WindowState = wsMinimized) and pbSystray
     then begin
         HideForm ;
-    end ;
+    end
+    else if (FormMain.WindowState = wsNormal)
+    then begin
+        Application.Restore;
+    end;
 end;
 
 procedure TFormMain.MainConfigMenuClick(Sender: TObject);
@@ -807,7 +838,7 @@ begin
     Result := True ;
 
     lsProtectFileName := AddTrailing(asPathAndFileName,
-        DirectorySeparator) + gsFolderLocalConfigName ;
+        DirectorySeparator, abUtf8) + gsFolderLocalConfigName ;
 
     if CheckFileExists(lsProtectFileName, abUtf8)
     then begin
@@ -841,7 +872,7 @@ begin
         lsFileName := asFolderName ;
     end;
 
-    lsFileName := AddTrailing(lsFileName, DirectorySeparator) +
+    lsFileName := AddTrailing(lsFileName, DirectorySeparator, false) +
         gsFolderLocalConfigName ;
 
     Result := FileExists(lsFileName) ;

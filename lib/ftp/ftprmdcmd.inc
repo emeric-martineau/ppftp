@@ -30,9 +30,10 @@ var
         // Full directory
         lsFullDir : String ;
     begin
-        lsFindFilePath := AddTrailing(asPath, DirectorySeparator) + '*.*' ;
+        lsFindFilePath := AddTrailing(asPath, DirectorySeparator,
+            false) + '*.*' ;
 
-        lsFullDir := AddTrailing(asPath, DirectorySeparator) ;
+        lsFullDir := AddTrailing(asPath, DirectorySeparator, false) ;
 
         liFindResult := FindFirst(lsFindFilePath, faanyfile, lrSearchRec) ;
 
@@ -81,9 +82,10 @@ var
         // Full directory
         lsFullDir : String ;
     begin
-        lsFindFilePath := AddTrailing(asPath, DirectorySeparator) + '*.*' ;
+        lsFindFilePath := AddTrailing(asPath, DirectorySeparator,
+            true) + '*.*' ;
 
-        lsFullDir := AddTrailing(asPath, DirectorySeparator) ;
+        lsFullDir := AddTrailing(asPath, DirectorySeparator, true) ;
 
         liFindResult := FindFirstUTF8(lsFindFilePath, faanyfile, lrSearchRec) ;
 
@@ -149,7 +151,8 @@ begin
     // User can't download or download forbiden by local config or
     // is protected file
     if not lbDeleteDirectory or IsFileProtected(lsSysFileName) or
-        not prUserConfig.DeleteDirectory
+        not prUserConfig.DeleteDirectory or
+        not IsRootInPath(prUserConfig.Root, lsSysFileName, pbUtf8)
     then begin
         SendAnswer(MSG_FTP_ACCESS_DENIED) ;
     end

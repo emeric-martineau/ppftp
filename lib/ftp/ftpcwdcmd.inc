@@ -22,7 +22,7 @@ begin
         end ;
 
         // check if path start by '/'. If not, add current ftp path
-        if (Length(lsPath) > 0) and (lsPath[1] = '/')
+        if (InternalLengthStr(lsPath, pbUtf8) > 0) and (lsPath[1] = '/')
         then begin
             psFtpCurrentDirectory := '' ;
         end ;
@@ -30,7 +30,7 @@ begin
         lsSysPath := ConvertFtpPathToSysPath(prUserConfig.Root,
             psFtpCurrentDirectory, lsPath, pbUtf8) ;
 
-        lsSysPath := AddTrailing(lsSysPath, DirectorySeparator) ;
+        lsSysPath := AddTrailing(lsSysPath, DirectorySeparator, pbUtf8) ;
 
         // 0-> not start by
         if IsRootInPath(prUserConfig.Root, lsSysPath, pbUtf8)
@@ -38,12 +38,12 @@ begin
             // Check if directory exist
             if CheckDirectoryExists(lsSysPath, pbUtf8)
             then begin
-                if CanReadDirectory(prUserConfig.Root, lsSysPath)
+                if CanReadDirectory(prUserConfig.Root, lsSysPath, pbUtf8)
                 then begin
-                    if Length(psFtpCurrentDirectory) > 0
+                    if InternalLengthStr(psFtpCurrentDirectory, pbUtf8) > 0
                     then begin
                         psFtpCurrentDirectory := AddTrailing(
-                            psFtpCurrentDirectory, '/') ;
+                            psFtpCurrentDirectory, '/', pbUtf8) ;
                     end ;
 
                     psFtpCurrentDirectory := GetAbsoluteFtpPath(
@@ -57,7 +57,7 @@ begin
             end
             else begin
                 // Delete and directory separator
-                lsSysPath := Copy(lsSysPath, 1, Length(lsSysPath) - 1) ;
+                lsSysPath := InternalCopyStr(lsSysPath, 1, Length(lsSysPath) - 1, pbUtf8) ;
 
                 if CheckFileExists(lsSysPath, pbUtf8)
                 then begin

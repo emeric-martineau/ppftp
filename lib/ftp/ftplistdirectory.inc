@@ -37,13 +37,14 @@ var
     begin
         if not abIsFile
         then begin
-            lsFindFilePath := AddTrailing(asPath, DirectorySeparator) + '*.*' ;
+            lsFindFilePath := AddTrailing(asPath, DirectorySeparator,
+                false) + '*.*' ;
         end
         else begin
             lsFindFilePath := asPath ;
         end ;
 
-        lsFullDir := AddTrailing(asPath, DirectorySeparator) ;
+        lsFullDir := AddTrailing(asPath, DirectorySeparator, false) ;
 
         liFindResult := FindFirst(lsFindFilePath, faanyfile, lrSearchRec) ;
 
@@ -99,13 +100,14 @@ var
     begin
         if not abIsFile
         then begin
-            lsFindFilePath := AddTrailing(asPath, DirectorySeparator) + '*.*' ;
+            lsFindFilePath := AddTrailing(asPath, DirectorySeparator,
+                true) + '*.*' ;
         end
         else begin
             lsFindFilePath := asPath ;
         end ;
 
-        lsFullDir := AddTrailing(asPath, DirectorySeparator) ;
+        lsFullDir := AddTrailing(asPath, DirectorySeparator, true) ;
 
         liFindResult := FindFirstUTF8(lsFindFilePath, faanyfile, lrSearchRec) ;
 
@@ -161,13 +163,14 @@ var
     begin
         if not abIsFile
         then begin
-            lsFindFilePath := AddTrailing(asPath, DirectorySeparator) + '*.*' ;
+            lsFindFilePath := AddTrailing(asPath, DirectorySeparator,
+                false) + '*.*' ;
         end
         else begin
             lsFindFilePath := asPath ;
         end ;
 
-        lsFullDir := AddTrailing(asPath, DirectorySeparator) ;
+        lsFullDir := AddTrailing(asPath, DirectorySeparator, false) ;
 
         liFindResult := FindFirst(lsFindFilePath, faanyfile, lrSearchRec) ;
 
@@ -223,13 +226,14 @@ var
     begin
         if not abIsFile
         then begin
-            lsFindFilePath := AddTrailing(asPath, DirectorySeparator) + '*.*' ;
+            lsFindFilePath := AddTrailing(asPath, DirectorySeparator,
+                true) + '*.*' ;
         end
         else begin
             lsFindFilePath := asPath ;
         end ;
 
-        lsFullDir := AddTrailing(asPath, DirectorySeparator) ;
+        lsFullDir := AddTrailing(asPath, DirectorySeparator, true) ;
 
         liFindResult := FindFirstUTF8(lsFindFilePath, faanyfile, lrSearchRec) ;
 
@@ -281,13 +285,15 @@ begin
         if lbFileExists
         then begin
             lbCanRead := CanReadDirectory(prUserConfig.Root,
-                ExtractFileDir(lsSysFileName)) ;
+                ExtractFileDir(lsSysFileName), pbUtf8) ;
         end
         else begin
-            lbCanRead := CanReadDirectory(prUserConfig.Root, lsSysFileName) ;
+            lbCanRead := CanReadDirectory(prUserConfig.Root, lsSysFileName,
+                pbUtf8) ;
         end ;
 
-        if not lbCanRead
+        if not lbCanRead or not IsRootInPath(prUserConfig.Root, lsSysFileName,
+            pbUtf8)
         then begin
             SendAnswer(MSG_FTP_ACCESS_DENIED) ;
         end

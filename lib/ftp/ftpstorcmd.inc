@@ -187,7 +187,8 @@ begin
     if atMode = scmUnique
     then begin
         // Add directory separator
-        lsSysFileName := AddTrailing(lsSysFileName, DirectorySeparator) ;
+        lsSysFileName := AddTrailing(lsSysFileName, DirectorySeparator,
+            pbUtf8) ;
 
         lsSysFileName := GetTempFileName(lsSysFileName, 'STOU_') ;
     end ;
@@ -201,12 +202,18 @@ begin
 
     // User can't download or download forbiden by local config or
     // is protected file or if read-only
-    if not lbUpload or IsFileProtected(lsSysFileName) or
+    if not lbUpload or
         not prUserConfig.Upload or
+        not IsRootInPath(prUserConfig.Root, lsSysFileName, pbUtf8) or
         (CheckFileExists(lsSysFileName, pbUtf8) and
-          ((GetFileAttribut(lsSysFileName, pbUtf8) and faReadOnly) = faReadOnly))
+          IsFileReadOnly(lsSysFileName, pbUtf8))
     then begin
         SendAnswer(MSG_FTP_ACCESS_DENIED) ;
+    end
+    else if IsFileProtected(lsSysFileName)
+    then begin
+        // File is protected. We say not found
+        SendAnswer(Format(MSG_FTP_LIST_NO_FOUND, [asParameter])) ;
     end
     else begin
         loDataSocket := GetDataSocket ;
@@ -230,6 +237,12 @@ begin
                 else begin
                     SendAnswer(MSG_FTP_OPEN_BINARY_DATA_CONNECTION) ;
                 end ;
+            end ;
+
+            // Must convert UTF8 file name to sys
+            if pbUtf8
+            then begin
+                lsSysFileName := UTF8ToSys(lsSysFileName) ;
             end ;
 
             if pbTransfertMode = tmAscii

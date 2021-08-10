@@ -1,3 +1,9 @@
+0.6.0 -
+  - bug in UTF8 with ConvertFtpPathToSysPath(), ExplodeCommand(),
+    CanReadDirectory(), ftpcwdcmd.inc, AddTrailing(),
+  - security missing,
+  - support SIZE,
+
 0.5.0 - 2010/03/12
   - support RNFR, RNTO, DELE, MKD/XMKD, RMD/XRMD,
   - correct bug in build path,

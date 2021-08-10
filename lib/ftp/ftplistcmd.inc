@@ -16,7 +16,8 @@ var
     loDataSocket : TTCPBlockSocket ;
 begin
     // if "-la"
-    if (Length(asParameter) > 0) and (asParameter[1] = '-')
+    if (InternalLengthStr(asParameter, pbUtf8) > 0) and
+        (InternalCopyStr(asParameter, 1, 1, pbUtf8) = '-')
     then begin
         lsCommand := '' ;
         lsParameter := '' ;

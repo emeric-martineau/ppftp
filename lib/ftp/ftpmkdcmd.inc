@@ -32,11 +32,18 @@ begin
 
     // User can't download or download forbiden by local config or
     // is protected file
-    if not lbMakeDirectory or IsFileProtected(lsSysFileName) or
-        not prUserConfig.MakeDirectory
+    if not lbMakeDirectory or
+        not prUserConfig.MakeDirectory or
+        not IsRootInPath(prUserConfig.Root, lsSysFileName, pbUtf8)
     then begin
         SendAnswer(MSG_FTP_ACCESS_DENIED) ;
     end
+{    else if IsFileProtected(lsSysFileName)
+    then begin
+        // File is protected. We say not found
+        SendAnswer(Format(MSG_FTP_LIST_NO_FOUND, [asFtpFolderName])) ;
+    end
+}
     else if CheckDirectoryExists(lsSysFileName, pbUtf8)
     then begin
         // If directory exist

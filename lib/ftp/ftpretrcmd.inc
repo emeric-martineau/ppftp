@@ -171,10 +171,15 @@ begin
 
     // User can't download or download forbiden by local config or
     // is protected file
-    if not lbDownload or IsFileProtected(lsSysFileName) or
-        not prUserConfig.Download
+    if not lbDownload or
+        not prUserConfig.Download or
+        not IsRootInPath(prUserConfig.Root, lsSysFileName, pbUtf8)
     then begin
         SendAnswer(MSG_FTP_ACCESS_DENIED) ;
+    end
+    else if IsFileProtected(lsSysFileName)
+    then begin
+        SendAnswer(Format(MSG_FTP_LIST_NO_FOUND, [asParameter])) ;
     end
     else if CheckFileExists(lsSysFileName, pbUtf8)
     then begin
@@ -185,6 +190,12 @@ begin
             {$IFDEF CALL_BACK_TRANSFERT}
             SetTransfert(lsSysFileName, DOWNLOAD_FILE, START_TRANSFERT) ;
             {$ENDIF}
+
+            // Must convert UTF8 file name to sys
+            if pbUtf8
+            then begin
+                lsSysFileName := UTF8ToSys(lsSysFileName) ;
+            end;
 
             if pbTransfertMode = tmAscii
             then begin

@@ -181,7 +181,7 @@ type
     procedure ClosePassiveSocket ;
     // Check if directory is readable
     function CanReadDirectory(const asRoot : String;
-        const asCurrentPath : String) : Boolean ;
+        const asCurrentPath : String; const abUtf8 : Boolean) : Boolean ;
     // List a directory
     procedure ListDirectory(const asFtpFolderName : String;
         const aoDataSocket : TTCPBlockSocket; const abNlst : Boolean) ;
@@ -237,6 +237,8 @@ type
     procedure MkdCommand(const asParameter : String) ;
     // RMD feature
     procedure RmdCommand(const asParameter : String) ;
+    // SIZE feature
+    procedure SizeCommand(const asParameter : String) ;
 
   public
     // Previous client
@@ -463,7 +465,9 @@ begin
     then begin
         lrUserConfig := FOnClientConfigRead(asLoginName) ;
 
-        prUserConfig.Root := AddTrailing(lrUserConfig.Root, DirectorySeparator) ;
+        // Root always in UTF8
+        prUserConfig.Root := AddTrailing(lrUserConfig.Root, DirectorySeparator,
+            true) ;
         prUserConfig.Download := lrUserConfig.Download = YES_VALUE ;
         prUserConfig.Upload := lrUserConfig.Upload = YES_VALUE ;
         prUserConfig.Rename := lrUserConfig.Rename = YES_VALUE ;
@@ -584,32 +588,39 @@ var
     liLengthString : Integer ;
     // Index of string
     liIndexString : Integer ;
+    // Current character
+    lsCurrentChar : String ;
 begin
     asCmd := '' ;
     asParameter := '' ;
 
-    liLengthString := Length(asString) ;
+    liLengthString := InternalLengthStr(asString, pbUtf8) ;
 
     liIndexString := 1 ;
 
-    // 1 - Skip first blacnk
+    lsCurrentChar := InternalCopyStr(asString, liIndexString, 1, pbUtf8) ;
+
+    // 1 - Skip first blank
     while (liIndexString <= liLengthString) and
-        ((asString[liIndexString] = ' ') or (asString[liIndexString] = #9)) do
+        ((AnsiCompareStr(lsCurrentChar, ' ') = 0) or (AnsiCompareStr(lsCurrentChar, #9) = 0)) do
     begin
         Inc(liIndexString) ;
+
+        lsCurrentChar := InternalCopyStr(asString, liIndexString, 1, pbUtf8) ;
     end ;
 
     // 2 - Get command
     while (liIndexString <= liLengthString) and
-        (asString[liIndexString] <> ' ') and (asString[liIndexString] <> #9) do
+        (AnsiCompareStr(lsCurrentChar, ' ') <> 0) and (AnsiCompareStr(lsCurrentChar, #9) <> 0) do
     begin
-        asCmd := asCmd + asString[liIndexString] ;
+        asCmd := asCmd + InternalCopyStr(asString, liIndexString, 1, pbUtf8) ;
 
         Inc(liIndexString) ;
+        lsCurrentChar := InternalCopyStr(asString, liIndexString, 1, pbUtf8) ;
     end ;
 
     // 3 - Get parameter
-    asParameter := Copy(asString, liIndexString, liLengthString) ;
+    asParameter := InternalCopyStr(asString, liIndexString, liLengthString, pbUtf8) ;
 
     asParameter := Trim(asParameter) ;
 end ;
@@ -742,7 +753,7 @@ begin
         end
         else begin
             // Check home directory exists
-            if DirectoryExists(prUserConfig.Root)
+            if DirectoryExistsUTF8(prUserConfig.Root)
             then begin
                 SendAnswer(Format(MSG_FTP_ROOT_LOGGED, [prUserConfig.Login])) ;
             end
@@ -907,10 +918,11 @@ end;
 //
 // Return true if can read. asCurrentPath must be start by asRoot
 //
-// @param asRoot user root dir
+// @param asRoot user root dir. Must be UTF8
 // @param asCurrentPath path to read
+// @param abUtf8 if utf 8 mode enable
 function TFtpClient.CanReadDirectory(const asRoot : String;
-    const asCurrentPath : String) : Boolean ;
+    const asCurrentPath : String; const abUtf8 : Boolean) : Boolean ;
 var
     // local config
     lsLocalConfigValue : String ;
@@ -926,16 +938,21 @@ begin
     Result := True ;
 
     // Add directory separator to be sur we have same or higher size
-    lsRoot := AddTrailing(asRoot, DirectorySeparator) ;
-    lsCurrentPath := AddTrailing(asCurrentPath, DirectorySeparator) ;
+    lsRoot := AddTrailing(asRoot, DirectorySeparator, true) ;
+    lsCurrentPath := AddTrailing(asCurrentPath, DirectorySeparator, abUtf8) ;
+
+    if not abUtf8
+    then begin
+        lsRoot := UTF8ToSys(lsRoot) ;
+    end ;
 
     // Now, we cut start
-    liLengthRoot := Length(lsRoot) ;
+    liLengthRoot := InternalLengthStr(lsRoot, abUtf8) ;
 
     // +1 for end directory separator of lsRoot
     // -1 for end directory separator of lsCurrentPath
-    lsCurrentPath := Copy(lsCurrentPath, liLengthRoot + 1,
-        Length(lsCurrentPath) - liLengthRoot - 1) ;
+    lsCurrentPath := InternalCopyStr(lsCurrentPath, liLengthRoot + 1,
+        Length(lsCurrentPath) - liLengthRoot - 1, abUtf8) ;
 
     while Result do
     begin
@@ -945,7 +962,7 @@ begin
             Result := lsLocalConfigValue <> NO_VALUE ;
         end ;
 
-        if Length(lsCurrentPath) = 0
+        if InternalLengthStr(lsCurrentPath, abUtf8) = 0
         then begin
             break ;
         end ;
@@ -1356,6 +1373,10 @@ begin
     then begin
         RmdCommand(asParameter) ;
     end
+    else if (asCommand = 'SIZE')
+    then begin
+        SizeCommand(asParameter) ;
+    end
     else begin
         SendAnswer(MSG_FTP_CMD_NOT_UNDERSTOOD) ;
     end ;
@@ -1482,6 +1503,13 @@ procedure TFtpClient.MkdCommand(const asParameter : String) ;
 // @param asParameter parameter is file name
 procedure TFtpClient.RmdCommand(const asParameter : String) ;
 {$I ftprmdcmd.inc}
+
+//
+// Size feature
+//
+// @param asParameter parameter is file name
+procedure TFtpClient.SizeCommand(const asParameter : String) ;
+{$I ftpsizecmd.inc}
 
 end.
 

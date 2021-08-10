@@ -1,6 +1,6 @@
 [Setup]
 AppName=PPFtp Server
-AppVerName=PPFtp Server 0.5.0
+AppVerName=PPFtp Server 0.6.0
 DefaultDirName={pf}\ppftp_server
 DefaultGroupName=PPFtp Server
 UninstallDisplayIcon={uninstallexe}
@@ -9,7 +9,7 @@ WizardImageFile=WizModernImage-IS.bmp
 WizardSmallImageFile=WizModernSmallImage-IS.bmp
 LanguageDetectionMethod=none
 OutPutDir=".\"
-OutputBaseFilename="ppftp_server-0.5.0"
+OutputBaseFilename="ppftp_server-0.6.0"
 
 [Languages]
 Name: "en"; MessagesFile: "compiler:Default.isl"
@@ -37,3 +37,4 @@ Name: "{group}\PPFtpServer (GUI)"; Filename: "{app}\ppftpserver_gui.exe"; Workin
 Name: "{group}\PPFtpServer (Console)"; Filename: "{app}\ppftpserver_console.exe"; WorkingDir: "{app}"
 Name: "{group}\Readme"; Filename: "{app}\README.txt"; WorkingDir: "{app}"
 Name: "{group}\Licence"; Filename: "{app}\license.txt"; WorkingDir: "{app}"
+

@@ -94,7 +94,12 @@ begin
     then begin
         lsUser := UsersListBox.Items[UsersListBox.ItemIndex] ;
 
-        if Application.MessageBox(PChar(Format('Are you sur you want delete %s ?',
+        if LowerCase(lsUser) = ANONYMOUS_USER
+        then begin
+            Application.MessageBox('You can''t delete anonymous user. Disabled it !',
+                'Error', MB_ICONERROR or MB_OK) ;
+        end
+        else if Application.MessageBox(PChar(Format('Are you sur you want delete %s ?',
             [lsUser])),
             'Delete user', MB_ICONQUESTION or MB_YESNO) = IDYES
         then begin

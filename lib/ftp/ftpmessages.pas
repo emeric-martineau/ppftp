@@ -106,6 +106,7 @@ const
     MSG_FTP_DIR_CREATED : String = '257 ''%s'': directory created.' ;
     MSG_FTP_DIR_DELETED : String = '250 ''%s'': directory deleted.' ;
     MSG_FTP_DIR_CONTAIN_FILE : String = '550 ''%s'': File exists.' ;
+    MSG_FTP_FILE_SIZE : String = '213 %d' ;
 
 implementation
 

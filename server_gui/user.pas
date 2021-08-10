@@ -163,7 +163,8 @@ var
     // Find file
     lsFindFilePath : String ;
 begin
-    psUsersDirectory := AddTrailing(psUsersDirectory, DirectorySeparator) ;
+    psUsersDirectory := AddTrailing(psUsersDirectory, DirectorySeparator,
+        false) ;
 
     lsFindFilePath := psUsersDirectory + '*.*' ;
 

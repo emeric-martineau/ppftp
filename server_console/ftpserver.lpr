@@ -303,7 +303,7 @@ begin
     Result := True ;
 
     lsProtectFileName := AddTrailing(asPathAndFileName,
-        DirectorySeparator) + gsFolderLocalConfigName ;
+        DirectorySeparator, abUtf8) + gsFolderLocalConfigName ;
 
     if CheckFileExists(lsProtectFileName, abUtf8)
     then begin
@@ -337,7 +337,7 @@ begin
         lsFileName := asFolderName ;
     end;
 
-    lsFileName := AddTrailing(lsFileName, DirectorySeparator) +
+    lsFileName := AddTrailing(lsFileName, DirectorySeparator, false) +
         gsFolderLocalConfigName ;
 
     Result := FileExists(lsFileName) ;
@@ -419,7 +419,7 @@ begin
             Inc(liIndexParamStr) ;
             
             giRootConfigDirectory := AddTrailing(
-                ParamStr(liIndexParamStr), DirectorySeparator) ;
+                ParamStr(liIndexParamStr), DirectorySeparator, false) ;
         end
         else if (ParamStr(liIndexParamStr) = '-logfile')
         then begin

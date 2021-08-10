@@ -162,6 +162,8 @@ var
     liIndexParamStr : Integer ;
     // Lauch at startup ?
     lbLauch : Boolean ;
+    // Option value
+    lsOptionValue : String ;
 begin
     gbShutdown := False ;
 
@@ -184,7 +186,7 @@ begin
             Inc(liIndexParamStr) ;
 
             giRootConfigDirectory := AddTrailing(
-                ParamStr(liIndexParamStr), DirectorySeparator) ;
+                ParamStr(liIndexParamStr), DirectorySeparator, false) ;
         end
         else if (ParamStr(liIndexParamStr) = '-notrayicon')
         then begin
@@ -200,6 +202,14 @@ begin
         end ;
 
         Inc(liIndexParamStr) ;
+    end ;
+
+    if Application.HasOption('root')
+    then begin
+        lsOptionValue := Application.GetOptionValue('root') ;
+
+        giRootConfigDirectory := AddTrailing(
+                lsOptionValue, DirectorySeparator, false) ;
     end ;
 
     // Defaut log format
@@ -223,11 +233,11 @@ procedure TFormMain.FormShow(Sender: TObject);
 begin
     if pbMinimizeOnStartup
     then begin
-        HideForm ;
+        //HideForm ;
 
         if pbMinimizeOnStartup and not pbSystray
         then begin
-            Self.WindowState := wsMinimized ;
+            Application.Minimize;
         end ;
 
         pbMinimizeOnStartup:= False ;
@@ -240,10 +250,14 @@ end;
 // @param Sender sender to send minimize
 procedure TFormMain.FormWindowStateChange(Sender: TObject);
 begin
-    if FormMain.WindowState = wsMinimized
+    if (FormMain.WindowState = wsMinimized) and pbSystray
     then begin
         HideForm ;
-    end ;
+    end
+    else if (FormMain.WindowState = wsNormal)
+    then begin
+        Application.Restore;
+    end;
 end;
 
 procedure TFormMain.MainConfigMenuClick(Sender: TObject);
@@ -801,9 +815,18 @@ end ;
 //
 function RemoveFileProtected(const asPathAndFileName : String;
     const abUtf8 : Boolean) : Boolean ;
+var
+    lsProtectFileName : String ;
 begin
-    Result := InternalDeleteFile(AddTrailing(asPathAndFileName,
-        DirectorySeparator) + gsFolderLocalConfigName , abUtf8) ;
+    Result := True ;
+
+    lsProtectFileName := AddTrailing(asPathAndFileName,
+        DirectorySeparator, abUtf8) + gsFolderLocalConfigName ;
+
+    if CheckFileExists(lsProtectFileName, abUtf8)
+    then begin
+        Result := InternalDeleteFile(lsProtectFileName , abUtf8) ;
+    end ;
 end ;
 
 //
@@ -832,7 +855,7 @@ begin
         lsFileName := asFolderName ;
     end;
 
-    lsFileName := AddTrailing(lsFileName, DirectorySeparator) +
+    lsFileName := AddTrailing(lsFileName, DirectorySeparator, false) +
         gsFolderLocalConfigName ;
 
     Result := FileExists(lsFileName) ;
