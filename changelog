@@ -1,0 +1,12 @@
+0.1.0 -
+  - synchronize client log,
+  - synchronize login/logout,
+  
+0.0.7 - 2010/01/15
+  - disable UTF8 command line,
+  - can connect user,
+  - support NO/NOOP, SYST, UTF8,
+  - can disable utf8 in config file,
+  
+0.0.6 - 2010/01/14
+  first useable version.

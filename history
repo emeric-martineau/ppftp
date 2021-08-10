@@ -1,0 +1,26 @@
+History
+-------
+
+When I discover dot Net technologie, I write a FTP client
+(http://www.bubulemaster.fr/download/old/leechdotnet/).
+After, I write a FTP server (same web address).
+But, problem, it was slow and dot Net technologie is copyrighted by
+Microsoft.
+Client and server work with Mono (http://www.mono-project.com) but without
+guarantee of Microsoft forbid Mono.
+
+For my personnal use, I use TYPsoft FTP Server. But, two problem. First, a
+author post say the next version not open source due to some close source
+component. Second, since one year (maybe more), TYPsoft FTP Server web site
+are closed.
+
+I love Pascal language. And I decide to write my own FTP server. I search, and
+I discover Synapse library (http://ararat.cz/synapse) and LNet library
+(http://lnet.wordpress.com/).
+I have all key to write easily an open source FTP server.
+
+I decide to use Synapse library cause we found more documentation. LNet is good
+cause is more platform independant (Linux, Window, Win CE, Mac OS X) but few
+documentation and no new version since more one year.
+
+Emeric MARTINEAU - 2010/01/15

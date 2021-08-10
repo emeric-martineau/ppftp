@@ -1,0 +1,731 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
+<html>
+<head>
+<meta name="GENERATOR" content="PasDoc 0.11.0">
+<meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+<title>ftpclient: Class TFtpClient</title>
+<link rel="StyleSheet" type="text/css" href="pasdoc.css">
+</head>
+<body bgcolor="#ffffff" text="#000000" link="#0000ff" vlink="#800080" alink="#FF0000">
+<a name="TFtpClient"></a><h1 class="cio">Class TFtpClient</h1>
+<table class="sections wide_list">
+<tr>
+<td><a class="section"  href="#%40Description">Description</a></td><td><a class="section"  href="#%40Hierarchy">Hierarchy</a></td><td><a class="section"  href="#%40Fields">Fields</a></td><td><a class="section"  href="#%40Methods">Methods</a></td><td><a class="section"  href="#%40Properties">Properties</a></td></tr></table>
+<a name="%40Description"></a><h2 class="unit">Unit</h2>
+<p class="unitlink">
+<a   href="ftpclient.html">ftpclient</a></p>
+<h2 class="declaration">Declaration</h2>
+<p class="declaration">
+<code>type TFtpClient = class(TThread)</code></p>
+<h2 class="description">Description</h2>
+<p>
+Mother class of FTP server</p>
+<a name="%40Hierarchy"></a><h2 class="hierarchy">Hierarchy</h2>
+<ul class="hierarchy"><li class="ancestor">TThread</li>
+<li class="thisitem">TFtpClient</li></ul><h2 class="overview">Overview</h2>
+<a name="%40Fields"></a><h3 class="summary">Fields</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code><b><a   href="ftpclient.TFtpClient.html#FOnLog">FOnLog</a></b>: <a   href="ftptypes.html#TLogProcedure">TLogProcedure</a> ;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code><b><a   href="ftpclient.TFtpClient.html#FOnError">FOnError</a></b>: <a   href="ftptypes.html#TLogProcedure">TLogProcedure</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code><b><a   href="ftpclient.TFtpClient.html#FOnClientConfigRead">FOnClientConfigRead</a></b>: <a   href="ftptypes.html#TClientConfigReader">TClientConfigReader</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code><b><a   href="ftpclient.TFtpClient.html#FPreviousClient">FPreviousClient</a></b>: <a   href="ftpclient.TFtpClient.html">TFtpClient</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code><b><a   href="ftpclient.TFtpClient.html#FNextClient">FNextClient</a></b>: <a   href="ftpclient.TFtpClient.html">TFtpClient</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code><b><a   href="ftpclient.TFtpClient.html#FOnClientDisconnect">FOnClientDisconnect</a></b>: <a   href="ftpclient.html#TClientDisconnect">TClientDisconnect</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code><b><a   href="ftpclient.TFtpClient.html#FOnLogin">FOnLogin</a></b>: <a   href="ftptypes.html#TClientLogin">TClientLogin</a> ;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code><b><a   href="ftpclient.TFtpClient.html#FOnLogout">FOnLogout</a></b>: <a   href="ftptypes.html#TClientLogout">TClientLogout</a> ;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code><b><a   href="ftpclient.TFtpClient.html#FFullLog">FFullLog</a></b>: Boolean ;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code><b><a   href="ftpclient.TFtpClient.html#FUtf8Support">FUtf8Support</a></b>: Boolean ;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code><b><a   href="ftpclient.TFtpClient.html#FGuiApplication">FGuiApplication</a></b>: Boolean ;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code><b><a   href="ftpclient.TFtpClient.html#poClientSock">poClientSock</a></b>:     TTCPBlockSocket;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code><b><a   href="ftpclient.TFtpClient.html#psWelcomeMessage">psWelcomeMessage</a></b>: String;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code><b><a   href="ftpclient.TFtpClient.html#psGoodbyeMessage">psGoodbyeMessage</a></b>: String;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code><b><a   href="ftpclient.TFtpClient.html#piTimeOut">piTimeOut</a></b>: Integer ;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code><b><a   href="ftpclient.TFtpClient.html#prUserConfig">prUserConfig</a></b>: <a   href="ftptypes.TFtpClientConfig.html">TFtpClientConfig</a> ;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code><b><a   href="ftpclient.TFtpClient.html#piMaximumLogin">piMaximumLogin</a></b>: Integer ;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code><b><a   href="ftpclient.TFtpClient.html#pbUtf8">pbUtf8</a></b>: Boolean ;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code><b><a   href="ftpclient.TFtpClient.html#psMessageLogOrError">psMessageLogOrError</a></b>: String ;</code></td>
+</tr>
+</table>
+<a name="%40Methods"></a><h3 class="summary">Methods</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code>function <b><a   href="ftpclient.TFtpClient.html#CheckLogin">CheckLogin</a></b>(const asLoginName : String) : Boolean ;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code>procedure <b><a   href="ftpclient.TFtpClient.html#Logout">Logout</a></b>(const asLoginName : String) ;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code>procedure <b><a   href="ftpclient.TFtpClient.html#Log">Log</a></b>(const asMessage : String) ;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code>procedure <b><a   href="ftpclient.TFtpClient.html#SynchronizeLog">SynchronizeLog</a></b> ;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code>procedure <b><a   href="ftpclient.TFtpClient.html#SynchronizeError">SynchronizeError</a></b> ;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code>procedure <b><a   href="ftpclient.TFtpClient.html#Error">Error</a></b>(const asMessage : String) ;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code>procedure <b><a   href="ftpclient.TFtpClient.html#ReadConfig">ReadConfig</a></b>(const asLoginName : String) ;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code>function <b><a   href="ftpclient.TFtpClient.html#ReadRemoteString">ReadRemoteString</a></b>(var asString : String) : Boolean ;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code>procedure <b><a   href="ftpclient.TFtpClient.html#ExplodeCommand">ExplodeCommand</a></b>(const asString : String; var asCmd : String; var asParameter : String) ;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code>procedure <b><a   href="ftpclient.TFtpClient.html#Logout">Logout</a></b> ;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code>procedure <b><a   href="ftpclient.TFtpClient.html#InitDefaultUser">InitDefaultUser</a></b> ;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code>procedure <b><a   href="ftpclient.TFtpClient.html#SendAnswer">SendAnswer</a></b>(const asString : String) ;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code>procedure <b><a   href="ftpclient.TFtpClient.html#ValideUserPassword">ValideUserPassword</a></b>(const asPassword : String) ;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code>procedure <b><a   href="ftpclient.TFtpClient.html#ExecuteUserCommand">ExecuteUserCommand</a></b>(const asCommand : String; const asParameter : String; var asCurrentDirectory : String) ;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code>procedure <b><a   href="ftpclient.TFtpClient.html#FeatCommand">FeatCommand</a></b> ;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code>procedure <b><a   href="ftpclient.TFtpClient.html#Utf8Command">Utf8Command</a></b>(const asParameter : String) ;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>constructor <b><a   href="ftpclient.TFtpClient.html#Create">Create</a></b>(const abCreateSuspended: boolean; const aoClientSock: TTCPBlockSocket; const asWelcomeMessage: String; const asGoodbyeMessage: String; const aiTimeOut : Integer; const aiMaxLogin : Integer);</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>destructor <b><a   href="ftpclient.TFtpClient.html#Destroy">Destroy</a></b>; override;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a   href="ftpclient.TFtpClient.html#Execute">Execute</a></b>; override;</code></td>
+</tr>
+</table>
+<a name="%40Properties"></a><h3 class="summary">Properties</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>property <b><a   href="ftpclient.TFtpClient.html#PreviousClient">PreviousClient</a></b>: <a   href="ftpclient.TFtpClient.html">TFtpClient</a> read <a   href="ftpclient.TFtpClient.html#FPreviousClient">FPreviousClient</a> write <a   href="ftpclient.TFtpClient.html#FPreviousClient">FPreviousClient</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>property <b><a   href="ftpclient.TFtpClient.html#NextClient">NextClient</a></b>: <a   href="ftpclient.TFtpClient.html">TFtpClient</a> read <a   href="ftpclient.TFtpClient.html#FNextClient">FNextClient</a> write <a   href="ftpclient.TFtpClient.html#FNextClient">FNextClient</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>property <b><a   href="ftpclient.TFtpClient.html#FullLog">FullLog</a></b> : Boolean read <a   href="ftpclient.TFtpClient.html#FFullLog">FFullLog</a> write <a   href="ftpclient.TFtpClient.html#FFullLog">FFullLog</a> ;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>property <b><a   href="ftpclient.TFtpClient.html#Utf8Support">Utf8Support</a></b> : Boolean read <a   href="ftpclient.TFtpClient.html#FUtf8Support">FUtf8Support</a> write <a   href="ftpclient.TFtpClient.html#FUtf8Support">FUtf8Support</a> ;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>property <b><a   href="ftpclient.TFtpClient.html#GuiApplication">GuiApplication</a></b> : Boolean read <a   href="ftpclient.TFtpClient.html#FGuiApplication">FGuiApplication</a> write <a   href="ftpclient.TFtpClient.html#FGuiApplication">FGuiApplication</a> ;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>property <b><a   href="ftpclient.TFtpClient.html#OnLog">OnLog</a></b>: <a   href="ftptypes.html#TLogProcedure">TLogProcedure</a> read <a   href="ftpclient.TFtpClient.html#FOnLog">FOnLog</a> write <a   href="ftpclient.TFtpClient.html#FOnLog">FOnLog</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>property <b><a   href="ftpclient.TFtpClient.html#OnError">OnError</a></b>: <a   href="ftptypes.html#TLogProcedure">TLogProcedure</a> read <a   href="ftpclient.TFtpClient.html#FOnError">FOnError</a> write <a   href="ftpclient.TFtpClient.html#FOnError">FOnError</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>property <b><a   href="ftpclient.TFtpClient.html#OnClientConfigRead">OnClientConfigRead</a></b>: <a   href="ftptypes.html#TClientConfigReader">TClientConfigReader</a>
+      read <a   href="ftpclient.TFtpClient.html#FOnClientConfigRead">FOnClientConfigRead</a> write <a   href="ftpclient.TFtpClient.html#FOnClientConfigRead">FOnClientConfigRead</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>property <b><a   href="ftpclient.TFtpClient.html#OnClientDisconnect">OnClientDisconnect</a></b>: <a   href="ftpclient.html#TClientDisconnect">TClientDisconnect</a>
+      read <a   href="ftpclient.TFtpClient.html#FOnClientDisconnect">FOnClientDisconnect</a> write <a   href="ftpclient.TFtpClient.html#FOnClientDisconnect">FOnClientDisconnect</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>property <b><a   href="ftpclient.TFtpClient.html#OnLogin">OnLogin</a></b> : <a   href="ftptypes.html#TClientLogin">TClientLogin</a> read <a   href="ftpclient.TFtpClient.html#FOnLogin">FOnLogin</a> write <a   href="ftpclient.TFtpClient.html#FOnLogin">FOnLogin</a> ;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>property <b><a   href="ftpclient.TFtpClient.html#OnLogout">OnLogout</a></b> : <a   href="ftptypes.html#TClientLogout">TClientLogout</a> read <a   href="ftpclient.TFtpClient.html#FOnLogout">FOnLogout</a> write <a   href="ftpclient.TFtpClient.html#FOnLogout">FOnLogout</a> ;</code></td>
+</tr>
+</table>
+<h2 class="description">Description</h2>
+<h3 class="detail">Fields</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="FOnLog"></a><code><b>FOnLog</b>: <a   href="ftptypes.html#TLogProcedure">TLogProcedure</a> ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Log</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="FOnError"></a><code><b>FOnError</b>: <a   href="ftptypes.html#TLogProcedure">TLogProcedure</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Error</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="FOnClientConfigRead"></a><code><b>FOnClientConfigRead</b>: <a   href="ftptypes.html#TClientConfigReader">TClientConfigReader</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Config reader</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="FPreviousClient"></a><code><b>FPreviousClient</b>: <a   href="ftpclient.TFtpClient.html">TFtpClient</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Previous thread</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="FNextClient"></a><code><b>FNextClient</b>: <a   href="ftpclient.TFtpClient.html">TFtpClient</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Next thread</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="FOnClientDisconnect"></a><code><b>FOnClientDisconnect</b>: <a   href="ftpclient.html#TClientDisconnect">TClientDisconnect</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Call when connection shutdown</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="FOnLogin"></a><code><b>FOnLogin</b>: <a   href="ftptypes.html#TClientLogin">TClientLogin</a> ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Login</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="FOnLogout"></a><code><b>FOnLogout</b>: <a   href="ftptypes.html#TClientLogout">TClientLogout</a> ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Logout</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="FFullLog"></a><code><b>FFullLog</b>: Boolean ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+FullLog</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="FUtf8Support"></a><code><b>FUtf8Support</b>: Boolean ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Utf8 support</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="FGuiApplication"></a><code><b>FGuiApplication</b>: Boolean ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Gui application for non-freeze log in console mode</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="poClientSock"></a><code><b>poClientSock</b>:     TTCPBlockSocket;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Command socket</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="psWelcomeMessage"></a><code><b>psWelcomeMessage</b>: String;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Welcome message</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="psGoodbyeMessage"></a><code><b>psGoodbyeMessage</b>: String;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Goodbye message</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="piTimeOut"></a><code><b>piTimeOut</b>: Integer ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Time out in second</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="prUserConfig"></a><code><b>prUserConfig</b>: <a   href="ftptypes.TFtpClientConfig.html">TFtpClientConfig</a> ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Config</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="piMaximumLogin"></a><code><b>piMaximumLogin</b>: Integer ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Maximum login</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="pbUtf8"></a><code><b>pbUtf8</b>: Boolean ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Utf8 mode enabled</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="psMessageLogOrError"></a><code><b>psMessageLogOrError</b>: String ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Message to show</p>
+</td></tr>
+</table>
+<h3 class="detail">Methods</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="CheckLogin"></a><code>function <b>CheckLogin</b>(const asLoginName : String) : Boolean ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Return True if can login</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="Logout"></a><code>procedure <b>Logout</b>(const asLoginName : String) ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Logout</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="Log"></a><code>procedure <b>Log</b>(const asMessage : String) ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Call FOnLog if set</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="SynchronizeLog"></a><code>procedure <b>SynchronizeLog</b> ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Synchronized Log. Don't use directely. Use Log()</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="SynchronizeError"></a><code>procedure <b>SynchronizeError</b> ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Synchronized Error. Don't use directely. Use Error()</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="Error"></a><code>procedure <b>Error</b>(const asMessage : String) ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Call FOnError if set</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="ReadConfig"></a><code>procedure <b>ReadConfig</b>(const asLoginName : String) ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Get config</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="ReadRemoteString"></a><code>function <b>ReadRemoteString</b>(var asString : String) : Boolean ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Read remote string</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="ExplodeCommand"></a><code>procedure <b>ExplodeCommand</b>(const asString : String; var asCmd : String; var asParameter : String) ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Split user string to command and parameter</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="Logout"></a><code>procedure <b>Logout</b> ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Logout</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="InitDefaultUser"></a><code>procedure <b>InitDefaultUser</b> ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Default user</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="SendAnswer"></a><code>procedure <b>SendAnswer</b>(const asString : String) ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Send answer to the client</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="ValideUserPassword"></a><code>procedure <b>ValideUserPassword</b>(const asPassword : String) ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Valide user login and password</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="ExecuteUserCommand"></a><code>procedure <b>ExecuteUserCommand</b>(const asCommand : String; const asParameter : String; var asCurrentDirectory : String) ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Execute user command</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="FeatCommand"></a><code>procedure <b>FeatCommand</b> ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+FEAT command</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="Utf8Command"></a><code>procedure <b>Utf8Command</b>(const asParameter : String) ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+UTF8 command</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Create"></a><code>constructor <b>Create</b>(const abCreateSuspended: boolean; const aoClientSock: TTCPBlockSocket; const asWelcomeMessage: String; const asGoodbyeMessage: String; const aiTimeOut : Integer; const aiMaxLogin : Integer);</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Constructor</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Destroy"></a><code>destructor <b>Destroy</b>; override;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Destructor</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Execute"></a><code>procedure <b>Execute</b>; override;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Execute main thread</p>
+</td></tr>
+</table>
+<h3 class="detail">Properties</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="PreviousClient"></a><code>property <b>PreviousClient</b>: <a   href="ftpclient.TFtpClient.html">TFtpClient</a> read <a   href="ftpclient.TFtpClient.html#FPreviousClient">FPreviousClient</a> write <a   href="ftpclient.TFtpClient.html#FPreviousClient">FPreviousClient</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Previous client</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="NextClient"></a><code>property <b>NextClient</b>: <a   href="ftpclient.TFtpClient.html">TFtpClient</a> read <a   href="ftpclient.TFtpClient.html#FNextClient">FNextClient</a> write <a   href="ftpclient.TFtpClient.html#FNextClient">FNextClient</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Next client</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FullLog"></a><code>property <b>FullLog</b> : Boolean read <a   href="ftpclient.TFtpClient.html#FFullLog">FFullLog</a> write <a   href="ftpclient.TFtpClient.html#FFullLog">FFullLog</a> ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Full log</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Utf8Support"></a><code>property <b>Utf8Support</b> : Boolean read <a   href="ftpclient.TFtpClient.html#FUtf8Support">FUtf8Support</a> write <a   href="ftpclient.TFtpClient.html#FUtf8Support">FUtf8Support</a> ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Utf8 support</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GuiApplication"></a><code>property <b>GuiApplication</b> : Boolean read <a   href="ftpclient.TFtpClient.html#FGuiApplication">FGuiApplication</a> write <a   href="ftpclient.TFtpClient.html#FGuiApplication">FGuiApplication</a> ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Gui application for non-freeze log in console mode</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="OnLog"></a><code>property <b>OnLog</b>: <a   href="ftptypes.html#TLogProcedure">TLogProcedure</a> read <a   href="ftpclient.TFtpClient.html#FOnLog">FOnLog</a> write <a   href="ftpclient.TFtpClient.html#FOnLog">FOnLog</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Log</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="OnError"></a><code>property <b>OnError</b>: <a   href="ftptypes.html#TLogProcedure">TLogProcedure</a> read <a   href="ftpclient.TFtpClient.html#FOnError">FOnError</a> write <a   href="ftpclient.TFtpClient.html#FOnError">FOnError</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Error</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="OnClientConfigRead"></a><code>property <b>OnClientConfigRead</b>: <a   href="ftptypes.html#TClientConfigReader">TClientConfigReader</a>
+      read <a   href="ftpclient.TFtpClient.html#FOnClientConfigRead">FOnClientConfigRead</a> write <a   href="ftpclient.TFtpClient.html#FOnClientConfigRead">FOnClientConfigRead</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Client config reader</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="OnClientDisconnect"></a><code>property <b>OnClientDisconnect</b>: <a   href="ftpclient.html#TClientDisconnect">TClientDisconnect</a>
+      read <a   href="ftpclient.TFtpClient.html#FOnClientDisconnect">FOnClientDisconnect</a> write <a   href="ftpclient.TFtpClient.html#FOnClientDisconnect">FOnClientDisconnect</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Call when connection shutdown</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="OnLogin"></a><code>property <b>OnLogin</b> : <a   href="ftptypes.html#TClientLogin">TClientLogin</a> read <a   href="ftpclient.TFtpClient.html#FOnLogin">FOnLogin</a> write <a   href="ftpclient.TFtpClient.html#FOnLogin">FOnLogin</a> ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Login</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="OnLogout"></a><code>property <b>OnLogout</b> : <a   href="ftptypes.html#TClientLogout">TClientLogout</a> read <a   href="ftpclient.TFtpClient.html#FOnLogout">FOnLogout</a> write <a   href="ftpclient.TFtpClient.html#FOnLogout">FOnLogout</a> ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Logout</p>
+</td></tr>
+</table>
+<hr noshade size="1"><span class="appinfo"><em>Generated by <a  target="_parent" href="http://pasdoc.sourceforge.net/">PasDoc 0.11.0</a> on 2010-01-16 19:07:42</em>
+</span>
+</body></html>

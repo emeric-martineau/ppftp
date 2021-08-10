@@ -1,0 +1,14 @@
+begin
+    SendAnswer('211-Features:') ;
+    SendAnswer(' MDTM') ;
+    SendAnswer(' SIZE') ;
+
+    if FUtf8Support
+    then begin
+        SendAnswer(' UTF8 ON|OFF') ;
+    end ;
+
+    SendAnswer(' CLNT') ;
+    SendAnswer(' MFMT') ;
+    SendAnswer('211 End') ;
+end ;

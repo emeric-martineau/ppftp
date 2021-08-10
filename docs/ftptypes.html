@@ -1,0 +1,199 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
+<html>
+<head>
+<meta name="GENERATOR" content="PasDoc 0.11.0">
+<meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+<title>ftptypes</title>
+<link rel="StyleSheet" type="text/css" href="pasdoc.css">
+</head>
+<body bgcolor="#ffffff" text="#000000" link="#0000ff" vlink="#800080" alink="#FF0000">
+<h1 class="unit">Unit ftptypes</h1>
+<table class="sections wide_list">
+<tr>
+<td><a class="section"  href="#%40Description">Description</a></td><td>uses</td><td><a class="section"  href="#%40Classes">Classes, Interfaces, Objects and Records</a></td><td>Functions and Procedures</td><td><a class="section"  href="#%40Types">Types</a></td><td>Constants</td><td>Variables</td></tr></table>
+<a name="%40Description"></a><h2 class="description">Description</h2>
+<p>
+This file contain all type</p>
+<a name="%40Uses"></a><h2 class="overview">Overview</h2>
+<a name="%40Classes"></a><h3 class="cio">Classes, Interfaces, Objects and Records</h3>
+<table class="classestable wide_list">
+<tr class="listheader">
+<th class="itemname">Name</th>
+<th class="itemdesc">Description</th>
+</tr>
+<tr class="list">
+<td class="itemname">record&nbsp;<a class="bold"  href="ftptypes.TUserConfig.html"><code>TUserConfig</code></a></td>
+<td class="itemdesc">&nbsp;</td>
+</tr>
+<tr class="list2">
+<td class="itemname">record&nbsp;<a class="bold"  href="ftptypes.TFtpClientConfig.html"><code>TFtpClientConfig</code></a></td>
+<td class="itemdesc">&nbsp;</td>
+</tr>
+</table>
+<a name="%40Types"></a><h3 class="summary">Types</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="itemcode"><code><b><a   href="ftptypes.html#TLogProcedure">TLogProcedure</a></b> = procedure(const asMessage : String) ;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a   href="ftptypes.html#TLoginLogoutProcedure">TLoginLogoutProcedure</a></b> = procedure(const asLogin : String; const aiNumberOfLogin : Integer) ;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a   href="ftptypes.html#TMainConfigReader">TMainConfigReader</a></b> = function(const asKey : String) : String ;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a   href="ftptypes.html#TClientConfigReader">TClientConfigReader</a></b> = function(const asLoginName : String) : <a   href="ftptypes.TUserConfig.html">TUserConfig</a> ;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a   href="ftptypes.html#TClientLogin">TClientLogin</a></b> = function(const asLoginName : String) : Boolean of object ;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a   href="ftptypes.html#TClientLogout">TClientLogout</a></b> = procedure(const asLoginName : String) of object ;</code></td>
+</tr>
+</table>
+<h2 class="description">Description</h2>
+<h3 class="detail">Types</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="TLogProcedure"></a><code><b>TLogProcedure</b> = procedure(const asMessage : String) ;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+This file is part of the Portabl and Pascal FTP Server Copyright (c) 2010 MARTINEAU Emeric.
+
+<p>See the file license, included in this distribution, for details about the license.
+
+<p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. uses Classes, SysUtils; Procedure of log</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="TLoginLogoutProcedure"></a><code><b>TLoginLogoutProcedure</b> = procedure(const asLogin : String; const aiNumberOfLogin : Integer) ;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Login/Logout call back</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="TMainConfigReader"></a><code><b>TMainConfigReader</b> = function(const asKey : String) : String ;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Procedure to read main configuration 
+
+<p>List of values of asKey :              </p>
+<h6 class="description_section">Parameters</h6>
+<dl class="parameters">
+<dt>asKey</dt>
+<dd>key to read</dd>
+</dl>
+<h6 class="description_section">See also</h6>
+<dl class="see_also">
+  <dt><a class="normal"  href="ftpconst.html#MAIN_CONF_PORT">MAIN_CONF_PORT</a></dt>
+  <dd></dd>
+  <dt><a class="normal"  href="ftpconst.html#MAIN_CONF_IP_ADRESS">MAIN_CONF_IP_ADRESS</a></dt>
+  <dd></dd>
+  <dt><a class="normal"  href="ftpconst.html#MAIN_CONF_WELCOME_MESSAGE">MAIN_CONF_WELCOME_MESSAGE</a></dt>
+  <dd></dd>
+  <dt><a class="normal"  href="ftpconst.html#MAIN_CONF_GOODBYE_MESSAGE">MAIN_CONF_GOODBYE_MESSAGE</a></dt>
+  <dd></dd>
+  <dt><a class="normal"  href="ftpconst.html#MAIN_CONF_MAX_SESSION_PER_USER">MAIN_CONF_MAX_SESSION_PER_USER</a></dt>
+  <dd></dd>
+  <dt><a class="normal"  href="ftpconst.html#MAIN_CONF_MAX_CLIENT">MAIN_CONF_MAX_CLIENT</a></dt>
+  <dd></dd>
+  <dt><a class="normal"  href="ftpconst.html#MAIN_CONF_FULL_LOG">MAIN_CONF_FULL_LOG</a></dt>
+  <dd></dd>
+  <dt><a class="normal"  href="ftpconst.html#MAIN_CONF_TIME_OUT">MAIN_CONF_TIME_OUT</a></dt>
+  <dd></dd>
+  <dt><a class="normal"  href="ftpconst.html#MAIN_CONF_PASSIVE_PORT">MAIN_CONF_PASSIVE_PORT</a></dt>
+  <dd></dd>
+  <dt><a class="normal"  href="ftpconst.html#MAIN_CONF_DENY_PRIORITY">MAIN_CONF_DENY_PRIORITY</a></dt>
+  <dd></dd>
+  <dt><a class="normal"  href="ftpconst.html#MAIN_CONF_ALLOW_IP_ADRESS">MAIN_CONF_ALLOW_IP_ADRESS</a></dt>
+  <dd></dd>
+  <dt><a class="normal"  href="ftpconst.html#MAIN_CONF_DENY_IP_ADRESS">MAIN_CONF_DENY_IP_ADRESS</a></dt>
+  <dd></dd>
+  <dt><a class="normal"  href="ftpconst.html#MAIN_CONF_BUFFER_SIZE">MAIN_CONF_BUFFER_SIZE</a></dt>
+  <dd></dd>
+  <dt><a class="normal"  href="ftpconst.html#MAIN_CONF_USER_BYTE_RATE">MAIN_CONF_USER_BYTE_RATE</a></dt>
+  <dd></dd>
+</dl>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="TClientConfigReader"></a><code><b>TClientConfigReader</b> = function(const asLoginName : String) : <a   href="ftptypes.TUserConfig.html">TUserConfig</a> ;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Procedure ro read user configuration  
+
+<p>List of value of asKey          </p>
+<h6 class="description_section">Parameters</h6>
+<dl class="parameters">
+<dt>asLoginName</dt>
+<dd>name of login</dd>
+<dt>asKey</dt>
+<dd>key to read</dd>
+</dl>
+<h6 class="description_section">See also</h6>
+<dl class="see_also">
+  <dt><a class="normal"  href="ftpconst.html#USER_CONF_PASSWORD">USER_CONF_PASSWORD</a></dt>
+  <dd></dd>
+  <dt><a class="normal"  href="ftpconst.html#USER_CONF_ROOT">USER_CONF_ROOT</a></dt>
+  <dd></dd>
+  <dt><a class="normal"  href="ftpconst.html#USER_CONF_DOWNLOAD">USER_CONF_DOWNLOAD</a></dt>
+  <dd></dd>
+  <dt><a class="normal"  href="ftpconst.html#USER_CONF_UPLOAD">USER_CONF_UPLOAD</a></dt>
+  <dd></dd>
+  <dt><a class="normal"  href="ftpconst.html#USER_CONF_RENAME">USER_CONF_RENAME</a></dt>
+  <dd></dd>
+  <dt><a class="normal"  href="ftpconst.html#USER_CONF_DELETE">USER_CONF_DELETE</a></dt>
+  <dd></dd>
+  <dt><a class="normal"  href="ftpconst.html#USER_CONF_MAKE_DIRECTORY">USER_CONF_MAKE_DIRECTORY</a></dt>
+  <dd></dd>
+  <dt><a class="normal"  href="ftpconst.html#USER_CONF_DELETE_DIRECTORY">USER_CONF_DELETE_DIRECTORY</a></dt>
+  <dd></dd>
+  <dt><a class="normal"  href="ftpconst.html#USER_CONF_SUB_DIR">USER_CONF_SUB_DIR</a></dt>
+  <dd></dd>
+  <dt><a class="normal"  href="ftpconst.html#USER_CONF_DISABLED">USER_CONF_DISABLED</a></dt>
+  <dd></dd>
+</dl>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="TClientLogin"></a><code><b>TClientLogin</b> = function(const asLoginName : String) : Boolean of object ;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Login function call to know if we can login 
+
+<p></p>
+<h6 class="description_section">Parameters</h6>
+<dl class="parameters">
+<dt>asLoginName</dt>
+<dd>login name</dd>
+</dl>
+<h6 class="description_section">Returns</h6>
+<p class="return">True if can connect, False else (caus maximum login)</p></td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="TClientLogout"></a><code><b>TClientLogout</b> = procedure(const asLoginName : String) of object ;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Logout procedure </p>
+<h6 class="description_section">Parameters</h6>
+<dl class="parameters">
+<dt>asLoginName</dt>
+<dd>login name</dd>
+</dl>
+</td></tr>
+</table>
+<hr noshade size="1"><span class="appinfo"><em>Generated by <a  target="_parent" href="http://pasdoc.sourceforge.net/">PasDoc 0.11.0</a> on 2010-01-16 19:07:42</em>
+</span>
+</body></html>

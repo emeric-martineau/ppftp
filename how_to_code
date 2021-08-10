@@ -1,0 +1,174 @@
+Clean Coding
+Clean coding is not new programming method, like Extreme programming (http://fr.wikipedia.org/wiki/Extreme_programming). It's juste some rule to write code to not create bug. Idea comme me in work, when I debug because people have bad writing some code.
+
+1 - Name of variable
+--------------------
+Name of variable must be named like xyZzzzZzzz (2 firsts char in lower case) 
+
+xyZZZZZ :
+
+
+           x : l : local variable
+               g : global variable/public variable
+               p : private/protected variable
+               a : argument variable
+               c : constante
+               
+           y : s : string
+               i : integer
+               f : fload
+               d : double
+               a : array
+               l : list<>
+               o : object
+               b : bool/byte
+               c : char
+               l : long
+               c : cardinal
+               e : extend
+               w : word
+
+          ZZZZ : name of variable
+
+Never use underscore (_). Each word start by upper case : goIsEnd
+Name of var must be significative.
+
+2 - Name of function/procedure
+------------------------------
+To easy distinct variable ant function/procedure, function name start by upper case. But, pascal are not case sensitive, it's just better to read.
+Never use underscore (_).
+
+3 - Indentation
+---------------
+This is a sensitive subjet cause developper's world have divergence. I must be choice a solution to have same presentation on all configuration. I've choice 4 space to indent. 
+
+
+function truc()
+begin
+    if 1 = 1
+    then begin
+        writeln("coucou") ;
+    end ;
+end ;
+
+4 - Readability of code
+-----------------------
+To have good readability of code, we must aerate code.
+Seprate instruction who have not link
+Space after comma (,).
+Space before semicolon.
+Space after and before :=, =, >, <>, <, +, - ....
+
+
+function machin()
+var
+    { Compteur de boucle }
+    liIndex : Integer ;
+begin
+    liIndex := 1 ;
+    
+    for liIndex := 1 to 3 do
+    begin
+        MaFonction(1, 2, 3) ;
+    end ;
+end ;
+
+5 - Header of function
+----------------------
+Function must be have header except function to implement SimpleWebScript command (like strPrintF). Header are below :
+
+//
+// Descriptif
+//
+// @param (var|const) parametre 1
+// @param parametre 2
+//
+// @return retour
+//
+// @author moi
+// @created 2010-01-05
+
+
+6 - One enter, one exit
+-----------------------
+Function/procedure have one enter. To easy read code, function/procedure must be have one exit, except if one exit complicates code.
+
+7 - Comments
+------------
+We must comment code, especially if code are compliqued.
+We must be comment variable declaration.
+
+8 - Operator += -=...
+---------------------
+Pascal dont have operator : +=, -=, &=, |=, *= and it good cause, there operator make code hard to read.
+
+9 - Loop counter
+----------------
+In scool or in literature, you can see i, j, k to loop counter. Problem, it's not significative and, if you have loop in loop, you can reverse counter.
+Prefer use liIndexChar or other.
+
+10 - Delimitation of if/while/repeat/for
+----------------------------------------
+ALWAYS use begin/end in if/while/repeat/for operator. It's better to read, and avoids bugs.
+
+if (truc() = 1)
+then
+    for liIndexItemArray := 0 to 120 do
+    begin
+        ...       
+        ...
+        ...
+        ...
+        ...
+        ...
+        ...
+        ...
+        ...
+        ...
+        ...
+        ...
+        ...
+        ...
+        ...
+        ...
+        ...
+        ...        
+    end ;
+ // pourquoi est-ce indenté ? Il faut remonter jusqu'en haut pour le savoir
+
+Moreover, we must align begin with end, except with if, cause is more fine :
+
+for liIndexItemArray := 0 to 120 do
+begin
+end ;
+
+while truc()  do
+begin
+end ;
+
+// Not fine
+if 1 = 1 then
+begin
+end
+else
+begin
+
+// Better fine
+if 1 = 1
+then begin
+end
+else begin
+end ;
+end ;
+
+11 - More small is better
+-------------------------
+When you coding, to lite code, use function or procedure, but, dont create a function with have only function cause, the code becomes unreadable.
+
+12 - Allways compare to value
+-----------------------------
+For if/while/repeat, allways compare to value, except if true or false.
+
+13 - Not infinity loop
+----------------------
+In loop, allways compare the condition to value, never have while (true).

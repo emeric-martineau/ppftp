@@ -1,0 +1,226 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
+<html>
+<head>
+<meta name="GENERATOR" content="PasDoc 0.11.0">
+<meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+<title>ftpfunctions</title>
+<link rel="StyleSheet" type="text/css" href="pasdoc.css">
+</head>
+<body bgcolor="#ffffff" text="#000000" link="#0000ff" vlink="#800080" alink="#FF0000">
+<h1 class="unit">Unit ftpfunctions</h1>
+<table class="sections wide_list">
+<tr>
+<td><a class="section"  href="#%40Description">Description</a></td><td>uses</td><td>Classes, Interfaces, Objects and Records</td><td><a class="section"  href="#%40FuncsProcs">Functions and Procedures</a></td><td>Types</td><td>Constants</td><td>Variables</td></tr></table>
+<a name="%40Description"></a><h2 class="description">Description</h2>
+<p>
+This unit contain commun functions of FTP</p>
+<a name="%40Uses"></a><h2 class="overview">Overview</h2>
+<a name="%40FuncsProcs"></a><h3 class="summary">Functions and Procedures</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="itemcode"><code>function <b><a   href="ftpfunctions.html#TryIntParse">TryIntParse</a></b>(const asIntegerString : String; var aiInteger : Integer) : Boolean ;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a   href="ftpfunctions.html#AddTrailingEndSlash">AddTrailingEndSlash</a></b>(const asString : String) : String ;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a   href="ftpfunctions.html#ConvertMessage">ConvertMessage</a></b>(const asString : String; const asSeparator : String; const asHeader : String; const asEndOfLine : String) : String ;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a   href="ftpfunctions.html#StringToTStringList">StringToTStringList</a></b>(const asString : String; const asSeparator : String) : TStringList ;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>procedure <b><a   href="ftpfunctions.html#StringToTStringListNoCreate">StringToTStringListNoCreate</a></b>(const asString : String; const asSeparator : String; const aoList : TStringList) ;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a   href="ftpfunctions.html#ConvertPassivePort">ConvertPassivePort</a></b>(const asPassivePortString : String; var aiStartPort : Integer; var aiEndPort : Integer) : Boolean ;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>function <b><a   href="ftpfunctions.html#CheckIpAddressInList">CheckIpAddressInList</a></b>(const asIpAddress : String; const aoList : TStringList) : Boolean ;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code>function <b><a   href="ftpfunctions.html#CheckTStringsWithJocker">CheckTStringsWithJocker</a></b>(const aoList1 : TStringList; const aoList2 : TStringList) : Boolean ;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code>procedure <b><a   href="ftpfunctions.html#SendString">SendString</a></b>(const aoClientSock : TTCPBlockSocket; const asString : String) ;</code></td>
+</tr>
+</table>
+<h2 class="description">Description</h2>
+<h3 class="detail">Functions and Procedures</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="TryIntParse"></a><code>function <b>TryIntParse</b>(const asIntegerString : String; var aiInteger : Integer) : Boolean ;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Try parse a integer value
+
+<p> 
+
+<p></p>
+<h6 class="description_section">Parameters</h6>
+<dl class="parameters">
+<dt>asIntegerString</dt>
+<dd>String to be converted</dd>
+<dt>aiInteger</dt>
+<dd>result</dd>
+</dl>
+<h6 class="description_section">Returns</h6>
+<p class="return">true if ok, false else</p></td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="AddTrailingEndSlash"></a><code>function <b>AddTrailingEndSlash</b>(const asString : String) : String ;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Add \ or / at end if no yet
+
+<p></p>
+<h6 class="description_section">Parameters</h6>
+<dl class="parameters">
+<dt>asString</dt>
+<dd>string</dd>
+</dl>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="ConvertMessage"></a><code>function <b>ConvertMessage</b>(const asString : String; const asSeparator : String; const asHeader : String; const asEndOfLine : String) : String ;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Convert string with \n into xxx
+
+<p>   </p>
+<h6 class="description_section">Parameters</h6>
+<dl class="parameters">
+<dt>asString</dt>
+<dd>string to be converted</dd>
+<dt>asSeparator</dt>
+<dd>\n or something else</dd>
+<dt>asHeader</dt>
+<dd>start line</dd>
+<dt>asEndOfLine</dt>
+<dd>end of line</dd>
+</dl>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="StringToTStringList"></a><code>function <b>StringToTStringList</b>(const asString : String; const asSeparator : String) : TStringList ;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Split String to TStringList
+
+<p> </p>
+<h6 class="description_section">Parameters</h6>
+<dl class="parameters">
+<dt>asString</dt>
+<dd>string to split</dd>
+<dt>asSeparator</dt>
+<dd>separator to split</dd>
+</dl>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="StringToTStringListNoCreate"></a><code>procedure <b>StringToTStringListNoCreate</b>(const asString : String; const asSeparator : String; const aoList : TStringList) ;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Split String to TStringList
+
+<p>  </p>
+<h6 class="description_section">Parameters</h6>
+<dl class="parameters">
+<dt>asString</dt>
+<dd>string to split</dd>
+<dt>asSeparator</dt>
+<dd>separator to split</dd>
+<dt>aoList</dt>
+<dd>list to store result</dd>
+</dl>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="ConvertPassivePort"></a><code>function <b>ConvertPassivePort</b>(const asPassivePortString : String; var aiStartPort : Integer; var aiEndPort : Integer) : Boolean ;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Split string with '-' separator and convert both part in integer
+
+<p>  
+
+<p></p>
+<h6 class="description_section">Parameters</h6>
+<dl class="parameters">
+<dt>asPassivePortString</dt>
+<dd>string to be split</dd>
+<dt>aiStartPort</dt>
+<dd>result of start port</dd>
+<dt>aiEndPort</dt>
+<dd>result of end port</dd>
+</dl>
+<h6 class="description_section">Returns</h6>
+<p class="return">True if not error</p></td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="CheckIpAddressInList"></a><code>function <b>CheckIpAddressInList</b>(const asIpAddress : String; const aoList : TStringList) : Boolean ;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Check an ip address in list of ip address
+
+<p> </p>
+<h6 class="description_section">Parameters</h6>
+<dl class="parameters">
+<dt>asIpAddress</dt>
+<dd>ip address to check</dd>
+<dt>aoList</dt>
+<dd>list of ip address</dd>
+</dl>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="CheckTStringsWithJocker"></a><code>function <b>CheckTStringsWithJocker</b>(const aoList1 : TStringList; const aoList2 : TStringList) : Boolean ;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Check if two list are equals with jocker support
+
+<p> </p>
+<h6 class="description_section">Parameters</h6>
+<dl class="parameters">
+<dt>aoList1</dt>
+<dd>first list</dd>
+<dt>aoList2</dt>
+<dd>second list</dd>
+</dl>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="SendString"></a><code>procedure <b>SendString</b>(const aoClientSock : TTCPBlockSocket; const asString : String) ;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Send a string and add #10#13 at end
+
+<p> </p>
+<h6 class="description_section">Parameters</h6>
+<dl class="parameters">
+<dt>aoClientSock</dt>
+<dd>socket to send</dd>
+<dt>asString</dt>
+<dd>string to send</dd>
+</dl>
+</td></tr>
+</table>
+<hr noshade size="1"><span class="appinfo"><em>Generated by <a  target="_parent" href="http://pasdoc.sourceforge.net/">PasDoc 0.11.0</a> on 2010-01-16 19:07:42</em>
+</span>
+</body></html>

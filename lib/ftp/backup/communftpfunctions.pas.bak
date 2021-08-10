@@ -1,0 +1,45 @@
+// This unit contain commun functions of FTP
+unit communftpfunctions;
+
+// This file is part of the Portabl and Pascal FTP Server
+// Copyright (c) 2010 MARTINEAU Emeric.
+//
+// See the file license, included in this distribution,
+// for details about the license.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+{$mode objfpc}{$H+}
+
+interface
+
+uses
+  Classes, SysUtils; 
+
+implementation
+
+//
+// Try parse a integer value
+//
+// @param asIntegerString String to be converted
+// @param (var) aiInteger result
+//
+// @return true if ok, false else
+function TryIntParse(const asIntegerString : String; var aiInteger : Integer) : Boolean ;
+begin
+    Result := False ;
+
+    Try
+        aiInteger := StrToInt(asIntegerString) ;
+
+        Result := True ;
+    except
+        on E : EConvertError do
+            Result := False ;
+    end;
+end ;
+
+end.
+

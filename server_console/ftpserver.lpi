@@ -1,0 +1,370 @@
+<?xml version="1.0"?>
+<CONFIG>
+  <ProjectOptions>
+    <PathDelim Value="\"/>
+    <Version Value="7"/>
+    <General>
+      <Flags>
+        <MainUnitHasCreateFormStatements Value="False"/>
+        <MainUnitHasTitleStatement Value="False"/>
+      </Flags>
+      <MainUnit Value="0"/>
+      <TargetFileExt Value=".exe"/>
+      <Icon Value="0"/>
+      <UseXPManifest Value="True"/>
+      <ActiveEditorIndexAtStart Value="4"/>
+    </General>
+    <VersionInfo>
+      <ProjectVersion Value=""/>
+      <Language Value=""/>
+      <CharSet Value=""/>
+    </VersionInfo>
+    <PublishOptions>
+      <Version Value="2"/>
+      <IgnoreBinaries Value="False"/>
+      <IncludeFileFilter Value="*.(pas|pp|inc|lfm|lpr|lrs|lpi|lpk|sh|xml)"/>
+      <ExcludeFileFilter Value="*.(bak|ppu|ppw|o|so);*~;backup"/>
+    </PublishOptions>
+    <RunParams>
+      <local>
+        <FormatVersion Value="1"/>
+        <CommandLineParams Value="-root conf"/>
+        <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
+      </local>
+    </RunParams>
+    <RequiredPackages Count="1">
+      <Item1>
+        <PackageName Value="LCL"/>
+      </Item1>
+    </RequiredPackages>
+    <Units Count="23">
+      <Unit0>
+        <Filename Value="ftpserver.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="ftpserver"/>
+        <CursorPos X="55" Y="424"/>
+        <TopLine Value="386"/>
+        <EditorIndex Value="0"/>
+        <UsageCount Value="63"/>
+        <Loaded Value="True"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="..\lib\ftp\ftpmain.pas"/>
+        <UnitName Value="ftpmain"/>
+        <CursorPos X="1" Y="819"/>
+        <TopLine Value="781"/>
+        <EditorIndex Value="4"/>
+        <UsageCount Value="29"/>
+        <Loaded Value="True"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="C:\travail\lazarus\fpc\2.2.4\source\rtl\objpas\objpas.pp"/>
+        <UnitName Value="objpas"/>
+        <CursorPos X="7" Y="178"/>
+        <TopLine Value="166"/>
+        <UsageCount Value="9"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="C:\travail\lazarus\fpc\2.2.4\source\rtl\win32\system.pp"/>
+        <UnitName Value="System"/>
+        <CursorPos X="8" Y="1058"/>
+        <TopLine Value="1045"/>
+        <UsageCount Value="9"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="C:\travail\lazarus\lcl\fileutil.pas"/>
+        <UnitName Value="FileUtil"/>
+        <CursorPos X="10" Y="45"/>
+        <TopLine Value="26"/>
+        <UsageCount Value="10"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="C:\travail\lazarus\lcl\include\fileutil.inc"/>
+        <CursorPos X="1" Y="237"/>
+        <TopLine Value="218"/>
+        <UsageCount Value="9"/>
+      </Unit5>
+      <Unit6>
+        <Filename Value="C:\travail\lazarus\fpc\2.2.4\source\rtl\objpas\sysutils\datih.inc"/>
+        <CursorPos X="10" Y="130"/>
+        <TopLine Value="111"/>
+        <UsageCount Value="9"/>
+      </Unit6>
+      <Unit7>
+        <Filename Value="..\lib\ftp\ftpmessages.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="ftpmessages"/>
+        <CursorPos X="33" Y="40"/>
+        <TopLine Value="20"/>
+        <EditorIndex Value="1"/>
+        <UsageCount Value="60"/>
+        <Loaded Value="True"/>
+      </Unit7>
+      <Unit8>
+        <Filename Value="..\lib\ftp\ftpfunctions.pas"/>
+        <UnitName Value="ftpfunctions"/>
+        <CursorPos X="34" Y="244"/>
+        <TopLine Value="230"/>
+        <EditorIndex Value="7"/>
+        <UsageCount Value="28"/>
+        <Loaded Value="True"/>
+      </Unit8>
+      <Unit9>
+        <Filename Value="..\lib\ftp\ftpconst.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="ftpconst"/>
+        <CursorPos X="1" Y="26"/>
+        <TopLine Value="17"/>
+        <EditorIndex Value="2"/>
+        <UsageCount Value="60"/>
+        <Loaded Value="True"/>
+      </Unit9>
+      <Unit10>
+        <Filename Value="..\lib\ftp\ftptype.pas"/>
+        <UnitName Value="ftpconst"/>
+        <CursorPos X="1" Y="1"/>
+        <TopLine Value="1"/>
+        <UsageCount Value="9"/>
+      </Unit10>
+      <Unit11>
+        <Filename Value="..\lib\ftp\ftptypes.pas"/>
+        <UnitName Value="ftptypes"/>
+        <CursorPos X="26" Y="26"/>
+        <TopLine Value="1"/>
+        <EditorIndex Value="6"/>
+        <UsageCount Value="28"/>
+        <Loaded Value="True"/>
+      </Unit11>
+      <Unit12>
+        <Filename Value="..\lib\synapse\synsock.pas"/>
+        <UnitName Value="synsock"/>
+        <CursorPos X="16" Y="61"/>
+        <TopLine Value="30"/>
+        <UsageCount Value="12"/>
+      </Unit12>
+      <Unit13>
+        <Filename Value="..\..\fpc\2.2.4\source\rtl\unix\unixtype.pp"/>
+        <UnitName Value="unixtype"/>
+        <CursorPos X="2" Y="21"/>
+        <TopLine Value="1"/>
+        <UsageCount Value="10"/>
+      </Unit13>
+      <Unit14>
+        <Filename Value="..\lib\synapse\blcksock.pas"/>
+        <UnitName Value="blcksock"/>
+        <CursorPos X="1" Y="2531"/>
+        <TopLine Value="2512"/>
+        <UsageCount Value="12"/>
+      </Unit14>
+      <Unit15>
+        <Filename Value="..\lib\synapse\sswin32.pas"/>
+        <UnitName Value="sswin32"/>
+        <CursorPos X="17" Y="1"/>
+        <TopLine Value="1"/>
+        <UsageCount Value="11"/>
+      </Unit15>
+      <Unit16>
+        <Filename Value="..\lib\synapse\ssfpc.pas"/>
+        <UnitName Value="ssfpc"/>
+        <CursorPos X="3" Y="91"/>
+        <TopLine Value="72"/>
+        <UsageCount Value="11"/>
+      </Unit16>
+      <Unit17>
+        <Filename Value="..\lib\synapse\synautil.pas"/>
+        <UnitName Value="synautil"/>
+        <CursorPos X="1" Y="1"/>
+        <TopLine Value="1"/>
+        <UsageCount Value="11"/>
+      </Unit17>
+      <Unit18>
+        <Filename Value="..\lib\ftp\ftpclient.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="ftpclient"/>
+        <CursorPos X="1" Y="1"/>
+        <TopLine Value="1"/>
+        <EditorIndex Value="3"/>
+        <UsageCount Value="41"/>
+        <Loaded Value="True"/>
+      </Unit18>
+      <Unit19>
+        <Filename Value="..\lib\ftp\ftpfeatcmd.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="ftpfeatcmd"/>
+        <CursorPos X="24" Y="30"/>
+        <TopLine Value="1"/>
+        <UsageCount Value="24"/>
+      </Unit19>
+      <Unit20>
+        <Filename Value="..\lib\ftp\ftpfeatcmd.inc"/>
+        <CursorPos X="7" Y="12"/>
+        <TopLine Value="1"/>
+        <UsageCount Value="10"/>
+      </Unit20>
+      <Unit21>
+        <Filename Value="..\lib\ftp\ftputf8cmd.inc"/>
+        <CursorPos X="24" Y="23"/>
+        <TopLine Value="1"/>
+        <EditorIndex Value="5"/>
+        <UsageCount Value="12"/>
+        <Loaded Value="True"/>
+      </Unit21>
+      <Unit22>
+        <Filename Value=""/>
+        <UsageCount Value="10"/>
+      </Unit22>
+    </Units>
+    <JumpHistory Count="29" HistoryIndex="28">
+      <Position1>
+        <Filename Value="..\lib\ftp\ftpclient.pas"/>
+        <Caret Line="355" Column="26" TopLine="345"/>
+      </Position1>
+      <Position2>
+        <Filename Value="..\lib\ftp\ftpclient.pas"/>
+        <Caret Line="362" Column="17" TopLine="336"/>
+      </Position2>
+      <Position3>
+        <Filename Value="..\lib\ftp\ftpclient.pas"/>
+        <Caret Line="78" Column="1" TopLine="58"/>
+      </Position3>
+      <Position4>
+        <Filename Value="..\lib\ftp\ftpclient.pas"/>
+        <Caret Line="374" Column="40" TopLine="346"/>
+      </Position4>
+      <Position5>
+        <Filename Value="..\lib\ftp\ftpclient.pas"/>
+        <Caret Line="80" Column="1" TopLine="73"/>
+      </Position5>
+      <Position6>
+        <Filename Value="..\lib\ftp\ftpclient.pas"/>
+        <Caret Line="432" Column="9" TopLine="413"/>
+      </Position6>
+      <Position7>
+        <Filename Value="..\lib\ftp\ftpclient.pas"/>
+        <Caret Line="448" Column="13" TopLine="429"/>
+      </Position7>
+      <Position8>
+        <Filename Value="..\lib\ftp\ftpclient.pas"/>
+        <Caret Line="505" Column="5" TopLine="486"/>
+      </Position8>
+      <Position9>
+        <Filename Value="..\lib\ftp\ftpmain.pas"/>
+        <Caret Line="96" Column="1" TopLine="90"/>
+      </Position9>
+      <Position10>
+        <Filename Value="..\lib\ftp\ftpclient.pas"/>
+        <Caret Line="601" Column="58" TopLine="574"/>
+      </Position10>
+      <Position11>
+        <Filename Value="..\lib\ftp\ftpclient.pas"/>
+        <Caret Line="79" Column="1" TopLine="79"/>
+      </Position11>
+      <Position12>
+        <Filename Value="..\lib\ftp\ftpclient.pas"/>
+        <Caret Line="393" Column="51" TopLine="370"/>
+      </Position12>
+      <Position13>
+        <Filename Value="ftpserver.lpr"/>
+        <Caret Line="39" Column="28" TopLine="19"/>
+      </Position13>
+      <Position14>
+        <Filename Value="..\lib\ftp\ftpclient.pas"/>
+        <Caret Line="589" Column="13" TopLine="497"/>
+      </Position14>
+      <Position15>
+        <Filename Value="..\lib\ftp\ftpclient.pas"/>
+        <Caret Line="157" Column="1" TopLine="157"/>
+      </Position15>
+      <Position16>
+        <Filename Value="..\lib\ftp\ftpmain.pas"/>
+        <Caret Line="662" Column="46" TopLine="634"/>
+      </Position16>
+      <Position17>
+        <Filename Value="..\lib\ftp\ftpmain.pas"/>
+        <Caret Line="139" Column="35" TopLine="104"/>
+      </Position17>
+      <Position18>
+        <Filename Value="..\lib\ftp\ftpmain.pas"/>
+        <Caret Line="805" Column="21" TopLine="693"/>
+      </Position18>
+      <Position19>
+        <Filename Value="..\lib\ftp\ftpmain.pas"/>
+        <Caret Line="108" Column="1" TopLine="130"/>
+      </Position19>
+      <Position20>
+        <Filename Value="..\lib\ftp\ftpmain.pas"/>
+        <Caret Line="824" Column="11" TopLine="787"/>
+      </Position20>
+      <Position21>
+        <Filename Value="..\lib\ftp\ftpmain.pas"/>
+        <Caret Line="111" Column="19" TopLine="85"/>
+      </Position21>
+      <Position22>
+        <Filename Value="..\lib\ftp\ftpmain.pas"/>
+        <Caret Line="824" Column="14" TopLine="789"/>
+      </Position22>
+      <Position23>
+        <Filename Value="..\lib\ftp\ftpmain.pas"/>
+        <Caret Line="98" Column="21" TopLine="53"/>
+      </Position23>
+      <Position24>
+        <Filename Value="..\lib\ftp\ftpmain.pas"/>
+        <Caret Line="809" Column="9" TopLine="771"/>
+      </Position24>
+      <Position25>
+        <Filename Value="..\lib\ftp\ftpmain.pas"/>
+        <Caret Line="194" Column="17" TopLine="168"/>
+      </Position25>
+      <Position26>
+        <Filename Value="..\lib\ftp\ftpmain.pas"/>
+        <Caret Line="764" Column="60" TopLine="738"/>
+      </Position26>
+      <Position27>
+        <Filename Value="..\lib\ftp\ftpmain.pas"/>
+        <Caret Line="817" Column="57" TopLine="791"/>
+      </Position27>
+      <Position28>
+        <Filename Value="..\lib\ftp\ftpmain.pas"/>
+        <Caret Line="826" Column="31" TopLine="800"/>
+      </Position28>
+      <Position29>
+        <Filename Value="..\lib\ftp\ftpmain.pas"/>
+        <Caret Line="103" Column="77" TopLine="76"/>
+      </Position29>
+    </JumpHistory>
+  </ProjectOptions>
+  <CompilerOptions>
+    <Version Value="8"/>
+    <PathDelim Value="\"/>
+    <SearchPaths>
+      <IncludeFiles Value="$(ProjOutDir)\"/>
+      <OtherUnitFiles Value="..\lib\ftp\;..\lib\synapse\"/>
+    </SearchPaths>
+    <Parsing>
+      <SyntaxOptions>
+        <CStyleOperator Value="False"/>
+        <AllowLabel Value="False"/>
+        <CPPInline Value="False"/>
+      </SyntaxOptions>
+    </Parsing>
+    <Other>
+      <ConfigFile>
+        <CustomConfigFile Value="True"/>
+      </ConfigFile>
+      <CompilerPath Value="$(CompPath)"/>
+    </Other>
+  </CompilerOptions>
+  <Debugging>
+    <Exceptions Count="3">
+      <Item1>
+        <Name Value="EAbort"/>
+      </Item1>
+      <Item2>
+        <Name Value="ECodetoolError"/>
+      </Item2>
+      <Item3>
+        <Name Value="EFOpenError"/>
+      </Item3>
+    </Exceptions>
+  </Debugging>
+</CONFIG>

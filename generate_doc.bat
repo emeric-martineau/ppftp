@@ -1,0 +1,1 @@
+pasdoc -E docs/ -L en -S pasdoc-src-file
