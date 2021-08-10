@@ -12,7 +12,7 @@ var
     // Sys path
     lsSysPath : String ;
 begin
-    if prUserConfig.ListSubDir
+    if prUserConfig.SubDir
     then begin
         lsPath := asParameter ;
 

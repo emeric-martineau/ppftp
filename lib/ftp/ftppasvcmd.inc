@@ -29,14 +29,14 @@ begin
                 poPassivePortSock.Bind(poClientSock.GetLocalSinIP,
                     IntToStr(prPassivePort^.Port)) ;
 
-                 if poPassivePortSock.LastError = 0
-                 then begin
-                     break ;
-                 end ;
+                if poPassivePortSock.LastError = 0
+                then begin
+                    break ;
+                end ;
 
-                 FreePassivePort(prPassivePort) ;
+                FreePassivePort(prPassivePort) ;
 
-                 prPassivePort := GetPassivePort ;
+                prPassivePort := GetPassivePort ;
             end ;
 
             if poPassivePortSock.LastError = 0

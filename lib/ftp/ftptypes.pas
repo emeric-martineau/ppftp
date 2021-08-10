@@ -19,6 +19,9 @@ interface
 //  Classes, SysUtils;
 
 type
+    // Procedure of start or stop server
+    TStartStopServerProcedure = procedure ;
+
     // Procedure of log
     // @param asMessage message to log
     TLogProcedure = procedure(const asMessage : String) ;
@@ -38,7 +41,7 @@ type
     // @param asValue return value in config file
     //
     // @return True if local folder config exists
-    TFolderLocalConfigExists = function(const asFolderName : String;
+    TFolderLocalConfigExistsFunction = function(const asFolderName : String;
         const abUtf8 : Boolean; const asKey : String;
         var asValue : String) : Boolean ;
 
@@ -61,7 +64,7 @@ type
     //  @seealso(MAIN_CONF_DENY_IP_ADRESS)
     //  @seealso(MAIN_CONF_BUFFER_SIZE)
     //  @seealso(MAIN_CONF_USER_BYTE_RATE)
-    TMainConfigReader = function(const asKey : String) : String ;
+    TMainConfigReaderFunction = function(const asKey : String) : String ;
 
     // Type of user config
     TUserConfig = record
@@ -72,10 +75,11 @@ type
         Delete : String ;
         MakeDirectory : String ;
         DeleteDirectory : String ;
-        ListSubDir : String ;
+        SubDir : String ;
         Disabled : String ;
         ModifyFileTime : String ;
         UserFound : Boolean ;
+        ByteRate : String ;
     end ;
 
     // Procedure ro read user configuration
@@ -94,7 +98,7 @@ type
     //  @seealso(USER_CONF_DELETE_DIRECTORY)
     //  @seealso(USER_CONF_SUB_DIR)
     //  @seealso(USER_CONF_DISABLED)
-    TClientConfigReader = function(const asLoginName : String) : TUserConfig ;
+    TClientConfigReaderFunction = function(const asLoginName : String) : TUserConfig ;
 
     // check if password is good
     //
@@ -102,19 +106,19 @@ type
     // @param asPassword sending password
     //
     // @return True if password match ok
-    TClientCheckPassword = function(const asLoginName : String; const asPassword : String) : Boolean ;
+    TClientCheckPasswordFunction = function(const asLoginName : String; const asPassword : String) : Boolean ;
 
     // Login function call to know if we can login
     //
     // @param asLoginName login name
     //
     // @return True if can connect, False else (caus maximum login)
-    TClientLogin = function(const asLoginName : String) : Boolean of object ;
+    TClientLoginFunction = function(const asLoginName : String) : Boolean of object ;
 
     // Logout procedure
     //
     // @param asLoginName login name
-    TClientLogout = procedure(const asLoginName : String) of object ;
+    TClientLogoutProcedure = procedure(const asLoginName : String) of object ;
 
     // Type of user config for ftp client
     TFtpClientConfig = record
@@ -126,10 +130,11 @@ type
         Delete : Boolean ;
         MakeDirectory : Boolean ;
         DeleteDirectory : Boolean ;
-        ListSubDir : Boolean ;
+        SubDir : Boolean ;
         Disabled : Boolean ;
         Connected : Boolean ;
         UserFound : Boolean ;
+        ByteRate : Integer ;
     end ;
 
     // Passive port
@@ -146,23 +151,42 @@ type
     // @return port
     //
     // @seealso(TFreePassivePort)
-    TGetPassivePort = function() : PFtpPassivePort of object ;
+    TGetPassivePortFunction = function() : PFtpPassivePort of object ;
 
     // Free passive port
     //
     // @param asPort port return by TGetPassivePort
     //
     // @seealso(TGetPassivePort)
-    TFreePassivePort = procedure(const asPort : PFtpPassivePort) of object ;
+    TFreePassivePortProcedure = procedure(const asPort : PFtpPassivePort) of object ;
 
     // If file is protected and therefore we say doesn't exists
     //
     // @param asPathAndFileName complete file name with path
     // @param asUtf8 utf8 mode enabled
-    TFileProtected = function(const asPathAndFileName : String;
+    TFileProtectedFunction = function(const asPathAndFileName : String;
         const abUtf8 : Boolean) : Boolean ;
 
+    // Transfert mode
     TTransfertMode = (tmBinary, tmAscii) ;
+
+    // Transfert result
+    TTransfertResult = (trNoError, trAborted, trError) ;
+
+    // Transfert call back
+    //
+    // @param asLoginName login to trasfert
+    // @param asFileName filename
+    // @param asDownload true if download, false if upload
+    // @param asStart true start, false stop
+    // @param asFtpClient ftp client (TFtpClient)
+    TTransfertProcedure = procedure(const asLoginName : String;
+        const asFileName : String; const asDownload : Boolean;
+        const asStart : Boolean; const asFtpClient : Pointer) ;
+
+    // Type of store commande
+    TStoreCommandeMode = (scmNormal, scmUnique, scmAppend) ;
+
 implementation
 
 end.

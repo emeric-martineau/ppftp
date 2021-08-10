@@ -1,6 +1,3 @@
-// This file contain all type
-unit ftpversion;
-
 // This file is part of the Portabl and Pascal FTP Server
 // Copyright (c) 2010 MARTINEAU Emeric.
 //
@@ -10,15 +7,18 @@ unit ftpversion;
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+var
+    liValue : Integer ;
+begin
+    liValue := 0 ;
 
-{$mode objfpc}{$H+}
+    if TryIntParse(asParameter, liValue)
+    then begin
+        piStartTransfertFileValue := liValue ;
 
-interface
-
-const
-    FTP_VERSION : String = '0.3.0' ;
-
-implementation
-
-end.
-
+        SendAnswer(Format(MSG_FTP_REST_OK, [liValue])) ;
+    end
+    else begin
+        SendAnswer(Format(MSG_FTP_REST_FAIL, [asParameter])) ;
+    end ;
+end ;

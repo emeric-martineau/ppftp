@@ -8,6 +8,7 @@ object MainConfigForm: TMainConfigForm
   Caption = 'Main config'
   ClientHeight = 471
   ClientWidth = 522
+  OnCreate = FormCreate
   OnShow = FormShow
   Position = poMainFormCenter
   LCLVersion = '0.9.28.2'

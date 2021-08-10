@@ -36,15 +36,17 @@ type
         // Number of current client
         FClientCount : Integer ;
         // Config reader
-        FOnClientConfigRead : TClientConfigReader ;
+        FOnClientConfigRead : TClientConfigReaderFunction ;
         {$IFDEF GUI_APPLICATION_SUPPORT}
         // Gui application for non-freeze log in console mode
         FGuiApplication : Boolean ;
         {$ENDIF}
+        {$IFDEF CALL_BACK_LOGIN_LOGOUT}
         // Callback procedure for logout
         FOnLogin : TLoginLogoutProcedure ;
         // Callback procedure for logout
         FOnLogout : TLoginLogoutProcedure ;
+        {$ENDIF}
         // If running
         FRunning : Boolean ;
         // Ture if ok, false if an error occur
@@ -55,13 +57,19 @@ type
         // Error
         FOnError : TLogProcedure ;
         // Main config reader
-        FOnMainConfigRead : TMainConfigReader ;
+        FOnMainConfigRead : TMainConfigReaderFunction ;
         // If local config exists
-        FOnLocalConfigExists : TFolderLocalConfigExists ;
+        FOnLocalConfigExists : TFolderLocalConfigExistsFunction ;
         // Check password
-        FOnClientCheckPassword : TClientCheckPassword ;
+        FOnClientCheckPassword : TClientCheckPasswordFunction ;
         // File protected
-        FOnFileProtected : TFileProtected ;
+        FOnFileProtected : TFileProtectedFunction ;
+        // Transfert
+        FOnTransfert : TTransfertProcedure ;
+        // Start server
+        FOnStart : TStartStopServerProcedure ;
+        // Stop server
+        FOnStop : TStartStopServerProcedure ;
 
         // Port
         piListenPort : Integer ;
@@ -194,19 +202,36 @@ type
         // Error
         property OnError : TLogProcedure read FOnError write FOnError  ;
         // Main config reader
-        property OnMainConfigRead : TMainConfigReader read FOnMainConfigRead write FOnMainConfigRead  ;
+        property OnMainConfigRead : TMainConfigReaderFunction
+            read FOnMainConfigRead write FOnMainConfigRead  ;
         // Client config reader
-        property OnClientConfigRead : TClientConfigReader read FOnClientConfigRead write FOnClientConfigRead  ;
+        property OnClientConfigRead : TClientConfigReaderFunction
+            read FOnClientConfigRead write FOnClientConfigRead  ;
+        {$IFDEF CALL_BACK_LOGIN_LOGOUT}
         // Callback procedure for logout. Must be shortest possible
         property OnLogin : TLoginLogoutProcedure read FOnLogin write FOnLogin ;
         // Callback procedure for logout. Must be shortest possible
-        property OnLogout : TLoginLogoutProcedure read FOnLogout write FOnLogout ;
+        property OnLogout : TLoginLogoutProcedure read FOnLogout
+            write FOnLogout ;
+        {$ENDIF}
         // Local folder config
-        property OnLocalConfigExists : TFolderLocalConfigExists read FOnLocalConfigExists write FOnLocalConfigExists ;
+        property OnLocalConfigExists : TFolderLocalConfigExistsFunction
+            read FOnLocalConfigExists write FOnLocalConfigExists ;
         // Check password
-        property OnClientCheckPassword : TClientCheckPassword read FOnClientCheckPassword write FOnClientCheckPassword ;
+        property OnClientCheckPassword : TClientCheckPasswordFunction
+            read FOnClientCheckPassword write FOnClientCheckPassword ;
         // If file protected
-        property OnFileProtected : TFileProtected read FOnFileProtected write FOnFileProtected ;
+        property OnFileProtected : TFileProtectedFunction
+            read FOnFileProtected write FOnFileProtected ;
+        // Transfert
+        property OnTransfert : TTransfertProcedure read FOnTransfert
+            write FOnTransfert ;
+        // Start server
+        property OnStart : TStartStopServerProcedure read FOnStart
+            write FOnStart ;
+        // Stop server
+        property OnStop : TStartStopServerProcedure read FOnStop
+           write FOnStop ;
 
         // Constructor
         constructor Create(const abCreateSuspended : Boolean) ;
@@ -253,15 +278,35 @@ begin
 
     poListLoginCount := TFPHashList.Create ;
 
+    {$IFDEF CALL_BACK_LOGIN_LOGOUT}
     FOnLogin := nil ;
 
     FOnLogout := nil ;
+    {$ENDIF}
+
+    FOnTransfert := nil ;
 
     FRunning := False ;
 
     FOnLocalConfigExists := nil ;
 
     FOnClientCheckPassword := nil ;
+
+    FExitStatus := True ;
+
+    FOnLog := nil ;
+
+    FOnError := nil  ;
+
+    FOnMainConfigRead := nil  ;
+
+    FOnClientConfigRead := nil  ;
+
+    FOnFileProtected := nil ;
+
+    FOnStop := nil ;
+
+    FOnStart := nil ;
 end ;
 
 //
@@ -724,6 +769,13 @@ begin
     then begin
        // Delete disconect procedure for no call
        poFirstFtpClient.OnClientDisconnect := nil ;
+       poFirstFtpClient.OnLogout := nil ;
+       poFirstFtpClient.OnLogout := nil ;
+       poFirstFtpClient.OnGetPassivePort := nil ;
+       poFirstFtpClient.OnFreePassivePort := nil ;
+       {$IFDEF CALL_BACK_TRANSFERT}
+       poFirstFtpClient.OnTransfert := nil ;
+       {$ENDIF}
 
        poFirstFtpClient.Terminate ;
 
@@ -733,6 +785,13 @@ begin
        begin
            // Delete disconect procedure for no call
            loCurrentClient.OnClientDisconnect := nil ;
+           loCurrentClient.OnLogout := nil ;
+           loCurrentClient.OnLogout := nil ;
+           loCurrentClient.OnGetPassivePort := nil ;
+           loCurrentClient.OnFreePassivePort := nil ;
+           {$IFDEF CALL_BACK_TRANSFERT}
+           loCurrentClient.OnTransfert := nil ;
+           {$ENDIF}
 
            loCurrentClient.Terminate ;
 
@@ -780,6 +839,11 @@ begin
         loClientFtp.OnFreePassivePort := @FreePassivePort ;
         loClientFtp.OnCheckPassword := FOnClientCheckPassword ;
         loClientFtp.OnFileProtected := FOnFileProtected ;
+        {$IFDEF CALL_BACK_TRANSFERT}
+        loClientFtp.OnTransfert := FOnTransfert ;
+        {$ENDIF}
+        loClientFtp.MainByteRate := piUserByteRate ;
+        loClientFtp.BufferSize := piBufferSize ;
 
         loClientFtp.FullLog := pbFullLog ;
         loClientFtp.Utf8Support := pbUtf8Support ;
@@ -856,6 +920,7 @@ begin
         then begin
             lpCurrentCounter^ := lpCurrentCounter^ + 1 ;
 
+            {$IFDEF CALL_BACK_LOGIN_LOGOUT}
             if Assigned(FOnLogin)
             then begin
                 {$IFDEF GUI_APPLICATION_SUPPORT}
@@ -873,6 +938,7 @@ begin
                 end;
                 {$ENDIF}
             end ;
+            {$ENDIF}
         end ;
 
         LeaveCriticalsection(poLockLoginLogout) ;
@@ -905,6 +971,7 @@ begin
         then begin
             lpCurrentCounter^ := lpCurrentCounter^ - 1 ;
 
+            {$IFDEF CALL_BACK_LOGIN_LOGOUT}
             // Must be in critical section for syncronize
             if Assigned(FOnLogout)
             then begin
@@ -923,6 +990,7 @@ begin
                 end ;
                 {$ENDIF}
             end ;
+            {$ENDIF}
 
             if lpCurrentCounter^ = 0
             then begin
@@ -942,13 +1010,17 @@ end ;
 // Synchronized login. Don't use directely, use AddLogin
 procedure TFtpMain.SynchronizeLogin ;
 begin
+    {$IFDEF CALL_BACK_LOGIN_LOGOUT}
     FOnLogin(psLoginName, piLoginCount) ;
+    {$ENDIF}
 end ;
 
 // Synchronized logout. Don't use directely, use AddLogin
 procedure TFtpMain.SynchronizeLogout ;
 begin
+    {$IFDEF CALL_BACK_LOGIN_LOGOUT}
     FOnLogout(psLoginName, piLoginCount) ;
+    {$ENDIF}
 end ;
 
 //
@@ -1247,11 +1319,21 @@ begin
 
         FRunning := True ;
 
+        if Assigned(FOnStart)
+        then begin
+            FOnStart() ;
+        end;
+
         Run ;
 
         FRunning := False ;
 
         RemoveAllClient ;
+
+        if Assigned(FOnStop)
+        then begin
+            FOnStop() ;
+        end;
     end ;
 
     Log(MSG_LOG_SHUTDOWN) ;
@@ -1331,11 +1413,17 @@ begin
             end ;
         end
         else begin
+            FExitStatus := False ;
+
             Error(Format(MSG_ERROR_CANT_CREATE_SOCKET, [piListenPort])) ;
         end ;
-    finally
-        loServerSock.Free ;
+    except
+        FExitStatus := False ;
+
+        Error(MSG_ERROR_WHEN_CREATE_SOCKET) ;
     end ;
+
+    loServerSock.Free ;
 end ;
 
 

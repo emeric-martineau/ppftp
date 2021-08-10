@@ -6,3 +6,4 @@ lib/ftp/ftptypes.pas
 lib/ftp/ftpclient.pas
 lib/ftp/ftpunixdirectory.pas
 lib/ftp/ftpwindowsdirectory.pas
+lib/ftp/ftpfilelist.pas

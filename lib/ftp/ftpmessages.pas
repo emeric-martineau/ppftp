@@ -10,7 +10,6 @@ unit ftpmessages;
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-
 {$mode objfpc}{$H+}
 
 interface
@@ -42,11 +41,15 @@ const
     MSG_ERROR_USER_BYTE_RATE : String = 'Default user byte rate value invalid. Must be a integer' ;
     MSG_ERROR_ROOT_USER_NOT_FOUND : String = 'Cannot find home directory for user %s' ;
     MSG_ERROR_CANT_CREATE_SOCKET : String = 'Cannot listen port %d, maybe in use' ;
+    MSG_ERROR_READ_FILE : String = 'Error when send file "%s" : %s.' ;
+    MSG_ERROR_WRITE_FILE : String = 'Error when receive file "%s" : %s.' ;
+    MSG_ERROR_WHEN_CREATE_SOCKET : String = 'Cannot create socket' ;
 
     // Ftp message
     MSG_FTP_UNAUTHORIZED : String = '421 Unauthorized.' ;
     MSG_FTP_TOO_MANY_USER : String = '421 Too many users connected.' ;
     MSG_FTP_TIME_OUT : String = '503 Time out (%d seconds).' ;
+    MSG_FTP_FILE_TIME_OUT : String = '503 No transfert file (%d seconds).' ;
     MSG_FTP_ANONYMOUS_ALLOWED : String = '331 Anonymous access allowed, send identity (e-mail name) as password.' ;
     MSG_FTP_ANONYMOUS_NOT_ALLOWED : String = '421 Anonymous access not allowed.' ;
     MSG_FTP_SEND_PASSWORD : String = '331 Password required for %s' ;
@@ -79,11 +82,22 @@ const
     MSG_FTP_DATA_CONNECTION_FAIL : String = '425 Can''t build data connection: Connection refused.' ;
     MSG_FTP_DATA_CONNECTION_IP_FAIL : String = '425 IP address creator connection is not the same to IP address connction.' ;
     MSG_FTP_OPEN_ASCII_DATA_CONNECTION : String = '150 Opening ASCII mode data connection.' ;
+    MSG_FTP_OPEN_BINARY_DATA_CONNECTION : String = '150 Opening binary mode data connection.' ;
     MSG_FTP_END_DATA_CONNECTION : String = '226 Transfer complete.' ;
     MSG_FTP_TYPE_I : String = '200 Type set to I.' ;
     MSG_FTP_TYPE_A : String = '200 Type set to A.' ;
     MSG_FTP_TYPE_ERROR : String = '504 TYPE must be A or I.' ;
     MSG_FTP_NOT_A_DIRECTORY : String = '550 %s: Not a directory.' ;
+    MSG_FTP_MODE_OK : String = '200 Mode %s ok.' ;
+    MSG_FTP_MODE_FAIL : String = '500 Mode %s not implemented.' ;
+    MSG_FTP_REST_OK : String = '350 Restart transfert at %d.' ;
+    MSG_FTP_REST_FAIL : String = '501 Syntax error in parameter: %s is not a valid integer value.' ;
+    MSG_FTP_ABOR_OK : String = '226 ABOR command successful.' ;
+    MSG_FTP_ABOR_ONLY : String = '500 Transfert date or file in progress. Only ABOR command is allowed.' ;
+    MSG_FTP_TRANS_ABORTED : String = '426 Connection closed; transfert aborted.' ;
+    MSG_FTP_TRANS_ERROR : String = '500 Internal error.' ;
+    MSG_FTP_STOU : String = '150 FILE: %s' ;
+
 implementation
 
 end.

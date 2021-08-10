@@ -72,13 +72,25 @@ This unit contain all messages</p>
 <td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_ERROR_CANT_CREATE_SOCKET">MSG_ERROR_CANT_CREATE_SOCKET</a></b> : String = 'Cannot listen port %d, maybe in use' ;</code></td>
 </tr>
 <tr class="list">
-<td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_UNAUTHORIZED">MSG_FTP_UNAUTHORIZED</a></b> : String = '421 Unauthorized.' ;</code></td>
+<td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_ERROR_READ_FILE">MSG_ERROR_READ_FILE</a></b> : String = 'Error when send file &quot;%s&quot; : %s.' ;</code></td>
 </tr>
 <tr class="list2">
-<td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_TOO_MANY_USER">MSG_FTP_TOO_MANY_USER</a></b> : String = '421 Too many users connected.' ;</code></td>
+<td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_ERROR_WRITE_FILE">MSG_ERROR_WRITE_FILE</a></b> : String = 'Error when receive file &quot;%s&quot; : %s.' ;</code></td>
 </tr>
 <tr class="list">
+<td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_ERROR_WHEN_CREATE_SOCKET">MSG_ERROR_WHEN_CREATE_SOCKET</a></b> : String = 'Cannot create socket' ;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_UNAUTHORIZED">MSG_FTP_UNAUTHORIZED</a></b> : String = '421 Unauthorized.' ;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_TOO_MANY_USER">MSG_FTP_TOO_MANY_USER</a></b> : String = '421 Too many users connected.' ;</code></td>
+</tr>
+<tr class="list2">
 <td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_TIME_OUT">MSG_FTP_TIME_OUT</a></b> : String = '503 Time out (%d seconds).' ;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_FILE_TIME_OUT">MSG_FTP_FILE_TIME_OUT</a></b> : String = '503 No transfert file (%d seconds).' ;</code></td>
 </tr>
 <tr class="list2">
 <td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_ANONYMOUS_ALLOWED">MSG_FTP_ANONYMOUS_ALLOWED</a></b> : String = '331 Anonymous access allowed, send identity (e-mail name) as password.' ;</code></td>
@@ -177,19 +189,49 @@ This unit contain all messages</p>
 <td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_OPEN_ASCII_DATA_CONNECTION">MSG_FTP_OPEN_ASCII_DATA_CONNECTION</a></b> : String = '150 Opening ASCII mode data connection.' ;</code></td>
 </tr>
 <tr class="list2">
+<td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_OPEN_BINARY_DATA_CONNECTION">MSG_FTP_OPEN_BINARY_DATA_CONNECTION</a></b> : String = '150 Opening binary mode data connection.' ;</code></td>
+</tr>
+<tr class="list">
 <td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_END_DATA_CONNECTION">MSG_FTP_END_DATA_CONNECTION</a></b> : String = '226 Transfer complete.' ;</code></td>
 </tr>
-<tr class="list">
+<tr class="list2">
 <td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_TYPE_I">MSG_FTP_TYPE_I</a></b> : String = '200 Type set to I.' ;</code></td>
 </tr>
-<tr class="list2">
+<tr class="list">
 <td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_TYPE_A">MSG_FTP_TYPE_A</a></b> : String = '200 Type set to A.' ;</code></td>
 </tr>
-<tr class="list">
+<tr class="list2">
 <td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_TYPE_ERROR">MSG_FTP_TYPE_ERROR</a></b> : String = '504 TYPE must be A or I.' ;</code></td>
 </tr>
-<tr class="list2">
+<tr class="list">
 <td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_NOT_A_DIRECTORY">MSG_FTP_NOT_A_DIRECTORY</a></b> : String = '550 %s: Not a directory.' ;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_MODE_OK">MSG_FTP_MODE_OK</a></b> : String = '200 Mode %s ok.' ;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_MODE_FAIL">MSG_FTP_MODE_FAIL</a></b> : String = '500 Mode %s not implemented.' ;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_REST_OK">MSG_FTP_REST_OK</a></b> : String = '350 Restart transfert at %d.' ;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_REST_FAIL">MSG_FTP_REST_FAIL</a></b> : String = '501 Syntax error in parameter: %s is not a valid integer value.' ;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_ABOR_OK">MSG_FTP_ABOR_OK</a></b> : String = '226 ABOR command successful.' ;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_ABOR_ONLY">MSG_FTP_ABOR_ONLY</a></b> : String = '500 Transfert date or file in progress. Only ABOR command is allowed.' ;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_TRANS_ABORTED">MSG_FTP_TRANS_ABORTED</a></b> : String = '426 Connection closed; transfert aborted.' ;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_TRANS_ERROR">MSG_FTP_TRANS_ERROR</a></b> : String = '500 Internal error.' ;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_STOU">MSG_FTP_STOU</a></b> : String = '150 FILE: %s' ;</code></td>
 </tr>
 </table>
 <h2 class="description">Description</h2>
@@ -326,6 +368,27 @@ ERROR</p>
 </table>
 <table class="detail wide_list">
 <tr class="list">
+<td class="itemcode"><a name="MSG_ERROR_READ_FILE"></a><code><b>MSG_ERROR_READ_FILE</b> : String = 'Error when send file &quot;%s&quot; : %s.' ;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MSG_ERROR_WRITE_FILE"></a><code><b>MSG_ERROR_WRITE_FILE</b> : String = 'Error when receive file &quot;%s&quot; : %s.' ;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MSG_ERROR_WHEN_CREATE_SOCKET"></a><code><b>MSG_ERROR_WHEN_CREATE_SOCKET</b> : String = 'Cannot create socket' ;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
 <td class="itemcode"><a name="MSG_FTP_UNAUTHORIZED"></a><code><b>MSG_FTP_UNAUTHORIZED</b> : String = '421 Unauthorized.' ;</code></td>
 </tr>
 <tr><td colspan="1">
@@ -343,6 +406,13 @@ Ftp message</p>
 <table class="detail wide_list">
 <tr class="list">
 <td class="itemcode"><a name="MSG_FTP_TIME_OUT"></a><code><b>MSG_FTP_TIME_OUT</b> : String = '503 Time out (%d seconds).' ;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MSG_FTP_FILE_TIME_OUT"></a><code><b>MSG_FTP_FILE_TIME_OUT</b> : String = '503 No transfert file (%d seconds).' ;</code></td>
 </tr>
 <tr><td colspan="1">
 &nbsp;</td></tr>
@@ -575,6 +645,13 @@ Ftp message</p>
 </table>
 <table class="detail wide_list">
 <tr class="list">
+<td class="itemcode"><a name="MSG_FTP_OPEN_BINARY_DATA_CONNECTION"></a><code><b>MSG_FTP_OPEN_BINARY_DATA_CONNECTION</b> : String = '150 Opening binary mode data connection.' ;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
 <td class="itemcode"><a name="MSG_FTP_END_DATA_CONNECTION"></a><code><b>MSG_FTP_END_DATA_CONNECTION</b> : String = '226 Transfer complete.' ;</code></td>
 </tr>
 <tr><td colspan="1">
@@ -608,6 +685,69 @@ Ftp message</p>
 <tr><td colspan="1">
 &nbsp;</td></tr>
 </table>
-<hr noshade size="1"><span class="appinfo"><em>Generated by <a  target="_parent" href="http://pasdoc.sourceforge.net/">PasDoc 0.11.0</a> on 2010-01-29 13:55:11</em>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MSG_FTP_MODE_OK"></a><code><b>MSG_FTP_MODE_OK</b> : String = '200 Mode %s ok.' ;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MSG_FTP_MODE_FAIL"></a><code><b>MSG_FTP_MODE_FAIL</b> : String = '500 Mode %s not implemented.' ;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MSG_FTP_REST_OK"></a><code><b>MSG_FTP_REST_OK</b> : String = '350 Restart transfert at %d.' ;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MSG_FTP_REST_FAIL"></a><code><b>MSG_FTP_REST_FAIL</b> : String = '501 Syntax error in parameter: %s is not a valid integer value.' ;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MSG_FTP_ABOR_OK"></a><code><b>MSG_FTP_ABOR_OK</b> : String = '226 ABOR command successful.' ;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MSG_FTP_ABOR_ONLY"></a><code><b>MSG_FTP_ABOR_ONLY</b> : String = '500 Transfert date or file in progress. Only ABOR command is allowed.' ;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MSG_FTP_TRANS_ABORTED"></a><code><b>MSG_FTP_TRANS_ABORTED</b> : String = '426 Connection closed; transfert aborted.' ;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MSG_FTP_TRANS_ERROR"></a><code><b>MSG_FTP_TRANS_ERROR</b> : String = '500 Internal error.' ;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MSG_FTP_STOU"></a><code><b>MSG_FTP_STOU</b> : String = '150 FILE: %s' ;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<hr noshade size="1"><span class="appinfo"><em>Generated by <a  target="_parent" href="http://pasdoc.sourceforge.net/">PasDoc 0.11.0</a> on 2010-03-07 18:52:39</em>
 </span>
 </body></html>

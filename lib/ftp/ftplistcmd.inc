@@ -31,7 +31,7 @@ begin
 
     if Assigned(loDataSocket)
     then begin
-        ListDirectory(lsParameter, poClientSock, loDataSocket, abNlst) ;
+        ListDirectory(lsParameter, loDataSocket, abNlst) ;
 
         CloseDataConnection(loDataSocket) ;
     end ;

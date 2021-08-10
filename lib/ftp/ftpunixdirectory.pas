@@ -113,7 +113,7 @@ begin
     lsRight := GetRight(arSearchRec) ;
 
     // Right and owner and group
-    Result := Result + lsRight + lsRight + lsRight + '   1 ftp ftp ' +
+    Result := lsRight + lsRight + lsRight + '   1 ftp ftp ' +
         Format('%9.1d', [arSearchRec.Size]) ;
 
     //drwxr-xr-x   2 web site      640 May 12  2004 admin

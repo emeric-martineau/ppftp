@@ -3,53 +3,63 @@
 <head>
 <meta name="GENERATOR" content="PasDoc 0.11.0">
 <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
-<title>ftptypes: record TFtpPassivePort</title>
+<title>FtpFileList: record TFtpFile</title>
 <link rel="StyleSheet" type="text/css" href="pasdoc.css">
 </head>
 <body bgcolor="#ffffff" text="#000000" link="#0000ff" vlink="#800080" alink="#FF0000">
-<a name="TFtpPassivePort"></a><h1 class="cio">record TFtpPassivePort</h1>
+<a name="TFtpFile"></a><h1 class="cio">record TFtpFile</h1>
 <table class="sections wide_list">
 <tr>
 <td><a class="section"  href="#%40Description">Description</a></td><td>Hierarchy</td><td><a class="section"  href="#%40Fields">Fields</a></td><td>Methods</td><td>Properties</td></tr></table>
 <a name="%40Description"></a><h2 class="unit">Unit</h2>
 <p class="unitlink">
-<a   href="ftptypes.html">ftptypes</a></p>
+<a   href="FtpFileList.html">FtpFileList</a></p>
 <h2 class="declaration">Declaration</h2>
 <p class="declaration">
-<code>type TFtpPassivePort = record</code></p>
+<code>type TFtpFile = record</code></p>
 <h2 class="description">Description</h2>
 &nbsp;<h2 class="overview">Overview</h2>
 <a name="%40Fields"></a><h3 class="summary">Fields</h3>
 <table class="summary wide_list">
 <tr class="list">
-<td class="itemcode"><code><b><a   href="ftptypes.TFtpPassivePort.html#Port">Port</a></b>: word ;</code></td>
+<td class="itemcode"><code><b><a   href="FtpFileList.TFtpFile.html#FileName">FileName</a></b>: String ;</code></td>
 </tr>
 <tr class="list2">
-<td class="itemcode"><code><b><a   href="ftptypes.TFtpPassivePort.html#Next">Next</a></b>: <a   href="ftptypes.html#PFtpPassivePort">PFtpPassivePort</a> ;</code></td>
+<td class="itemcode"><code><b><a   href="FtpFileList.TFtpFile.html#Download">Download</a></b>: Boolean ;</code></td>
 </tr>
 <tr class="list">
-<td class="itemcode"><code><b><a   href="ftptypes.TFtpPassivePort.html#Previous">Previous</a></b>: <a   href="ftptypes.html#PFtpPassivePort">PFtpPassivePort</a> ;</code></td>
+<td class="itemcode"><code><b><a   href="FtpFileList.TFtpFile.html#FtpClient">FtpClient</a></b>: pointer ;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a   href="FtpFileList.TFtpFile.html#Extra">Extra</a></b>: pointer ;</code></td>
 </tr>
 </table>
 <h2 class="description">Description</h2>
 <h3 class="detail">Fields</h3>
 <table class="detail wide_list">
 <tr class="list">
-<td class="itemcode"><a name="Port"></a><code><b>Port</b>: word ;</code></td>
+<td class="itemcode"><a name="FileName"></a><code><b>FileName</b>: String ;</code></td>
 </tr>
 <tr><td colspan="1">
 &nbsp;</td></tr>
 </table>
 <table class="detail wide_list">
 <tr class="list">
-<td class="itemcode"><a name="Next"></a><code><b>Next</b>: <a   href="ftptypes.html#PFtpPassivePort">PFtpPassivePort</a> ;</code></td>
+<td class="itemcode"><a name="Download"></a><code><b>Download</b>: Boolean ;</code></td>
 </tr>
 <tr><td colspan="1">
 &nbsp;</td></tr>
 </table>
 <table class="detail wide_list">
 <tr class="list">
-<td class="itemcode"><a name="Previous"></a><code><b>Previous</b>: <a   href="ftptypes.html#PFtpPassivePort">PFtpPassivePort</a> ;</code></td>
+<td class="itemcode"><a name="FtpClient"></a><code><b>FtpClient</b>: pointer ;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="Extra"></a><code><b>Extra</b>: pointer ;</code></td>
 </tr>
 <tr><td colspan="1">
 &nbsp;</td></tr>

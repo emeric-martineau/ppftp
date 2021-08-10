@@ -52,12 +52,15 @@ type
     BufferSizeSpinEdit: TSpinEdit;
     GoodbyeMemo: TMemo;
     procedure CancelButtonClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure GoodbyeButtonClick(Sender: TObject);
     procedure OkButtonClick(Sender: TObject);
     procedure WelcomeButtonClick(Sender: TObject);
   private
     { private declarations }
+    // If config is read
+    pbConfigRead : Boolean ;
     // Ini file
     poMainConfig : TIniFile ;
     // Path to config
@@ -106,7 +109,10 @@ implementation
 // Form show
 procedure TMainConfigForm.FormShow(Sender: TObject);
 begin
-    ReadMainConfig ;
+    if not pbConfigRead
+    then begin
+        ReadMainConfig ;
+    end ;
 end;
 
 //
@@ -114,6 +120,11 @@ end;
 procedure TMainConfigForm.CancelButtonClick(Sender: TObject);
 begin
     Close ;
+end;
+
+procedure TMainConfigForm.FormCreate(Sender: TObject);
+begin
+    pbConfigRead := False ;
 end;
 
 //
@@ -175,6 +186,9 @@ begin
 
     lsValue := ConvertString(MAIN_CONF_PASSIVE_PORT,
         DEFAULT_PASSIVE_PORT) ;
+
+    liValue1 := 0 ;
+    liValue2 := 0 ;
 
     ConvertPassivePort(lsValue, liValue1, liValue2) ;
 
@@ -288,26 +302,17 @@ begin
     poMainConfig.WriteString(psMainConfigSection, MAIN_CONF_DENY_PRIORITY,
         BooleanToString(DeniedPriorityCheckBox.Checked)) ;
 
+    poMainConfig.WriteString(psMainConfigSection, MAIN_CONF_WELCOME_MESSAGE,
+        ConvertTStringsToString(WelcomeMemo.Lines, MESSAGE_SEPARATOR)) ;
 
-
+    poMainConfig.WriteString(psMainConfigSection, MAIN_CONF_GOODBYE_MESSAGE,
+        ConvertTStringsToString(GoodbyeMemo.Lines, MESSAGE_SEPARATOR)) ;
 
     poMainConfig.WriteString(psMainConfigSection, psLocalConfigKey,
         LocalFolderConfigNameLabeledEdit.Text) ;
 
     poMainConfig.Free ;
-
-    {
-    lsValue := ConvertString(MAIN_CONF_WELCOME_MESSAGE,
-        DEFAULT_WELCOME_MESSAGE) ;
-
-    StringToTStringListNoCreate(lsValue, MESSAGE_SEPARATOR, WelcomeMemo.Lines) ;
-
-    lsValue := ConvertString(MAIN_CONF_GOODBYE_MESSAGE,
-        DEFAULT_GOODBYE_MESSAGE) ;
-
-    StringToTStringListNoCreate(lsValue, MESSAGE_SEPARATOR, GoodbyeMemo.Lines) ;
-    }
-end;
+end ;
 
 //
 // Convert TStrings to string

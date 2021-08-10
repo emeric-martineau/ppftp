@@ -159,6 +159,9 @@ const
      // If user can modify file time
      // @seealso(DEFAULT_USER_MODIFY_FILE_TIME)
      USER_CONF_MODIFY_FILE_TIME : String = 'ModifyFileTime' ;
+     // User byte rate
+     // @seealso(DEFAULT_USER_BYTE_RATE)
+     USER_CONF_BYTE_RATE : String = 'ByteRate' ;
 
      // Default password. If empty, just list right
      DEFAULT_USER_PASSWORD : String = '' ;
@@ -182,6 +185,8 @@ const
      DEFAULT_USER_DISABLED : String = 'yes' ;
      // Default modify file time
      DEFAULT_USER_MODIFY_FILE_TIME : String = 'no' ;
+     // Default user byte rate
+     DEFAULT_USER_CONF_BYTE_RATE : String = '0' ;
 
      // FOLDER download rigth
      FOLDER_CONF_DOWNLOAD : String = 'Download' ;
@@ -199,6 +204,20 @@ const
      FOLDER_CONF_SUB_DIR : String = 'SubDir' ;
      // If FOLDER disabled
      FOLDER_CONF_DISABLED : String = 'Readable' ;
+
+     // Download file
+     DOWNLOAD_FILE : Boolean = True ;
+     // Upload file
+     UPLOAD_FILE : Boolean = False ;
+
+     // Start transfert
+     START_TRANSFERT : Boolean = True ;
+     // Stop Transfert
+     STOP_TRANSFERT : Boolean = False ;
+
+     // Waiting for string in millisecond
+     WAITING_FOR_INPUT : Integer = 1000 ;
+
 implementation
 
 end.

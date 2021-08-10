@@ -2,10 +2,10 @@ object FormMain: TFormMain
   Left = 487
   Height = 300
   Top = 316
-  Width = 400
+  Width = 396
   Caption = 'Portable & Pascal FTP Server'
   ClientHeight = 280
-  ClientWidth = 400
+  ClientWidth = 396
   Menu = MainMenu1
   OnClose = FormClose
   OnCloseQuery = FormCloseQuery
@@ -19,7 +19,7 @@ object FormMain: TFormMain
     Left = 0
     Height = 280
     Top = 0
-    Width = 400
+    Width = 396
     ActivePage = LogTabSheet
     Align = alClient
     TabIndex = 0
@@ -27,12 +27,12 @@ object FormMain: TFormMain
     object LogTabSheet: TTabSheet
       Caption = 'Log'
       ClientHeight = 254
-      ClientWidth = 392
+      ClientWidth = 388
       object LogMemo: TMemo
         Left = 0
         Height = 231
         Top = 0
-        Width = 392
+        Width = 388
         Align = alClient
         ScrollBars = ssBoth
         TabOrder = 0
@@ -42,7 +42,7 @@ object FormMain: TFormMain
         Left = 0
         Height = 23
         Top = 231
-        Width = 392
+        Width = 388
         Panels = <>
         SimpleText = 'Server stopped'
       end
@@ -50,12 +50,12 @@ object FormMain: TFormMain
     object UserTabSheet: TTabSheet
       Caption = 'Users'
       ClientHeight = 254
-      ClientWidth = 392
+      ClientWidth = 388
       object LoginListView: TListView
         Left = 0
         Height = 254
         Top = 0
-        Width = 392
+        Width = 388
         Align = alClient
         Columns = <        
           item
@@ -70,6 +70,41 @@ object FormMain: TFormMain
             Caption = 'File transfert in progress'
             Width = 150
           end>
+        ReadOnly = True
+        SortType = stText
+        TabOrder = 0
+        ViewStyle = vsReport
+      end
+    end
+    object TransfertTabSheet: TTabSheet
+      Caption = 'Files transfert'
+      ClientHeight = 254
+      ClientWidth = 388
+      object FileTransfertListView: TListView
+        Left = 0
+        Height = 254
+        Top = 0
+        Width = 388
+        Align = alClient
+        Columns = <        
+          item
+            Caption = 'User name'
+            Width = 100
+          end        
+          item
+            Caption = 'Session ID'
+            Width = 80
+          end        
+          item
+            Caption = 'File name'
+            Width = 100
+          end        
+          item
+            Caption = 'Way'
+            Width = 60
+          end>
+        PopupMenu = PopupMenu1
+        ReadOnly = True
         SortType = stText
         TabOrder = 0
         ViewStyle = vsReport
@@ -78,12 +113,12 @@ object FormMain: TFormMain
     object ErrorTabSheet: TTabSheet
       Caption = 'Errors'
       ClientHeight = 254
-      ClientWidth = 392
+      ClientWidth = 388
       object ErrorMemo: TMemo
         Left = 0
         Height = 254
         Top = 0
-        Width = 392
+        Width = 388
         Align = alClient
         TabOrder = 0
       end
@@ -127,6 +162,10 @@ object FormMain: TFormMain
       object MainConfigMenu: TMenuItem
         Caption = 'Main config'
         OnClick = MainConfigMenuClick
+      end
+      object UsersMenu: TMenuItem
+        Caption = 'Users'
+        OnClick = UsersMenuClick
       end
     end
     object HelphMenu: TMenuItem
@@ -8005,18 +8044,19 @@ object FormMain: TFormMain
     left = 217
     top = 89
   end
-  object Timer1: TTimer
-    Enabled = False
-    Interval = 500
-    OnTimer = Timer1Timer
-    left = 53
-    top = 74
-  end
   object LogSaveDialog: TSaveDialog
     DefaultExt = '.log'
     FileName = 'ppftp.log'
     Filter = 'Log|*.log|Text|*.txt'
     left = 170
     top = 68
+  end
+  object PopupMenu1: TPopupMenu
+    left = 215
+    top = 166
+    object CancelTransfertMenu: TMenuItem
+      Caption = 'Cancel transfert'
+      OnClick = CancelTransfertMenuClick
+    end
   end
 end

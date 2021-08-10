@@ -17,13 +17,15 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   Menus, ComCtrls, StdCtrls, ExtCtrls, IniFiles, StrUtils, LCLType, contnrs,
-  CommandLine, aboutform, mainconfig, FtpFunctions, FtpMain, FtpTypes, FtpConst ;
+  CommandLine, aboutform, mainconfig, user, FtpFunctions, FtpMain, FtpTypes,
+  FtpConst, FtpFileList, FtpClient ;
 
 type
 
   { TFormMain }
 
   TFormMain = class(TForm)
+    FileTransfertListView: TListView;
     LoginListView: TListView;
     MainMenu1: TMainMenu;
     LogMemo: TMemo;
@@ -34,6 +36,10 @@ type
     CommandLineMenu: TMenuItem;
     MainConfigMenu: TMenuItem;
     LogMenu: TMenuItem;
+    CancelTransfertMenu: TMenuItem;
+    PopupMenu1: TPopupMenu;
+    TransfertTabSheet: TTabSheet;
+    UsersMenu: TMenuItem;
     SaveLogMenuItem: TMenuItem;
     ClearLogMenu: TMenuItem;
     LogSaveDialog: TSaveDialog;
@@ -46,7 +52,6 @@ type
     ServerMenu: TMenuItem;
     LogTabSheet: TTabSheet;
     ErrorTabSheet: TTabSheet;
-    Timer1: TTimer;
     TrayIcon1: TTrayIcon;
     UserTabSheet: TTabSheet;
     procedure AboutMenuClick(Sender: TObject);
@@ -59,12 +64,13 @@ type
     procedure FormShow(Sender: TObject);
     procedure FormWindowStateChange(Sender: TObject);
     procedure MainConfigMenuClick(Sender: TObject);
+    procedure CancelTransfertMenuClick(Sender: TObject);
     procedure SaveLogMenuItemClick(Sender: TObject);
     procedure ServerMenuClick(Sender: TObject);
     procedure StartMenuClick(Sender: TObject);
     procedure StopMenuClick(Sender: TObject);
-    procedure Timer1Timer(Sender: TObject);
     procedure TrayIcon1Click(Sender: TObject);
+    procedure UsersMenuClick(Sender: TObject);
   protected
     // If tray icon can be enable
     pbSystray : Boolean ;
@@ -76,6 +82,10 @@ type
     procedure StopServer ;
     // Hide form
     procedure HideForm ;
+    // Clear list of login
+    procedure ClearListOfLogin ;
+    // Clear list of file
+    procedure ClearListOfFile ;
   private
     { private declarations }
     // Minimize window on startup
@@ -104,6 +114,8 @@ var
   goListLogin : TFPHashList ;
   // Local folder conf file
   gsFolderLocalConfigName : String ;
+  // HashMap for login count on file transfert
+  goListFile : TFPHashList ;
 
 const
   TIMER_DELAY : Cardinal = 500 ;
@@ -112,7 +124,8 @@ const
   DEFAULT_FTP_ACCESS : String = 'ftp.access' ;
   FTP_ACCESS_KEY : String = 'FtpAccessFile' ;
   MAX_INTEGER_VALUE : Integer = 2147483647 ;
-
+  USERS_DIRECTORY : String = 'users' ;
+  FOLDER_IN_SECTION : String = 'folder' ;
 
 procedure ErrorMsg(const asMessage : String) ;
 procedure LogMsg(const asMessage : String) ;
@@ -124,6 +137,14 @@ function CheckPassword(const asLoginName : String;
     const asPassword : String) : Boolean ;
 function FileProtected(const asPathAndFileName : String;
     const abUtf8 : Boolean) : Boolean ;
+function FolderLocalConfigReader(const asFolderName : String;
+        const abUtf8 : Boolean; const asKey : String;
+        var asValue : String) : Boolean ;
+procedure TransfertFile(const asLoginName : String;
+        const asFileName : String; const asDownload : Boolean;
+        const asStart : Boolean; const asFtpClient : Pointer) ;
+procedure StopServerCallBack ;
+procedure StartServerCallBack ;
 
 implementation
 
@@ -184,6 +205,8 @@ begin
 
     goListLogin := TFPHashList.Create ;
 
+    goListFile := TFPHashList.Create ;
+
     goFtpMain := nil ;
 
     if lbLauch
@@ -235,6 +258,23 @@ begin
     loMainConfigForm.ShowModal() ;
 
     loMainConfigForm.Free ;
+end;
+
+procedure TFormMain.CancelTransfertMenuClick(Sender: TObject);
+var
+    // Id ftp
+    lsIdFtp : String ;
+    // Record file
+    prCurrentFile : PTFtpFile ;
+begin
+    if Assigned(FileTransfertListView.ItemFocused)
+    then begin
+        lsIdFtp := FileTransfertListView.ItemFocused.SubItems[0] ;
+
+        prCurrentFile := PTFtpFile(goListFile.Find(lsIdFtp)) ;
+
+        TFtpClient(prCurrentFile^.FtpClient).Cancel := True ;
+    end;
 end;
 
 procedure TFormMain.SaveLogMenuItemClick(Sender: TObject);
@@ -291,29 +331,6 @@ begin
 end;
 
 //
-// Time to know in server is running or not
-procedure TFormMain.Timer1Timer(Sender: TObject);
-begin
-    if goFtpMain.Running = True
-    then begin
-        StatusBar1.SimpleText := 'Server running' ;
-        TTimer(Sender).Enabled := False ;
-    end
-    else if (goFtpMain.Running = False) and (goFtpMain.ExitStatus = False)
-    then begin
-        StatusBar1.SimpleText := 'Server error !!!' ;
-        TTimer(Sender).Enabled := False ;
-    end
-    else if (goFtpMain.Running = False) and (goFtpMain.ExitStatus = True)
-    then begin
-        StatusBar1.SimpleText := 'Server stopped' ;
-        TTimer(Sender).Enabled := False ;
-    end ;
-
-    TTimer(Sender).Interval := TIMER_DELAY ;
-end;
-
-//
 // If click on tray icon
 //
 // @param Sender
@@ -326,6 +343,20 @@ begin
     TrayIcon1.Visible := False ;
 
     FormMain.ShowOnTop ;
+end;
+
+procedure TFormMain.UsersMenuClick(Sender: TObject);
+var
+    loUserForm : TUserForm ;
+begin
+    loUserForm := TUserForm.Create(Self) ;
+
+    loUserForm.psUsersDirectory := giRootConfigDirectory + USERS_DIRECTORY ;
+    loUserForm.psUserSection := USER_SECTION ;
+
+    loUserForm.ShowModal ;
+
+    loUserForm.Free ;
 end;
 
 //
@@ -344,6 +375,10 @@ begin
         goFtpMain.OnLogout := nil ;
         goFtpMain.OnClientCheckPassword := nil ;
         goFtpMain.OnFileProtected := nil ;
+        goFtpMain.OnLocalConfigExists := nil ;
+        goFtpMain.OnTransfert := nil ;
+        goFtpMain.OnStart := nil ;
+        goFtpMain.OnStop := nil ;
 
         //goFtpMain.FreeOnTerminate := True ;
         goFtpMain.Terminate ;
@@ -353,7 +388,13 @@ begin
 
     FreeAndNil(goMainConfig) ;
 
+    ClearListOfLogin ;
+
     FreeAndNil(goListLogin) ;
+
+    ClearListOfFile ;
+
+    FreeAndNil(goListFile) ;
 end;
 
 //
@@ -440,7 +481,7 @@ begin
     goMainConfig.StripQuotes := True ;
 
     // Free ftp if not free
-    if goFtpMain <> nil
+    if Assigned(goFtpMain)
     then begin
         goFtpMain.Free ;
     end ;
@@ -460,15 +501,16 @@ begin
     goFtpMain.OnLogout := @UpdateLoginCount ;
     goFtpMain.OnClientCheckPassword := @CheckPassword ;
     goFtpMain.OnFileProtected := @FileProtected ;
+    goFtpMain.OnLocalConfigExists := @FolderLocalConfigReader ;
+    goFtpMain.OnTransfert := @TransfertFile ;
+    goFtpMain.OnStart := @StartServerCallBack ;
+    goFtpMain.OnStop := @StopServerCallBack ;
 
     //goFtpMain.FreeOnTerminate := True ;
     // Set False if console application, else true
     goFtpMain.GuiApplication := True ;
 
     goFtpMain.Resume ;
-
-    Timer1.Interval := TIMER_DELAY ;
-    Timer1.Enabled := True ;
 end ;
 
 //
@@ -478,9 +520,44 @@ begin
     StatusBar1.SimpleText := 'Shutdown server in progress...' ;
 
     goFtpMain.Terminate ;
+end ;
 
-    Timer1.Interval := TIMER_DELAY ;
-    Timer1.Enabled := True ;
+//
+// Clear list of login
+procedure TFormMain.ClearListOfLogin ;
+var
+    // Index of login
+    liIndex : Integer ;
+    // List viw
+    loListViewLine : TListItem ;
+begin
+    for liIndex := 0 to goListLogin.Count - 1 do
+    begin
+        loListViewLine := TListItem(goListLogin[liIndex]) ;
+
+        FreeAndNil(loListViewLine) ;
+    end ;
+
+    goListLogin.Clear;
+end ;
+
+//
+// Clear list of file
+procedure TFormMain.ClearListOfFile ;
+var
+    // Index of login
+    liIndex : Integer ;
+    // List viw
+    lpFtpFileList : PTFtpFile ;
+begin
+    for liIndex := 0 to goListFile.Count - 1 do
+    begin
+        lpFtpFileList := PTFtpFile(goListFile[liIndex]) ;
+
+        Dispose(lpFtpFileList) ;
+    end ;
+
+    goListFile.Clear;
 end ;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -509,7 +586,6 @@ end ;
 //
 // @param asMessage message to log
 procedure LogMsg(const asMessage : String) ;
-
 begin
     if not gbShutdown
     then begin
@@ -553,7 +629,7 @@ begin
         Result.UserFound := False ;
     end
     else begin
-        lsFile := ExpandFileName(giRootConfigDirectory + 'users' +
+        lsFile := ExpandFileName(giRootConfigDirectory + USERS_DIRECTORY +
             DirectorySeparator + asLoginName + '.ini') ;
 
         Result.UserFound := FileExists(lsFile);
@@ -582,12 +658,14 @@ begin
             DEFAULT_USER_MAKE_DIRECTORY) ;
         Result.DeleteDirectory := loUserConfig.ReadString(USER_SECTION, USER_CONF_DELETE_DIRECTORY,
             DEFAULT_USER_DELETE_DIRECTORY) ;
-        Result.ListSubDir := loUserConfig.ReadString(USER_SECTION, USER_CONF_SUB_DIR,
+        Result.SubDir := loUserConfig.ReadString(USER_SECTION, USER_CONF_SUB_DIR,
             DEFAULT_USER_SUB_DIR) ;
         Result.ModifyFileTime := loUserConfig.ReadString(USER_SECTION, USER_CONF_MODIFY_FILE_TIME ,
             DEFAULT_USER_MODIFY_FILE_TIME) ;            
         Result.Disabled := loUserConfig.ReadString(USER_SECTION, USER_CONF_DISABLED,
             DEFAULT_USER_DISABLED) ;
+        Result.ByteRate := loUserConfig.ReadString(USER_SECTION, USER_CONF_BYTE_RATE,
+            DEFAULT_USER_CONF_BYTE_RATE) ;
 
         loUserConfig.Free ;
     end ;
@@ -639,7 +717,7 @@ begin
             loListViewLine.Caption := asLogin ;
 
             loListViewLine.SubItems.Add(IntToStr(aiNumberOfLogin)) ;
-            loListViewLine.SubItems.Add('no');
+            loListViewLine.SubItems.Add('0');
 
             goListLogin.Add(asLogin, loListViewLine) ;
         end
@@ -713,6 +791,275 @@ begin
     {$ELSE}
     Result := CompareFilenames(gsFolderLocalConfigName, lsFileName) = 0 ;
     {$ENDIF}
+end ;
+
+//
+// Read local folder config
+//
+// @param asFolderName name of folder
+// @param abUtf8 True if utf8 folder name
+// @param asKey keyname of local config to read
+// @param asValue value of key
+//
+// @return True if local config found
+function FolderLocalConfigReader(const asFolderName : String;
+        const abUtf8 : Boolean; const asKey : String;
+        var asValue : String) : Boolean ;
+var
+    // File name
+    lsFileName : String ;
+    // Ini file
+    loFolderConfig : TIniFile ;
+begin
+    if abUtf8
+    then begin
+        lsFileName := UTF8ToSys(asFolderName) ;
+    end
+    else begin
+        lsFileName := asFolderName ;
+    end;
+
+    lsFileName := AddTrailing(lsFileName, DirectorySeparator) +
+        gsFolderLocalConfigName ;
+
+    Result := FileExists(lsFileName) ;
+
+    if Result
+    then begin
+        loFolderConfig := TIniFile.Create(lsFileName) ;
+
+        loFolderConfig.CaseSensitive := False ;
+        loFolderConfig.StripQuotes := True ;
+
+        Result := loFolderConfig.ValueExists(FOLDER_IN_SECTION, asKey) ;
+
+        if Result
+        then begin
+            asValue := loFolderConfig.ReadString(FOLDER_IN_SECTION, asKey, '');
+        end ;
+
+        loFolderConfig.Free ;
+    end ;
+end ;
+
+{
+// Transfert call back
+//
+// @param asLoginName login to trasfert
+// @param asFileName filename
+// @param asDownload true if download, false if upload
+// @param asStart true start, false stop
+// @param asFtpClient ftp client (TFtpClient)
+procedure TransfertFile(const asLoginName : String;
+        const asFileName : String; const asDownload : Boolean;
+        const asStart : Boolean; const asFtpClient : Pointer) ;
+var
+    // Current download file
+    lrCurrentFile : TFtpFile ;
+    // Current list file
+    loCurrentListFile : TFtpFileList ;
+    // Item of view list for login
+    loListViewLineLogin : TListItem ;
+    // Item of view list of file
+    loListViewLineFile : TListItem ;
+
+    // Index of record
+    liRecordIndex : Integer ;
+begin
+    if not gbShutdown
+    then begin
+        // Seach if login is already register
+        loListViewLineLogin := TListItem(goListLogin.Find(asLoginName)) ;
+
+        loCurrentListFile := TFtpFileList(goListFile.Find(asLoginName)) ;
+
+        // Create and add line
+        if not Assigned(loCurrentListFile)
+        then begin
+            loCurrentListFile := TFtpFileList.Create ;
+
+            goListFile.Add(asLoginName, loCurrentListFile);
+        end ;
+
+        if  asStart
+        then begin
+            lrCurrentFile.FileName := asFileName ;
+            lrCurrentFile.Download := asDownload ;
+            lrCurrentFile.FtpClient := asFtpClient ;
+
+            loListViewLineLogin.SubItems[1] := 'yes' ;
+
+            // Create line
+            loListViewLineFile := FormMain.FileTransfertListView.Items.Add ;
+
+            loListViewLineFile.Caption := asLoginName ;
+
+            loListViewLineFile.SubItems.Add(Format('%p', [asFtpClient])) ;
+            loListViewLineFile.SubItems.Add(asFileName);
+
+            if asDownload
+            then begin
+                loListViewLineFile.SubItems.Add('Send') ;
+            end
+            else begin
+                loListViewLineFile.SubItems.Add('Receive') ;
+            end ;
+
+            lrCurrentFile.Extra := loListViewLineFile ;
+
+            loCurrentListFile.Add(lrCurrentFile) ;
+        end
+        else begin
+            // Delete record and line
+            liRecordIndex := loCurrentListFile.Find(asFileName, asDownload,
+                asFtpClient) ;
+
+            if liRecordIndex <> -1
+            then begin
+                // Get line in list view
+                loListViewLineFile := TListItem(loCurrentListFile[liRecordIndex].Extra) ;
+
+                // Delete line in list view
+                loListViewLineFile.Free ;
+
+                // Delete record in list
+                loCurrentListFile.Delete(liRecordIndex) ;
+            end ;
+
+            if loCurrentListFile.Count = 0
+            then begin
+                loListViewLineLogin.SubItems[1] := 'no' ;
+            end ;
+        end ;
+    end ;
+end ;
+}
+
+// Transfert call back
+//
+// @param asLoginName login to trasfert
+// @param asFileName filename
+// @param asDownload true if download, false if upload
+// @param asStart true start, false stop
+// @param asFtpClient ftp client (TFtpClient)
+procedure TransfertFile(const asLoginName : String;
+        const asFileName : String; const asDownload : Boolean;
+        const asStart : Boolean; const asFtpClient : Pointer) ;
+var
+    // Current download file
+    prCurrentFile : PTFtpFile ;
+    // Item of view list for login
+    loListViewLineLogin : TListItem ;
+    // Item of view list of file
+    loListViewLineFile : TListItem ;
+    // Id ftp
+    lsIdFtp : String ;
+    // Index of record
+    liRecordIndex : Integer ;
+    // Counter of transfert
+    liCounterOfTransfert : Integer ;
+begin
+    if not gbShutdown
+    then begin
+        // Seach if login is already register
+        loListViewLineLogin := TListItem(goListLogin.Find(asLoginName)) ;
+
+        lsIdFtp := Format('%p', [asFtpClient]) ;
+
+        prCurrentFile := PTFtpFile(goListFile.Find(lsIdFtp)) ;
+
+        // Create and add line
+        if not Assigned(prCurrentFile)
+        then begin
+            New(prCurrentFile) ;
+        end ;
+
+        if asStart
+        then begin
+            prCurrentFile^.FileName := asFileName ;
+            prCurrentFile^.Download := asDownload ;
+            prCurrentFile^.FtpClient := asFtpClient ;
+
+            liCounterOfTransfert := StrToInt(loListViewLineLogin.SubItems[1]) ;
+
+            loListViewLineLogin.SubItems[1] := IntToStr(liCounterOfTransfert + 1) ;
+
+            // Create line
+            loListViewLineFile := FormMain.FileTransfertListView.Items.Add ;
+
+            loListViewLineFile.Caption := asLoginName ;
+
+            loListViewLineFile.SubItems.Add(lsIdFtp) ;
+            loListViewLineFile.SubItems.Add(asFileName);
+
+            if asDownload
+            then begin
+                loListViewLineFile.SubItems.Add('Send') ;
+            end
+            else begin
+                loListViewLineFile.SubItems.Add('Receive') ;
+            end ;
+
+            prCurrentFile^.Extra := loListViewLineFile ;
+
+            goListFile.Add(lsIdFtp, prCurrentFile) ;
+        end
+        else begin
+            // Delete line in ListView
+            loListViewLineFile := TListItem(prCurrentFile^.Extra) ;
+            loListViewLineFile.Free ;
+
+            // Free record
+            Dispose(prCurrentFile) ;
+
+            // Seach entry in map
+            liRecordIndex := goListFile.FindIndexOf(lsIdFtp) ;
+
+            // If found entry delete it
+            if liRecordIndex <> -1
+            then begin
+                goListFile.Delete(liRecordIndex) ;
+            end ;
+
+            liCounterOfTransfert := StrToInt(loListViewLineLogin.SubItems[1]) ;
+
+            Dec(liCounterOfTransfert) ;
+
+            if liCounterOfTransfert > 0
+            then begin
+                loListViewLineLogin.SubItems[1] := IntToStr(liCounterOfTransfert) ;
+            end
+            else begin
+                loListViewLineLogin.SubItems[1] := '0'
+            end ;
+        end ;
+    end ;
+end ;
+
+//
+// Start server call back
+procedure StartServerCallBack ;
+begin
+    if not gbShutdown
+    then begin
+        FormMain.StatusBar1.SimpleText := 'Server running' ;
+    end;
+end ;
+
+//
+// Stop server call back
+procedure StopServerCallBack ;
+begin
+    if not gbShutdown
+    then begin
+        if not Assigned(goFtpMain) or goFtpMain.ExitStatus = True
+        then begin
+            FormMain.StatusBar1.SimpleText := 'Server stopped' ;
+        end
+        else begin
+            FormMain.StatusBar1.SimpleText := 'Server error !!!' ;
+        end;
+    end;
 end ;
 
 initialization

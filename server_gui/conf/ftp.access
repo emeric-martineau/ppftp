@@ -1,3 +1,5 @@
 [folder]
 ; If can be read this folder
 Readable=yes
+; If user can read file
+Download=yes

@@ -14,11 +14,17 @@ var
     lbFolderExists : Boolean ;
     // Sys file name
     lsSysFileName : String ;
+    // True if aborted
+    lbAborted : Boolean ;
+    // If can read
+    lbCanRead : Boolean ;
 
     //
     // List directory
-    procedure ShowDirectory(const asPath : String; const abIsFile : Boolean;
-        const aoDataSocket : TTCPBlockSocket) ;
+    //
+    // @return true if aborted
+    function ShowDirectory(const asPath : String; const abIsFile : Boolean;
+        const aoDataSocket : TTCPBlockSocket) : Boolean ;
     var
         // Result of find
         liFindResult : Integer ;
@@ -41,7 +47,9 @@ var
 
         liFindResult := FindFirst(lsFindFilePath, faanyfile, lrSearchRec) ;
 
-        while liFindResult = 0 do
+        Result := False ;
+
+        while (liFindResult = 0) and not Result do
         begin
             if ((lrSearchRec.Attr and faHidden) = 0)
                 and ((lrSearchRec.Attr and faSysFile) = 0)
@@ -50,6 +58,7 @@ var
                 if (lrSearchRec.Attr and faDirectory) > 0
                 then begin
                     if (lrSearchRec.Name <> '.') and (lrSearchRec.Name <> '..')
+                        and prUserConfig.SubDir
                     then begin
                         aoDataSocket.SendString(GetDirectory(lrSearchRec) +
                             FTP_EOL) ;
@@ -65,6 +74,8 @@ var
             end ;
 
             liFindResult := FindNext(lrSearchRec) ;
+
+            Result := IsAborted ;
         end ;
 
         FindClose(lrSearchRec) ;
@@ -72,8 +83,10 @@ var
 
     //
     // List directory UTF8
-    procedure ShowDirectoryUTF8(const asPath : String; const abIsFile : Boolean;
-        const aoDataSocket : TTCPBlockSocket) ;
+    //
+    // @return true if aborted
+    function ShowDirectoryUTF8(const asPath : String; const abIsFile : Boolean;
+        const aoDataSocket : TTCPBlockSocket) : Boolean ;
     var
         // Result of find
         liFindResult : Integer ;
@@ -96,7 +109,9 @@ var
 
         liFindResult := FindFirstUTF8(lsFindFilePath, faanyfile, lrSearchRec) ;
 
-        while liFindResult = 0 do
+        Result := False ;
+
+        while (liFindResult = 0) and not Result do
         begin
             if ((lrSearchRec.Attr and faHidden) = 0)
                 and ((lrSearchRec.Attr and faSysFile) = 0)
@@ -105,6 +120,7 @@ var
                 if (lrSearchRec.Attr and faDirectory) > 0
                 then begin
                     if (lrSearchRec.Name <> '.') and (lrSearchRec.Name <> '..')
+                        and prUserConfig.SubDir
                     then begin
                         aoDataSocket.SendString(GetDirectory(lrSearchRec) +
                             FTP_EOL) ;
@@ -120,6 +136,8 @@ var
             end ;
 
             liFindResult := FindNextUTF8(lrSearchRec) ;
+
+            Result := IsAborted ;
         end ;
 
         FindCloseUTF8(lrSearchRec) ;
@@ -127,8 +145,10 @@ var
 
     //
     // List directory
-    procedure ShowDirectoryNlst(const asPath : String; const abIsFile : Boolean;
-        const aoDataSocket : TTCPBlockSocket) ;
+    //
+    // @return true if aborted
+    function ShowDirectoryNlst(const asPath : String; const abIsFile : Boolean;
+        const aoDataSocket : TTCPBlockSocket) : Boolean ;
     var
         // Result of find
         liFindResult : Integer ;
@@ -151,7 +171,9 @@ var
 
         liFindResult := FindFirst(lsFindFilePath, faanyfile, lrSearchRec) ;
 
-        while liFindResult = 0 do
+        Result := False ;
+
+        while (liFindResult = 0) and not Result do
         begin
             if ((lrSearchRec.Attr and faHidden) = 0)
                 and ((lrSearchRec.Attr and faSysFile) = 0)
@@ -160,6 +182,7 @@ var
                 if (lrSearchRec.Attr and faDirectory) > 0
                 then begin
                     if (lrSearchRec.Name <> '.') and (lrSearchRec.Name <> '..')
+                        and prUserConfig.SubDir
                     then begin
                         aoDataSocket.SendString(lrSearchRec.Name +
                             FTP_EOL) ;
@@ -175,6 +198,8 @@ var
             end ;
 
             liFindResult := FindNext(lrSearchRec) ;
+
+            Result := IsAborted ;
         end ;
 
         FindClose(lrSearchRec) ;
@@ -182,8 +207,10 @@ var
 
     //
     // List directory UTF8
-    procedure ShowDirectoryNlstUTF8(const asPath : String; const abIsFile : Boolean;
-        const aoDataSocket : TTCPBlockSocket) ;
+    //
+    // @return true if aborted
+    function ShowDirectoryNlstUTF8(const asPath : String; const abIsFile : Boolean;
+        const aoDataSocket : TTCPBlockSocket) : Boolean ;
     var
         // Result of find
         liFindResult : Integer ;
@@ -206,7 +233,9 @@ var
 
         liFindResult := FindFirstUTF8(lsFindFilePath, faanyfile, lrSearchRec) ;
 
-        while liFindResult = 0 do
+        Result := False ;
+
+        while (liFindResult = 0) and not Result do
         begin
             if ((lrSearchRec.Attr and faHidden) = 0)
                 and ((lrSearchRec.Attr and faSysFile) = 0)
@@ -215,6 +244,7 @@ var
                 if (lrSearchRec.Attr and faDirectory) > 0
                 then begin
                     if (lrSearchRec.Name <> '.') and (lrSearchRec.Name <> '..')
+                        and prUserConfig.SubDir
                     then begin
                         aoDataSocket.SendString(lrSearchRec.Name +
                             FTP_EOL) ;
@@ -230,6 +260,8 @@ var
             end ;
 
             liFindResult := FindNextUTF8(lrSearchRec) ;
+
+            Result := IsAborted ;
         end ;
 
         FindCloseUTF8(lrSearchRec) ;
@@ -244,9 +276,22 @@ begin
     lbFileExists := CheckFileExists(lsSysFileName, pbUtf8) ;
 
     // If directory is readable or if directory who contains file is readble
-    if lbFileExists or lbFolderExists
+    if (lbFileExists or lbFolderExists)
     then begin
-        if IsFileProtected(lsSysFileName)
+        if lbFileExists
+        then begin
+            lbCanRead := CanReadDirectory(prUserConfig.Root,
+                ExtractFileDir(lsSysFileName)) ;
+        end
+        else begin
+            lbCanRead := CanReadDirectory(prUserConfig.Root, lsSysFileName) ;
+        end ;
+
+        if not lbCanRead
+        then begin
+            SendAnswer(MSG_FTP_ACCESS_DENIED) ;
+        end
+        else if IsFileProtected(lsSysFileName)
         then begin
             // File is protected. We say not found
             SendAnswer(Format(MSG_FTP_LIST_NO_FOUND, [asFtpFolderName])) ;
@@ -260,23 +305,33 @@ begin
                 then begin
                     if pbUtf8
                     then begin
-                        ShowDirectoryNlstUTF8(lsSysFileName, lbFileExists, aoDataSocket) ;
+                        lbAborted := ShowDirectoryNlstUTF8(lsSysFileName,
+                            lbFileExists, aoDataSocket) ;
                     end
                     else begin
-                        ShowDirectoryNlst(lsSysFileName, lbFileExists, aoDataSocket) ;
+                        lbAborted := ShowDirectoryNlst(lsSysFileName,
+                            lbFileExists, aoDataSocket) ;
                     end ;
                 end
                 else begin
                     if pbUtf8
                     then begin
-                        ShowDirectoryUTF8(lsSysFileName, lbFileExists, aoDataSocket) ;
+                        lbAborted := ShowDirectoryUTF8(lsSysFileName,
+                            lbFileExists, aoDataSocket) ;
                     end
                     else begin
-                        ShowDirectory(lsSysFileName, lbFileExists, aoDataSocket) ;
+                        lbAborted := ShowDirectory(lsSysFileName, lbFileExists,
+                            aoDataSocket) ;
                     end ;
                 end ;
 
-                SendAnswer(MSG_FTP_END_DATA_CONNECTION) ;
+                if lbAborted
+                then begin
+                    SendAnswer(MSG_FTP_TRANS_ABORTED) ;
+                end
+                else begin
+                    SendAnswer(MSG_FTP_END_DATA_CONNECTION) ;
+                end ;
             end ;
         end ;
     end

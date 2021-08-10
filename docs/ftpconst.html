@@ -183,37 +183,43 @@ This file contain all const</p>
 <td class="itemcode"><code><b><a   href="ftpconst.html#USER_CONF_MODIFY_FILE_TIME">USER_CONF_MODIFY_FILE_TIME</a></b> : String = 'ModifyFileTime' ;</code></td>
 </tr>
 <tr class="list2">
+<td class="itemcode"><code><b><a   href="ftpconst.html#USER_CONF_BYTE_RATE">USER_CONF_BYTE_RATE</a></b> : String = 'ByteRate' ;</code></td>
+</tr>
+<tr class="list">
 <td class="itemcode"><code><b><a   href="ftpconst.html#DEFAULT_USER_PASSWORD">DEFAULT_USER_PASSWORD</a></b> : String = '' ;</code></td>
 </tr>
-<tr class="list">
+<tr class="list2">
 <td class="itemcode"><code><b><a   href="ftpconst.html#DEFAULT_USER_ROOT">DEFAULT_USER_ROOT</a></b> : String = '.' ;</code></td>
 </tr>
-<tr class="list2">
+<tr class="list">
 <td class="itemcode"><code><b><a   href="ftpconst.html#DEFAULT_USER_DOWNLOAD">DEFAULT_USER_DOWNLOAD</a></b> : String = 'no' ;</code></td>
 </tr>
-<tr class="list">
+<tr class="list2">
 <td class="itemcode"><code><b><a   href="ftpconst.html#DEFAULT_USER_UPLOAD">DEFAULT_USER_UPLOAD</a></b> : String = 'no' ;</code></td>
 </tr>
-<tr class="list2">
+<tr class="list">
 <td class="itemcode"><code><b><a   href="ftpconst.html#DEFAULT_USER_RENAME">DEFAULT_USER_RENAME</a></b> : String = 'no' ;</code></td>
 </tr>
-<tr class="list">
+<tr class="list2">
 <td class="itemcode"><code><b><a   href="ftpconst.html#DEFAULT_USER_DELETE">DEFAULT_USER_DELETE</a></b> : String = 'no' ;</code></td>
 </tr>
-<tr class="list2">
+<tr class="list">
 <td class="itemcode"><code><b><a   href="ftpconst.html#DEFAULT_USER_MAKE_DIRECTORY">DEFAULT_USER_MAKE_DIRECTORY</a></b> : String = 'no' ;</code></td>
 </tr>
-<tr class="list">
+<tr class="list2">
 <td class="itemcode"><code><b><a   href="ftpconst.html#DEFAULT_USER_DELETE_DIRECTORY">DEFAULT_USER_DELETE_DIRECTORY</a></b> : String = 'no' ;</code></td>
 </tr>
-<tr class="list2">
+<tr class="list">
 <td class="itemcode"><code><b><a   href="ftpconst.html#DEFAULT_USER_SUB_DIR">DEFAULT_USER_SUB_DIR</a></b> : String = 'no' ;</code></td>
 </tr>
-<tr class="list">
+<tr class="list2">
 <td class="itemcode"><code><b><a   href="ftpconst.html#DEFAULT_USER_DISABLED">DEFAULT_USER_DISABLED</a></b> : String = 'yes' ;</code></td>
 </tr>
-<tr class="list2">
+<tr class="list">
 <td class="itemcode"><code><b><a   href="ftpconst.html#DEFAULT_USER_MODIFY_FILE_TIME">DEFAULT_USER_MODIFY_FILE_TIME</a></b> : String = 'no' ;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a   href="ftpconst.html#DEFAULT_USER_CONF_BYTE_RATE">DEFAULT_USER_CONF_BYTE_RATE</a></b> : String = '0' ;</code></td>
 </tr>
 <tr class="list">
 <td class="itemcode"><code><b><a   href="ftpconst.html#FOLDER_CONF_DOWNLOAD">FOLDER_CONF_DOWNLOAD</a></b> : String = 'Download' ;</code></td>
@@ -238,6 +244,21 @@ This file contain all const</p>
 </tr>
 <tr class="list2">
 <td class="itemcode"><code><b><a   href="ftpconst.html#FOLDER_CONF_DISABLED">FOLDER_CONF_DISABLED</a></b> : String = 'Readable' ;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a   href="ftpconst.html#DOWNLOAD_FILE">DOWNLOAD_FILE</a></b> : Boolean = True ;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a   href="ftpconst.html#UPLOAD_FILE">UPLOAD_FILE</a></b> : Boolean = False ;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a   href="ftpconst.html#START_TRANSFERT">START_TRANSFERT</a></b> : Boolean = True ;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a   href="ftpconst.html#STOP_TRANSFERT">STOP_TRANSFERT</a></b> : Boolean = False ;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a   href="ftpconst.html#WAITING_FOR_INPUT">WAITING_FOR_INPUT</a></b> : Integer = 1000 ;</code></td>
 </tr>
 </table>
 <h2 class="description">Description</h2>
@@ -870,6 +891,20 @@ If user can modify file time </p>
 </table>
 <table class="detail wide_list">
 <tr class="list">
+<td class="itemcode"><a name="USER_CONF_BYTE_RATE"></a><code><b>USER_CONF_BYTE_RATE</b> : String = 'ByteRate' ;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+User byte rate </p>
+<h6 class="description_section">See also</h6>
+<dl class="see_also">
+  <dt><a class="normal"  href="ftpconst.html#DEFAULT_USER_BYTE_RATE">DEFAULT_USER_BYTE_RATE</a></dt>
+  <dd></dd>
+</dl>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
 <td class="itemcode"><a name="DEFAULT_USER_PASSWORD"></a><code><b>DEFAULT_USER_PASSWORD</b> : String = '' ;</code></td>
 </tr>
 <tr><td colspan="1">
@@ -969,6 +1004,15 @@ Default modify file time</p>
 </table>
 <table class="detail wide_list">
 <tr class="list">
+<td class="itemcode"><a name="DEFAULT_USER_CONF_BYTE_RATE"></a><code><b>DEFAULT_USER_CONF_BYTE_RATE</b> : String = '0' ;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Default user byte rate</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
 <td class="itemcode"><a name="FOLDER_CONF_DOWNLOAD"></a><code><b>FOLDER_CONF_DOWNLOAD</b> : String = 'Download' ;</code></td>
 </tr>
 <tr><td colspan="1">
@@ -1039,6 +1083,51 @@ Show sub right</p>
 If FOLDER disabled</p>
 </td></tr>
 </table>
-<hr noshade size="1"><span class="appinfo"><em>Generated by <a  target="_parent" href="http://pasdoc.sourceforge.net/">PasDoc 0.11.0</a> on 2010-01-29 13:55:11</em>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="DOWNLOAD_FILE"></a><code><b>DOWNLOAD_FILE</b> : Boolean = True ;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Download file</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="UPLOAD_FILE"></a><code><b>UPLOAD_FILE</b> : Boolean = False ;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Upload file</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="START_TRANSFERT"></a><code><b>START_TRANSFERT</b> : Boolean = True ;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Start transfert</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="STOP_TRANSFERT"></a><code><b>STOP_TRANSFERT</b> : Boolean = False ;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Stop Transfert</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="WAITING_FOR_INPUT"></a><code><b>WAITING_FOR_INPUT</b> : Integer = 1000 ;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Waiting for string in millisecond</p>
+</td></tr>
+</table>
+<hr noshade size="1"><span class="appinfo"><em>Generated by <a  target="_parent" href="http://pasdoc.sourceforge.net/">PasDoc 0.11.0</a> on 2010-03-07 18:52:39</em>
 </span>
 </body></html>

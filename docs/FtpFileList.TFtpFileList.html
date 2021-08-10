@@ -1,0 +1,263 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
+<html>
+<head>
+<meta name="GENERATOR" content="PasDoc 0.11.0">
+<meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+<title>FtpFileList: Class TFtpFileList</title>
+<link rel="StyleSheet" type="text/css" href="pasdoc.css">
+</head>
+<body bgcolor="#ffffff" text="#000000" link="#0000ff" vlink="#800080" alink="#FF0000">
+<a name="TFtpFileList"></a><h1 class="cio">Class TFtpFileList</h1>
+<table class="sections wide_list">
+<tr>
+<td><a class="section"  href="#%40Description">Description</a></td><td><a class="section"  href="#%40Hierarchy">Hierarchy</a></td><td><a class="section"  href="#%40Fields">Fields</a></td><td><a class="section"  href="#%40Methods">Methods</a></td><td><a class="section"  href="#%40Properties">Properties</a></td></tr></table>
+<a name="%40Description"></a><h2 class="unit">Unit</h2>
+<p class="unitlink">
+<a   href="FtpFileList.html">FtpFileList</a></p>
+<h2 class="declaration">Declaration</h2>
+<p class="declaration">
+<code>type TFtpFileList = class(TObject)</code></p>
+<h2 class="description">Description</h2>
+<a name="%40Hierarchy"></a><h2 class="hierarchy">Hierarchy</h2>
+<ul class="hierarchy"><li class="ancestor">TObject</li>
+<li class="thisitem">TFtpFileList</li></ul><h2 class="overview">Overview</h2>
+<a name="%40Fields"></a><h3 class="summary">Fields</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code><b><a   href="FtpFileList.TFtpFileList.html#FtpFileArray">FtpFileArray</a></b>: array of <a   href="FtpFileList.TFtpFile.html">TFtpFile</a> ;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code><b><a   href="FtpFileList.TFtpFileList.html#Capacity">Capacity</a></b>: Integer ;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code><b><a   href="FtpFileList.TFtpFileList.html#Nb">Nb</a></b>: Integer ;</code></td>
+</tr>
+</table>
+<a name="%40Methods"></a><h3 class="summary">Methods</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code>function <b><a   href="FtpFileList.TFtpFileList.html#Get">Get</a></b>(const aiIndex : Integer) : <a   href="FtpFileList.TFtpFile.html">TFtpFile</a> ;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code>procedure <b><a   href="FtpFileList.TFtpFileList.html#Put">Put</a></b>(const aiIndex : Integer; const arValue : <a   href="FtpFileList.TFtpFile.html">TFtpFile</a>) ;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a   href="FtpFileList.TFtpFileList.html#Add">Add</a></b>(const arValue : <a   href="FtpFileList.TFtpFile.html">TFtpFile</a>) ;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a   href="FtpFileList.TFtpFileList.html#Clear">Clear</a></b> ;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a   href="FtpFileList.TFtpFileList.html#Count">Count</a></b> : Integer ;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>constructor <b><a   href="FtpFileList.TFtpFileList.html#Create">Create</a></b> ;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>constructor <b><a   href="FtpFileList.TFtpFileList.html#Create">Create</a></b>(const aiInitialSize : Integer) ;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>destructor <b><a   href="FtpFileList.TFtpFileList.html#Destroy">Destroy</a></b>; override;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a   href="FtpFileList.TFtpFileList.html#Delete">Delete</a></b>(const aiIndex : Integer) ;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a   href="FtpFileList.TFtpFileList.html#Delete">Delete</a></b>(const asValue : <a   href="FtpFileList.TFtpFile.html">TFtpFile</a>) ;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a   href="FtpFileList.TFtpFileList.html#Insert">Insert</a></b>(const aiIndex : Integer; const arValue : <a   href="FtpFileList.TFtpFile.html">TFtpFile</a>) ;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a   href="FtpFileList.TFtpFileList.html#Find">Find</a></b>(const asFileName : String; const asDownload : Boolean; const asFtpClient : pointer) : Integer ;</code></td>
+</tr>
+</table>
+<a name="%40Properties"></a><h3 class="summary">Properties</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>property <b><a   href="FtpFileList.TFtpFileList.html#Integers">Integers</a></b>[Index: Integer]: <a   href="FtpFileList.TFtpFile.html">TFtpFile</a> read <a   href="FtpFileList.TFtpFileList.html#Get">Get</a> write <a   href="FtpFileList.TFtpFileList.html#Put">Put</a>;</code></td>
+</tr>
+</table>
+<h2 class="description">Description</h2>
+<h3 class="detail">Fields</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="FtpFileArray"></a><code><b>FtpFileArray</b>: array of <a   href="FtpFileList.TFtpFile.html">TFtpFile</a> ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Array of TFtpFile</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="Capacity"></a><code><b>Capacity</b>: Integer ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Capacity of array. When Nb = Capacity, it will be increase by ARRAY_RANGE</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="Nb"></a><code><b>Nb</b>: Integer ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Number of item in array</p>
+</td></tr>
+</table>
+<h3 class="detail">Methods</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="Get"></a><code>function <b>Get</b>(const aiIndex : Integer) : <a   href="FtpFileList.TFtpFile.html">TFtpFile</a> ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Get data</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="Put"></a><code>procedure <b>Put</b>(const aiIndex : Integer; const arValue : <a   href="FtpFileList.TFtpFile.html">TFtpFile</a>) ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Put data</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Add"></a><code>procedure <b>Add</b>(const arValue : <a   href="FtpFileList.TFtpFile.html">TFtpFile</a>) ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Add item list</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Clear"></a><code>procedure <b>Clear</b> ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Clear list. All data is free.</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Count"></a><code>function <b>Count</b> : Integer ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Return count of item in list</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Create"></a><code>constructor <b>Create</b> ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Constructor</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Create"></a><code>constructor <b>Create</b>(const aiInitialSize : Integer) ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Constructor with initial capacity</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Destroy"></a><code>destructor <b>Destroy</b>; override;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Free object. All data will be free</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Delete"></a><code>procedure <b>Delete</b>(const aiIndex : Integer) ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Delete item. Item was free</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Delete"></a><code>procedure <b>Delete</b>(const asValue : <a   href="FtpFileList.TFtpFile.html">TFtpFile</a>) ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Delete item. Item was free</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Insert"></a><code>procedure <b>Insert</b>(const aiIndex : Integer; const arValue : <a   href="FtpFileList.TFtpFile.html">TFtpFile</a>) ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Insert list</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Find"></a><code>function <b>Find</b>(const asFileName : String; const asDownload : Boolean; const asFtpClient : pointer) : Integer ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Find a record</p>
+</td></tr>
+</table>
+<h3 class="detail">Properties</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Integers"></a><code>property <b>Integers</b>[Index: Integer]: <a   href="FtpFileList.TFtpFile.html">TFtpFile</a> read <a   href="FtpFileList.TFtpFileList.html#Get">Get</a> write <a   href="FtpFileList.TFtpFileList.html#Put">Put</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Default propery</p>
+</td></tr>
+</table>
+<hr noshade size="1"><span class="appinfo"><em>Generated by <a  target="_parent" href="http://pasdoc.sourceforge.net/">PasDoc 0.11.0</a> on 2010-03-07 18:52:39</em>
+</span>
+</body></html>

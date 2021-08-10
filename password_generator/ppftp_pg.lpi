@@ -41,8 +41,8 @@
         <Filename Value="ppftp_pg.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="ppftp_pg"/>
-        <CursorPos X="28" Y="52"/>
-        <TopLine Value="19"/>
+        <CursorPos X="24" Y="20"/>
+        <TopLine Value="10"/>
         <EditorIndex Value="0"/>
         <UsageCount Value="21"/>
         <Loaded Value="True"/>
@@ -204,6 +204,7 @@
       </SyntaxOptions>
     </Parsing>
     <CodeGeneration>
+      <SmartLinkUnit Value="True"/>
       <Optimizations>
         <OptimizationLevel Value="3"/>
       </Optimizations>
@@ -211,6 +212,7 @@
     <Linking>
       <Debugging>
         <UseLineInfoUnit Value="False"/>
+        <StripSymbols Value="True"/>
       </Debugging>
       <LinkSmart Value="True"/>
     </Linking>

@@ -1,6 +1,3 @@
-// This file contain all type
-unit ftpversion;
-
 // This file is part of the Portabl and Pascal FTP Server
 // Copyright (c) 2010 MARTINEAU Emeric.
 //
@@ -10,15 +7,12 @@ unit ftpversion;
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-
-{$mode objfpc}{$H+}
-
-interface
-
-const
-    FTP_VERSION : String = '0.3.0' ;
-
-implementation
-
-end.
-
+begin
+    if UpperCase(asParameter) = 'S'
+    then begin
+        SendAnswer(Format(MSG_FTP_MODE_OK, ['S'])) ;
+    end
+    else begin
+        SendAnswer(Format(MSG_FTP_MODE_FAIL, [asParameter])) ;
+    end ;
+end ;

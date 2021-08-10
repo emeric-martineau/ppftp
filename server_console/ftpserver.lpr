@@ -256,12 +256,14 @@ begin
         DEFAULT_USER_MAKE_DIRECTORY) ;
     Result.DeleteDirectory := loUserConfig.ReadString(USER_SECTION, USER_CONF_DELETE_DIRECTORY,
         DEFAULT_USER_DELETE_DIRECTORY) ;
-    Result.ListSubDir := loUserConfig.ReadString(USER_SECTION, USER_CONF_SUB_DIR,
+    Result.SubDir := loUserConfig.ReadString(USER_SECTION, USER_CONF_SUB_DIR,
         DEFAULT_USER_SUB_DIR) ;
     Result.ModifyFileTime := loUserConfig.ReadString(USER_SECTION, USER_CONF_MODIFY_FILE_TIME ,
         DEFAULT_USER_MODIFY_FILE_TIME) ;
     Result.Disabled := loUserConfig.ReadString(USER_SECTION, USER_CONF_DISABLED,
         DEFAULT_USER_DISABLED) ;
+    Result.ByteRate := loUserConfig.ReadString(USER_SECTION, USER_CONF_BYTE_RATE,
+        DEFAULT_USER_CONF_BYTE_RATE) ;
 
     loUserConfig.Free ;
 end ;

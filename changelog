@@ -1,9 +1,17 @@
+0.4.0 - 2010/03/07
+  - support RETR, STOR, APPE, STOU,
+  - support time out file transfert,
+  
+0.3.0 - 2010/02/03
+  - add missing no show sub dir,
+  - support MODE, REST,
+  
 0.2.1 - 2010/01/29
   - correct bug in CWD command,
   - add main config window in GUI,
   
 0.2.0 - 2010/01/26
-  - suppot PWD/XPWD, CDUP/XCUP, PORT, PASV, TYPE, LIIST/NLST,
+  - support PWD/XPWD, CDUP/XCUP, PORT, PASV, TYPE, LIIST/NLST,
   - support of local folder configuration,
 
 0.1.3 - 2010/01/19

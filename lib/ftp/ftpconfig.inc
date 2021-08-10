@@ -6,3 +6,9 @@
 
 // Windows type server
 //{$DEFINE TYPE_SERVER_WINDOWS}
+
+// Enabled call back transfert function
+//{$DEFINE CALL_BACK_TRANSFERT}
+
+// Enable call back login/logout function.
+//{$DEFINE CALL_BACK_LOGIN_LOGOUT}

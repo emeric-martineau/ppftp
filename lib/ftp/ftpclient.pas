@@ -18,7 +18,7 @@ interface
 {$I ftpconfig.inc}
 
 uses
-  Classes, SysUtils, FtpTypes, FtpFunctions, FtpMessages, FtpConst
+  Classes, SysUtils, dateutils, FtpTypes, FtpFunctions, FtpMessages, FtpConst
   , blcksock, synsock, FileUtil,
   {$IFDEF TYPE_SERVER_UNIX}
   ftpunixdirectory
@@ -45,7 +45,7 @@ type
     // Error
     FOnError : TLogProcedure;
     // Config reader
-    FOnClientConfigRead : TClientConfigReader;
+    FOnClientConfigRead : TClientConfigReaderFunction;
     // Previous thread
     FPreviousClient : TFtpClient;
     // Next thread
@@ -53,9 +53,9 @@ type
     // Call when connection shutdown
     FOnClientDisconnect : TClientDisconnect;
     // Login
-    FOnLogin : TClientLogin ;
+    FOnLogin : TClientLoginFunction ;
     // Logout
-    FOnLogout : TClientLogout ;
+    FOnLogout : TClientLogoutProcedure ;
     // FullLog
     FFullLog : Boolean ;
     // Utf8 support
@@ -65,15 +65,23 @@ type
     FGuiApplication : Boolean ;
     {$ENDIF}
     // If local config exists
-    FOnLocalConfigExists : TFolderLocalConfigExists ;
+    FOnLocalConfigExists : TFolderLocalConfigExistsFunction ;
     // Get passive port
-    FOnGetPassivePort : TGetPassivePort ;
+    FOnGetPassivePort : TGetPassivePortFunction ;
     // Free passive port
-    FOnFreePassivePort : TFreePassivePort ;
+    FOnFreePassivePort : TFreePassivePortProcedure ;
     // Check password
-    FOnCheckPassword : TClientCheckPassword ;
+    FOnCheckPassword : TClientCheckPasswordFunction ;
     // File protected
-    FOnFileProtected : TFileProtected ;
+    FOnFileProtected : TFileProtectedFunction ;
+    // Main byte rate
+    FMainByteRate : Integer ;
+    // Buffer size
+    FBufferSize : Integer ;
+    // Transfert
+    FOnTransfert : TTransfertProcedure ;
+    // Cancel
+    FCancel : Boolean ;
 
     // Command socket
     poClientSock : TTCPBlockSocket;
@@ -91,6 +99,8 @@ type
     pbUtf8 : Boolean ;
     // File transfert timeout
     piFileTransfertTimeOut : Integer ;
+    // Byte rate for text file
+    piByteRate : Integer ;
 
     // Message to show
     psMessageLogOrError : String ;
@@ -108,6 +118,14 @@ type
     prPassivePort : PFtpPassivePort ;
     // Binary transfert
     pbTransfertMode : TTransfertMode ;
+    // Rest value
+    piStartTransfertFileValue : Integer ;
+    // Waiting transfert time
+    piWaitingTransfertTime : Integer ;
+    // Buffer size
+    piUserBufferSize : Integer ;
+    // Last file transfert
+    prLastFileTransfert : TDateTime ;
 
     // Return True if can login
     function CheckLogin(const asLoginName : String) : Boolean ;
@@ -140,8 +158,7 @@ type
     procedure ValideUserPassword(const asPassword : String) ;
     // Read local folder config
     function FolderLocalConfigReader(const asFolderName : String;
-        const abUtf8 : Boolean; const asKey : String;
-        var asValue : String) : Boolean ;
+        const asKey : String; var asValue : String) : Boolean ;
     // Execute user command
     procedure ExecuteUserCommand(const asCommand : String;
         const asParameter : String) ;
@@ -161,12 +178,20 @@ type
         const asCurrentPath : String) : Boolean ;
     // List a directory
     procedure ListDirectory(const asFtpFolderName : String;
-        const aoCommandSocket : TTCPBlockSocket;
         const aoDataSocket : TTCPBlockSocket; const abNlst : Boolean) ;
     // File protected
     function IsFileProtected(const asPathAndFileName : String) : Boolean ;
     // Close data connection
     procedure CloseDataConnection(aoDataSocket : TTCPBlockSocket) ;
+    // Check if client abord transfert
+    function IsAborted : Boolean ;
+    // Update waiting time for transfert
+    procedure UpdateWaitingTransfertTime ;
+    {$IFDEF CALL_BACK_TRANSFERT}
+    // Transfert call back
+    procedure SetTransfert(const asFileName : String;
+        const asDownload : Boolean; const asStart : Boolean) ;
+    {$ENDIF}
 
     // FEAT command
     procedure FeatCommand ;
@@ -185,6 +210,15 @@ type
     procedure ListCommand(const asParameter : String; const abNlst : Boolean) ;
     // TYPE command
     procedure TypeCommand(const asParameter : String) ;
+    // MODE feature
+    procedure ModeCommand(const asParameter : String) ;
+    // REST feature
+    procedure RestCommand(const asParameter : String) ;
+    // RETR feature
+    procedure RetrCommand(const asParameter : String) ;
+    // STOR/STOU/APPE feature
+    procedure StorStouAppeCommand(const asParameter : String;
+        const atMode : TStoreCommandeMode) ;
 
   public
     // Previous client
@@ -199,31 +233,47 @@ type
     // Gui application for non-freeze log in console mode. Set define GUI_APPLICATION_SUPPORT in config.inc
     property GuiApplication : Boolean read FGuiApplication write FGuiApplication ;
     {$ENDIF}
+    // Main byte rate
+    property MainByteRate : Integer read FMainByteRate write FMainByteRate ;
+    // Buffer size
+    property BufferSize : Integer read FBufferSize write FBufferSize ;
+    // Cancel transfert file
+    property Cancel : Boolean write FCancel ;
 
     // Log
     property OnLog: TLogProcedure read FOnLog write FOnLog;
     // Error
     property OnError: TLogProcedure read FOnError write FOnError;
     // Client config reader
-    property OnClientConfigRead: TClientConfigReader
+    property OnClientConfigRead: TClientConfigReaderFunction
       read FOnClientConfigRead write FOnClientConfigRead;
     // Call when connection shutdown
     property OnClientDisconnect: TClientDisconnect
       read FOnClientDisconnect write FOnClientDisconnect;
     // Login
-    property OnLogin : TClientLogin read FOnLogin write FOnLogin ;
+    property OnLogin : TClientLoginFunction read FOnLogin write FOnLogin ;
     // Logout
-    property OnLogout : TClientLogout read FOnLogout write FOnLogout ;
+    property OnLogout : TClientLogoutProcedure read FOnLogout write FOnLogout ;
     // Local folder config
-    property OnLocalConfigExists : TFolderLocalConfigExists read FOnLocalConfigExists write FOnLocalConfigExists ;
+    property OnLocalConfigExists : TFolderLocalConfigExistsFunction read
+        FOnLocalConfigExists write FOnLocalConfigExists ;
     // Get passive port
-    property OnGetPassivePort : TGetPassivePort read FOnGetPassivePort write FOnGetPassivePort ;
+    property OnGetPassivePort : TGetPassivePortFunction read FOnGetPassivePort
+        write FOnGetPassivePort ;
     // Free passive port
-    property OnFreePassivePort : TFreePassivePort read FOnFreePassivePort write FOnFreePassivePort ;
+    property OnFreePassivePort : TFreePassivePortProcedure read
+        FOnFreePassivePort write FOnFreePassivePort ;
     // Check password
-    property OnCheckPassword : TClientCheckPassword read FOnCheckPassword write FOnCheckPassword ;
+    property OnCheckPassword : TClientCheckPasswordFunction read
+        FOnCheckPassword write FOnCheckPassword ;
     // If file protected
-    property OnFileProtected : TFileProtected read FOnFileProtected write FOnFileProtected ;
+    property OnFileProtected : TFileProtectedFunction read FOnFileProtected
+        write FOnFileProtected ;
+    {$IFDEF CALL_BACK_TRANSFERT}
+    // Transfert
+    property OnTransfert : TTransfertProcedure read FOnTransfert
+        write FOnTransfert ;
+    {$ENDIF}
 
     // Constructor
     constructor Create(const abCreateSuspended: boolean;
@@ -243,8 +293,10 @@ const
     READ_REMOTE_STRING_TIME_OUT : Integer = 1 ;
     // ReadRemoteString() result function. Thread must be terminated
     READ_REMOTE_STRING_TERMINATED : Integer = 2 ;
-    // ReadRemoteString() result function. Erro
+    // ReadRemoteString() result function. Error
     READ_REMOTE_STRING_ERROR : Integer = 3 ;
+    // ReadRemoteString() result function. We have file time out
+    READ_REMOTE_STRING_FILE_TIME_OUT : Integer = 4 ;
 implementation
 
 //
@@ -304,11 +356,19 @@ begin
 
     FOnFileProtected := nil ;
 
+    FOnTransfert := nil ;
+
+    FMainByteRate := 0 ;
+
+    FBufferSize := DEFAULT_BUFFER_SIZE ;
+
     poPassivePortSock := nil ;
 
     prPassivePort := nil ;
 
     pbTransfertMode := tmAscii ;
+
+    FCancel := False ;
 
     InitDefaultUser ;
 end;
@@ -357,7 +417,7 @@ begin
     prUserConfig.Delete := DEFAULT_USER_DELETE = YES_VALUE ;
     prUserConfig.MakeDirectory := DEFAULT_USER_MAKE_DIRECTORY = YES_VALUE ;
     prUserConfig.DeleteDirectory := DEFAULT_USER_DELETE_DIRECTORY = YES_VALUE ;
-    prUserConfig.ListSubDir := DEFAULT_USER_SUB_DIR = YES_VALUE ;
+    prUserConfig.SubDir := DEFAULT_USER_SUB_DIR = YES_VALUE ;
     prUserConfig.Disabled := DEFAULT_USER_DISABLED = YES_VALUE ;
     prUserConfig.UserFound := False ;
     prUserConfig.Connected := False ;
@@ -370,6 +430,7 @@ end ;
 procedure TFtpClient.ReadConfig(const asLoginName : String) ;
 var
     lrUserConfig : TUserConfig ;
+    liByteRate : Integer ;
 begin
     if Assigned(FOnClientConfigRead)
     then begin
@@ -382,8 +443,17 @@ begin
         prUserConfig.Delete := lrUserConfig.Delete = YES_VALUE ;
         prUserConfig.MakeDirectory := lrUserConfig.MakeDirectory = YES_VALUE ;
         prUserConfig.DeleteDirectory := lrUserConfig.DeleteDirectory = YES_VALUE ;
-        prUserConfig.ListSubDir := lrUserConfig.ListSubDir = YES_VALUE ;
+        prUserConfig.SubDir := lrUserConfig.SubDir = YES_VALUE ;
         prUserConfig.Disabled := lrUserConfig.Disabled = YES_VALUE ;
+
+        liByteRate := 0 ;
+
+        if not TryIntParse(lrUserConfig.ByteRate, liByteRate)
+        then begin
+            liByteRate := 0 ;
+        end ;
+
+        prUserConfig.ByteRate := liByteRate ;
         prUserConfig.UserFound := lrUserConfig.UserFound ;
         prUserConfig.Connected := False ;
     end
@@ -424,7 +494,7 @@ begin
 
     while (liTimeOut > 0) and (Terminated = False) do
     begin
-        asString := poClientSock.RecvString(1000) ;
+        asString := poClientSock.RecvString(WAITING_FOR_INPUT) ;
 
         if poClientSock.LastError = 0
         then begin
@@ -447,7 +517,17 @@ begin
         end
         else if poClientSock.LastError <> WSAETIMEDOUT
         then begin
+            Error(poClientSock.LastErrorDesc) ;
+
             Result := READ_REMOTE_STRING_ERROR ;
+
+            break ;
+        end ;
+
+        if (piFileTransfertTimeOut > 0) and
+            (SecondsBetween(prLastFileTransfert, Now) > piFileTransfertTimeOut)
+        then begin
+            Result := READ_REMOTE_STRING_FILE_TIME_OUT ;
 
             break ;
         end ;
@@ -664,8 +744,7 @@ end ;
 //
 // @return True if local config found
 function TFtpClient.FolderLocalConfigReader(const asFolderName : String;
-        const abUtf8 : Boolean; const asKey : String;
-        var asValue : String) : Boolean ;
+        const asKey : String; var asValue : String) : Boolean ;
 begin
     if Assigned(FOnLocalConfigExists)
     then begin
@@ -699,6 +778,7 @@ begin
                 Result := TTCPBlockSocket.Create ;
                 Result.Socket := loSock ;
                 Result.SetLinger(LINGER_ENABLE, LINGER_DELAY) ;
+                Result.ConvertLineEnd := True ;
             end ;
         end ;
 
@@ -832,7 +912,7 @@ begin
 
     while Result do
     begin
-        if FolderLocalConfigReader(lsRoot + lsCurrentPath, pbUtf8,
+        if FolderLocalConfigReader(lsRoot + lsCurrentPath,
              FOLDER_CONF_DISABLED, lsLocalConfigValue)
         then begin
             Result := lsLocalConfigValue <> NO_VALUE ;
@@ -858,7 +938,6 @@ end ;
 
 // List a directory
 procedure TFtpClient.ListDirectory(const asFtpFolderName : String;
-    const aoCommandSocket : TTCPBlockSocket;
     const aoDataSocket : TTCPBlockSocket; const abNlst : Boolean) ;
 {$I ftplistdirectory.inc}
 
@@ -875,6 +954,106 @@ begin
         Result := FOnFileProtected(asPathAndFileName, pbUtf8) ;
     end ;
 end ;
+
+//
+// Check if client abord transfert
+//
+// @return True or False
+function TFtpClient.IsAborted : Boolean ;
+var
+    // String for log
+    lsString : String ;
+    // Paramete
+    lsParameter : String ;
+    // Commande
+    lsCommande : String ;
+begin
+    Result := FCancel ;
+
+    FCancel := False ;
+
+    if not Result
+    then begin
+        lsString := poClientSock.RecvString(0) ;
+
+        if poClientSock.LastError = 0
+        then begin
+            lsParameter := '' ;
+            lsCommande := '' ;
+
+            ExplodeCommand(lsString, lsCommande, lsParameter) ;
+
+            Result := UpperCase(lsCommande) = 'ABOR' ;
+
+            if Result
+            then begin
+                SendAnswer(MSG_FTP_ABOR_OK) ;
+            end
+            else begin
+                SendAnswer(MSG_FTP_ABOR_ONLY) ;
+            end ;
+
+            if FFullLog
+            then begin
+                if UpperCase(Copy(lsString, 1, 4)) = 'PASS'
+                then begin
+                    lsString := Copy(lsString, 1, 4) + ' ****' ;
+                end ;
+
+                Log(Format(MSG_LOG_COMMAND,
+                    [poClientSock.GetRemoteSinIP, lsString])) ;
+            end ;
+        end ;
+    end ;
+end ;
+
+//
+// Update waiting time and buffer size
+procedure TFtpClient.UpdateWaitingTransfertTime ;
+begin
+    if prUserConfig.ByteRate = -1
+    then begin
+        piByteRate := FMainByteRate ;
+    end
+    else begin
+        piByteRate := prUserConfig.ByteRate ;
+    end ;
+
+    if piByteRate = 0
+    then begin
+        piWaitingTransfertTime := 0 ;
+        piUserBufferSize := FBufferSize ;
+    end
+    else begin
+        if piByteRate < FBufferSize
+        then begin
+            piWaitingTransfertTime := 1000 ;
+            piUserBufferSize := piByteRate ;
+        end
+        else begin
+            piWaitingTransfertTime := FBufferSize * 1000 div piByteRate ;
+            piUserBufferSize := FBufferSize ;
+        end ;
+    end ;
+end ;
+
+{$IFDEF CALL_BACK_TRANSFERT}
+//
+// Transfert call back
+//
+// @param asFileName filename
+// @param asDownload true if download, false if upload
+// @param asStart true start, false stop
+procedure TFtpClient.SetTransfert(const asFileName : String;
+    const asDownload : Boolean; const asStart : Boolean) ;
+begin
+    if Assigned(FOnTransfert)
+    then begin
+        FOnTransfert(prUserConfig.Login, asFileName, asDownload, asStart,
+            Self) ;
+    end ;
+end ;
+{$ENDIF}
 
 //
 // Execute ftp server
@@ -902,6 +1081,8 @@ begin
     lsRemoteString := '' ;
     lsParameter := '' ;
     lsCommand := '' ;
+
+    prLastFileTransfert := Now ;
 
     while (Terminated = False) and (lbQuit = False) do
     begin
@@ -961,6 +1142,8 @@ begin
                 if prUserConfig.Connected
                 then begin
                     psFtpCurrentDirectory := '/' ;
+
+                    UpdateWaitingTransfertTime ;
                 end ;
             end
             else if not prUserConfig.Connected
@@ -977,6 +1160,10 @@ begin
             if liReadRemoteStringResult = READ_REMOTE_STRING_TIME_OUT
             then begin
                 SendAnswer(Format(MSG_FTP_TIME_OUT, [piTimeOut])) ;
+            end
+            else if liReadRemoteStringResult = READ_REMOTE_STRING_FILE_TIME_OUT
+            then begin
+                SendAnswer(Format(MSG_FTP_FILE_TIME_OUT, [piFileTransfertTimeOut])) ;
             end ;
 
             break ;
@@ -1073,8 +1260,50 @@ begin
     then begin
         TypeCommand(asParameter) ;
     end
+    else if (asCommand = 'MODE')
+    then begin
+        ModeCommand(asParameter) ;
+    end
+    else if (asCommand = 'REST')
+    then begin
+        RestCommand(asParameter) ;
+    end
+    else if (asCommand = 'ABOR')
+    then begin
+        SendAnswer(MSG_FTP_ABOR_OK) ;
+    end
+    else if (asCommand = 'RETR')
+    then begin
+        RetrCommand(asParameter) ;
+
+        prLastFileTransfert := Now ;
+    end
+    else if (asCommand = 'STOR')
+    then begin
+        StorStouAppeCommand(asParameter, scmNormal) ;
+
+        prLastFileTransfert := Now ;
+    end
+    else if (asCommand = 'APPE')
+    then begin
+        StorStouAppeCommand(asParameter, scmAppend) ;
+
+        prLastFileTransfert := Now ;
+    end
+    else if (asCommand = 'STOU')
+    then begin
+        StorStouAppeCommand('', scmUnique) ;
+
+        prLastFileTransfert := Now ;
+    end
     else begin
         SendAnswer(MSG_FTP_CMD_NOT_UNDERSTOOD) ;
+    end ;
+
+    // We reinit rest value if not rest command
+    if asCommand <> 'REST'
+    then begin
+        piStartTransfertFileValue := 0 ;
     end ;
 end;
 
@@ -1128,6 +1357,36 @@ procedure TFtpClient.ListCommand(const asParameter : String; const abNlst : Bool
 // @param asParameter parameter (ON or OFF)
 procedure TFtpClient.TypeCommand(const asParameter : String) ;
 {$I ftptypecmd.inc}
+
+//
+// Mode feature
+//
+// @param asParameter parameter S
+procedure TFtpClient.ModeCommand(const asParameter : String) ;
+{$I ftpmodecmd.inc}
+
+//
+// Rest feature
+//
+// @param asParameter parameter as number
+procedure TFtpClient.RestCommand(const asParameter : String) ;
+{$I ftprestcmd.inc}
+
+//
+// Retr feature
+//
+// @param asParameter parameter is file name
+procedure TFtpClient.RetrCommand(const asParameter : String) ;
+{$I ftpretrcmd.inc}
+
+//
+// STOR/STOU/APPE feature
+//
+// @param asParameter file name
+// @param atMode mode file
+procedure TFtpClient.StorStouAppeCommand(const asParameter : String;
+    const atMode : TStoreCommandeMode) ;
+{$I ftpstorcmd.inc}
 
 end.
 

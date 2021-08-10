@@ -167,7 +167,49 @@ function TranslateToPassivePort(const asIpAddress : String;
 function CheckFileExists(const asFileName : String;
     const abUtf8 : Boolean) : Boolean ;
 
+//
+// Return string of IOResult
+// http://www.freepascal.org/docs-html/rtl/system/ioresult.html
+//
+// @param aiIoResult IOResult
+//
+// @return string
+function GetIoResultString(const aiIoResult : word) : String ;
+
+//
+// Open text file in read
+//
+// @param asFileName file name
+// @param asFile var file
+procedure OpenTextFileForRead(const asFileName : String; var asFile : TextFile);
+
+//
+// Open text file in write
+//
+// @param asFileName file name
+// @param asFile var file
+procedure OpenTextFileForWrite(const asFileName : String; var asFile : TextFile);
+
+//
+// Return file attributs
+//
+// @param asFileName file name
+// @param abUtf8 if utf8 mode is used
+function GetFileAttribut(const asFileName : String;
+    const abUtf8 : Boolean) : Longint ;
+
+//
+// Open text file in write
+//
+// @param asFileName file name
+// @param asFile var file
+procedure OpenTextFileForAppend(const asFileName : String; var asFile : TextFile);
+
 implementation
+
+var
+    // Lock for file mode
+    poLockFileMode : TRTLCriticalSection ;
 
 //
 // Try parse a integer value
@@ -432,6 +474,12 @@ end ;
 procedure SendString(const aoClientSock : TTCPBlockSocket; const asString : String) ;
 begin
     aoClientSock.SendString(asString + FTP_EOL) ;
+    {
+    if aoClientSock.LastError <> 0
+    then begin
+        writeln(aoClientSock.LastErrorDesc) ;
+    end ;
+    }
 end ;
 
 //
@@ -484,21 +532,34 @@ begin
         lsFtpCurrentPath := asFtpCurrentPath ;
     end ;
 
-    lsFtpPath := lsFtpCurrentPath + asFtpPath ;
+    lsPath := asFtpPath ;
+
+    liLengthPath := Length(lsPath) ;
+
+    // If lsPath convert in lsPath start by '/', we
+    // delete it.
+    if (liLengthPath > 0) and (lsPath[1] = '/')
+    then begin
+        lsPath := Copy(lsPath, 2, liLengthPath) ;
+    end ;
+
+    lsFtpPath := lsFtpCurrentPath + lsPath ;
+
+    liLengthPath := Length(lsFtpPath) ;
+
+    // If lsPath convert in lsPath start by '/', we
+    // delete it.
+    if (liLengthPath > 0) and (lsFtpPath[1] = '/')
+    then begin
+        lsFtpPath := Copy(lsFtpPath, 2, liLengthPath) ;
+    end ;
 
     // Convert all '/' to '\'
     {$IFDEF WINDOWS}
     lsPath := AnsiReplaceStr(lsFtpPath, '/', DirectorySeparator) ;
+    {$ELSE}
+    lsPath := '' ;
     {$ENDIF}
-
-    liLengthPath := Length(lsPath) ;
-
-    // If lsPath convert in lsPath start by DirectorySeparator, we
-    // delete it.
-    if (liLengthPath > 0) and (lsPath[1] = DirectorySeparator)
-    then begin
-        lsPath := Copy(lsPath, 2, liLengthPath) ;
-    end ;
 
     lsPath := AddTrailing(asRootPath, DirectorySeparator) + lsPath ;
 
@@ -606,18 +667,22 @@ function IsRootInPath(asRoot : String; asPath : String;
 var
     // pos string
     liPosOfRootPath : Integer ;
+    // Case sensitive
+    lbCaseSensitive : Boolean ;
 begin
     asRoot := AddTrailing(asRoot, DirectorySeparator) ;
     asPath := AddTrailing(asPath, DirectorySeparator) ;
 
-    // Check if start by root
+    // FileNameCaseSensitive : http://bugs.freepascal.org/view.php?id=9455
     {$IFDEF WINDOWS}
-    liPosOfRootPath := StrPos(asRoot, asPath, abUtf8,
-        false) ;
+    lbCaseSensitive := False ;
     {$ELSE}
-    liPosOfRootPath := StrPos(asRoot, asPath, abUtf8,
-        true) ;
+    lbCaseSensitive := True ;
     {$ENDIF}
+
+    // Check if start by root
+    liPosOfRootPath := StrPos(asRoot, asPath, abUtf8,
+        lbCaseSensitive) ;
 
     Result := liPosOfRootPath <> 0 ;
 end;
@@ -652,7 +717,7 @@ function TranslateToPassivePort(const asIpAddress : String;
 begin
     Result := AnsiReplaceStr(asIpAddress, '.', ',') ;
 
-    Result := Result + ',' + IntToStr(aiPort shr 8) + ',' +
+    Result := Result + ',' + IntToStr(aiPort div 256) + ',' +
         IntToStr(aiPort and $FF) ;
 end ;
 
@@ -669,6 +734,107 @@ begin
         Result := FileExists(asFileName) ;
     end ;
 end ;
+
+//
+// Return string of IOResult
+function GetIoResultString(const aiIoResult : word) : String ;
+begin
+    case aiIoResult of
+        2 : Result := 'File not found.' ;
+        3 : Result := 'Path not found.' ;
+        4 : Result := 'Too many open files.' ;
+        5 : Result := 'Access denied.' ;
+        6 : Result := 'Invalid file handle.' ;
+       12 : Result := 'Invalid file-access mode.' ;
+       15 : Result := 'Invalid disk number.' ;
+       16 : Result := 'Cannot remove current directory.' ;
+       17 : Result := 'Cannot rename across volumes.' ;
+      100 : Result := 'Error when reading from disk.' ;
+      101 : Result := 'Error when writing to disk.' ;
+      102 : Result := 'File not assigned.' ;
+      103 : Result := 'File not open.' ;
+      104 : Result := 'File not opened for input.' ;
+      105 : Result := 'File not opened for output.' ;
+      106 : Result := 'Invalid number.' ;
+      150 : Result := 'Disk is write protected.' ;
+      151 : Result := 'Unknown device.' ;
+      152 : Result := 'Drive not ready.' ;
+      153 : Result := 'Unknown command.' ;
+      154 : Result := 'CRC check failed.' ;
+      155 : Result := 'Invalid drive specified.' ;
+      156 : Result := 'Seek error on disk.' ;
+      157 : Result := 'Invalid media type.' ;
+      158 : Result := 'Sector not found.' ;
+      159 : Result := 'Printer out of paper.' ;
+      160 : Result := 'Error when writing to device.' ;
+      161 : Result := 'Error when reading from device.' ;
+      162 : Result := 'Hardware failure.' ;
+      else
+          Result := 'Unknow error.' ;
+    end;
+end;
+
+//
+// Open text file in read
+procedure OpenTextFileForRead(const asFileName : String; var asFile : TextFile);
+begin
+    EnterCriticalsection(poLockFileMode) ;
+
+    Filemode := fmOpenRead ;
+
+    AssignFile(asFile, asFileName) ;
+    Reset(asFile) ;
+
+    LeaveCriticalsection(poLockFileMode) ;
+end ;
+
+//
+// Open text file in write
+procedure OpenTextFileForWrite(const asFileName : String; var asFile : TextFile);
+begin
+    EnterCriticalsection(poLockFileMode) ;
+
+    Filemode := fmOpenWrite ;
+
+    AssignFile(asFile, asFileName) ;
+    Rewrite(asFile) ;
+
+    LeaveCriticalsection(poLockFileMode) ;
+end ;
+
+//
+// Return file attributs
+function GetFileAttribut(const asFileName : String;
+    const abUtf8 : Boolean) : Longint ;
+begin
+    if abUtf8
+    then begin
+        Result := FileGetAttrUTF8(asFileName) ;
+    end
+    else begin
+        Result := FileGetAttr(asFileName) ;
+    end ;
+end ;
+
+//
+// Open text file in write
+procedure OpenTextFileForAppend(const asFileName : String; var asFile : TextFile);
+begin
+    EnterCriticalsection(poLockFileMode) ;
+
+    Filemode := fmOpenWrite ;
+
+    AssignFile(asFile, asFileName) ;
+    Append(asFile) ;
+
+    LeaveCriticalsection(poLockFileMode) ;
+end ;
+
+initialization
+    InitCriticalSection(poLockFileMode) ;
+
+finalization
+    DoneCriticalsection(poLockFileMode) ;
 
 end.
 
