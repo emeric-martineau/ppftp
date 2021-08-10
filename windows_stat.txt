@@ -19,3 +19,14 @@ stat 213-status of /:
     02-01-06  05:36PM       <DIR>          Services
     02-01-06  06:56PM       <DIR>          Softlib
 213 End of status.
+
+Réponse :	211-FTP server status:
+Réponse :	     Connected to 192.168.1.2
+Réponse :	     Logged in as silviu
+Réponse :	     TYPE: ASCII
+Réponse :	     No session bandwidth limit
+Réponse :	     Session timeout in seconds is 900
+Réponse :	     Control connection is plain text
+Réponse :	     Data connections will be plain text
+Réponse :	     vsFTPd 2.0.3 - secure, fast, stable
+Réponse :	211 End of status

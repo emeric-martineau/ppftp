@@ -13,7 +13,7 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <CurrentMajorRevNr Value="7"/>
-      <ProjectVersion Value="0.7.0.0"/>
+      <ProjectVersion Value="0.8.0.0"/>
     </VersionInfo>
     <PublishOptions>
       <Version Value="2"/>
@@ -71,9 +71,9 @@
       <Unit4>
         <Filename Value="..\lib\ftp\ftpmessages.pas"/>
         <UnitName Value="ftpmessages"/>
-        <CursorPos X="25" Y="112"/>
+        <CursorPos X="22" Y="113"/>
         <TopLine Value="79"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="5"/>
         <UsageCount Value="30"/>
         <Loaded Value="True"/>
       </Unit4>
@@ -175,7 +175,7 @@
         <UnitName Value="ftpfunctions"/>
         <CursorPos X="28" Y="195"/>
         <TopLine Value="180"/>
-        <EditorIndex Value="9"/>
+        <EditorIndex Value="8"/>
         <UsageCount Value="31"/>
         <Loaded Value="True"/>
       </Unit18>
@@ -189,7 +189,7 @@
         <Filename Value="..\lib\ftp\ftpfeatcmd.inc"/>
         <CursorPos X="5" Y="21"/>
         <TopLine Value="1"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="6"/>
         <UsageCount Value="11"/>
         <Loaded Value="True"/>
       </Unit20>
@@ -297,7 +297,7 @@
         <UnitName Value="user"/>
         <CursorPos X="9" Y="167"/>
         <TopLine Value="147"/>
-        <EditorIndex Value="8"/>
+        <EditorIndex Value="7"/>
         <UsageCount Value="62"/>
         <Loaded Value="True"/>
       </Unit35>
@@ -305,7 +305,7 @@
         <Filename Value="..\lib\ftp\ftplistcmd.inc"/>
         <CursorPos X="1" Y="22"/>
         <TopLine Value="2"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="3"/>
         <UsageCount Value="15"/>
         <Loaded Value="True"/>
       </Unit36>
@@ -511,9 +511,9 @@
       </Unit68>
       <Unit69>
         <Filename Value="..\lib\ftp\ftpmdtmcmd.inc"/>
-        <CursorPos X="37" Y="45"/>
-        <TopLine Value="15"/>
-        <EditorIndex Value="5"/>
+        <CursorPos X="1" Y="13"/>
+        <TopLine Value="1"/>
+        <EditorIndex Value="4"/>
         <UsageCount Value="11"/>
         <Loaded Value="True"/>
       </Unit69>
@@ -525,8 +525,8 @@
       </Unit70>
       <Unit71>
         <Filename Value="..\lib\ftp\ftpmfmtcmd.inc"/>
-        <CursorPos X="41" Y="14"/>
-        <TopLine Value="1"/>
+        <CursorPos X="13" Y="85"/>
+        <TopLine Value="49"/>
         <EditorIndex Value="2"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
@@ -535,9 +535,7 @@
         <Filename Value="..\..\lazarus\fpc\2.2.4\source\rtl\objpas\sysutils\sysinth.inc"/>
         <CursorPos X="18" Y="63"/>
         <TopLine Value="44"/>
-        <EditorIndex Value="3"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit72>
     </Units>
     <JumpHistory Count="28" HistoryIndex="27">
@@ -691,12 +689,6 @@
     </Other>
   </CompilerOptions>
   <Debugging>
-    <BreakPoints Count="1">
-      <Item1>
-        <Source Value="..\lib\ftp\ftpmfmtcmd.inc"/>
-        <Line Value="47"/>
-      </Item1>
-    </BreakPoints>
     <Exceptions Count="3">
       <Item1>
         <Name Value="EAbort"/>

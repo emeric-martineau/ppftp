@@ -10,8 +10,6 @@
 var
     // Sys file name
     lsSysFileName : String ;
-    // Result of find
-    liFindResult : Integer ;
     // Search structure
     lrSearchRec : TSearchRec ;
 begin
@@ -34,10 +32,10 @@ begin
     else begin
         if pbUtf8
         then begin
-            liFindResult := FindFirstUTF8(lsSysFileName, faanyfile, lrSearchRec) ;
+            FindFirstUTF8(lsSysFileName, faanyfile, lrSearchRec) ;
         end
         else begin
-            liFindResult := FindFirst(lsSysFileName, faanyfile, lrSearchRec) ;
+            FindFirst(lsSysFileName, faanyfile, lrSearchRec) ;
         end ;
 
         SendAnswer(Format(MSG_FTP_FILE_SIZE, [lrSearchRec.Size])) ;

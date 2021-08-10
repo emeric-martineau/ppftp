@@ -1,6 +1,3 @@
-// This file contain all type
-unit ftpversion;
-
 // This file is part of the Portabl and Pascal FTP Server
 // Copyright (c) 2010 MARTINEAU Emeric.
 //
@@ -11,14 +8,24 @@ unit ftpversion;
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-{$mode objfpc}{$H+}
+begin
+    pbUtf8 := False ;
 
-interface
+    ClosePassiveSocket;
 
-const
-    FTP_VERSION : String = '0.8.0' ;
+    // done in ClosePassiveSocket
+    //pbPassiveMode := False ;
 
-implementation
+    pbTransfertMode := tmAscii ;
 
-end.
+    psRenameFromFile := '' ;
 
+    psRenameFromFileSys := '' ;
+
+    InitDefaultUser ;
+
+    // done if not rest command
+    //piStartTransfertFileValue := 0 ;
+
+    SendAnswer(MSG_FTP_REIN_OK) ;
+end ;

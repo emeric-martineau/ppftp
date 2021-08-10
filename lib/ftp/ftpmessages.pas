@@ -111,6 +111,7 @@ const
     MSG_FTP_FILE_MDTM : String = '213 %s' ;
     MSG_FTP_SYNTAX_ERROR : String = '501 Syntax error.' ;
     MSG_FTP_FILE_MFMT : String = '213 modify=%s; %s' ;
+    MSG_FTP_REIN_OK : String = '220 Reinitialize ok.' ;
 
 implementation
 

@@ -245,6 +245,8 @@ type
     procedure MdtmCommand(const asParameter : String) ;
     // MFMT feature
     procedure MfmtCommand(const asParameter : String) ;
+    // REIN feature
+    procedure ReinCommand(const asParameter : String) ;
 
   public
     // Previous client
@@ -406,6 +408,8 @@ begin
     FOnRemoveFileProtected := nil ;
 
     InitDefaultUser ;
+
+    piStartTransfertFileValue := 0 ;
 end;
 
 //
@@ -456,6 +460,7 @@ begin
     prUserConfig.Disabled := DEFAULT_USER_DISABLED = YES_VALUE ;
     prUserConfig.UserFound := False ;
     prUserConfig.Connected := False ;
+    prUserConfig.Login := '' ;
 end ;
 
 //
@@ -1207,6 +1212,10 @@ begin
                     psFtpCurrentDirectory := '/' ;
 
                     UpdateWaitingTransfertTime ;
+                end
+                else begin
+                    // Clear user
+                    prUserConfig.Login := '' ;
                 end ;
             end
             else if not prUserConfig.Connected
@@ -1395,6 +1404,10 @@ begin
     then begin
         MfmtCommand(asParameter) ;
     end
+    else if (asCommand = 'REIN')
+    then begin
+        ReinCommand(asParameter) ;
+    end
     else begin
         SendAnswer(MSG_FTP_CMD_NOT_UNDERSTOOD) ;
     end ;
@@ -1549,6 +1562,13 @@ procedure TFtpClient.MdtmCommand(const asParameter : String) ;
 // @param asParameter parameter is file name
 procedure TFtpClient.MfmtCommand(const asParameter : String) ;
 {$I ftpmfmtcmd.inc}
+
+//
+// Rein feature
+//
+// @param asParameter parameter is file name
+procedure TFtpClient.ReinCommand(const asParameter : String) ;
+{$I ftpreincmd.inc}
 
 end.
 
