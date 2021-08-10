@@ -19,7 +19,7 @@
 <code>type TFtpMain = class(TThread)</code></p>
 <h2 class="description">Description</h2>
 <p>
-Mother class of FTP server</p>
+{$DEFINE GUI_APPLICATION_SUPPORT} Mother class of FTP server</p>
 <a name="%40Hierarchy"></a><h2 class="hierarchy">Hierarchy</h2>
 <ul class="hierarchy"><li class="ancestor">TThread</li>
 <li class="thisitem">TFtpMain</li></ul><h2 class="overview">Overview</h2>
@@ -39,19 +39,11 @@ Mother class of FTP server</p>
 </tr>
 <tr class="list2">
 <td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
-<td class="itemcode"><code><b><a   href="ftpmain.TFtpMain.html#FWaitEvent">FWaitEvent</a></b>: PRtlEvent ;</code></td>
-</tr>
-<tr class="list">
-<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
 <td class="itemcode"><code><b><a   href="ftpmain.TFtpMain.html#FClientCount">FClientCount</a></b>: Integer ;</code></td>
 </tr>
-<tr class="list2">
-<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
-<td class="itemcode"><code><b><a   href="ftpmain.TFtpMain.html#FOnClientConfigRead">FOnClientConfigRead</a></b>: <a   href="ftptypes.html#TClientConfigReader">TClientConfigReader</a> ;</code></td>
-</tr>
 <tr class="list">
 <td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
-<td class="itemcode"><code><b><a   href="ftpmain.TFtpMain.html#FGuiApplication">FGuiApplication</a></b>: Boolean ;</code></td>
+<td class="itemcode"><code><b><a   href="ftpmain.TFtpMain.html#FOnClientConfigRead">FOnClientConfigRead</a></b>: <a   href="ftptypes.html#TClientConfigReader">TClientConfigReader</a> ;</code></td>
 </tr>
 <tr class="list2">
 <td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
@@ -60,6 +52,14 @@ Mother class of FTP server</p>
 <tr class="list">
 <td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
 <td class="itemcode"><code><b><a   href="ftpmain.TFtpMain.html#FOnLogout">FOnLogout</a></b>: <a   href="ftptypes.html#TLoginLogoutProcedure">TLoginLogoutProcedure</a> ;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code><b><a   href="ftpmain.TFtpMain.html#FRunning">FRunning</a></b>: Boolean ;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code><b><a   href="ftpmain.TFtpMain.html#FExitStatus">FExitStatus</a></b>: Boolean ;</code></td>
 </tr>
 <tr class="list2">
 <td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
@@ -178,14 +178,6 @@ Mother class of FTP server</p>
 </tr>
 <tr class="list">
 <td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
-<td class="itemcode"><code>procedure <b><a   href="ftpmain.TFtpMain.html#SynchronizeLog">SynchronizeLog</a></b> ;</code></td>
-</tr>
-<tr class="list2">
-<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
-<td class="itemcode"><code>procedure <b><a   href="ftpmain.TFtpMain.html#SynchronizeError">SynchronizeError</a></b> ;</code></td>
-</tr>
-<tr class="list">
-<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
 <td class="itemcode"><code>procedure <b><a   href="ftpmain.TFtpMain.html#SynchronizeLogin">SynchronizeLogin</a></b> ;</code></td>
 </tr>
 <tr class="list2">
@@ -234,7 +226,7 @@ Mother class of FTP server</p>
 </tr>
 <tr class="list">
 <td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
-<td class="itemcode"><code>destructor <b><a   href="ftpmain.TFtpMain.html#Destroy">Destroy</a></b> ; override;</code></td>
+<td class="itemcode"><code>destructor <b><a   href="ftpmain.TFtpMain.html#Free">Free</a></b> ;</code></td>
 </tr>
 <tr class="list2">
 <td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
@@ -261,11 +253,11 @@ Mother class of FTP server</p>
 </tr>
 <tr class="list2">
 <td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
-<td class="itemcode"><code>property <b><a   href="ftpmain.TFtpMain.html#WaitEvent">WaitEvent</a></b> : PRtlEvent read <a   href="ftpmain.TFtpMain.html#FWaitEvent">FWaitEvent</a> ;</code></td>
+<td class="itemcode"><code>property <b><a   href="ftpmain.TFtpMain.html#Running">Running</a></b> : Boolean read <a   href="ftpmain.TFtpMain.html#FRunning">FRunning</a> ;</code></td>
 </tr>
 <tr class="list">
 <td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
-<td class="itemcode"><code>property <b><a   href="ftpmain.TFtpMain.html#GuiApplication">GuiApplication</a></b> : Boolean read <a   href="ftpmain.TFtpMain.html#FGuiApplication">FGuiApplication</a> write <a   href="ftpmain.TFtpMain.html#FGuiApplication">FGuiApplication</a> ;</code></td>
+<td class="itemcode"><code>property <b><a   href="ftpmain.TFtpMain.html#ExitStatus">ExitStatus</a></b> : Boolean read <a   href="ftpmain.TFtpMain.html#FExitStatus">FExitStatus</a> ;</code></td>
 </tr>
 <tr class="list2">
 <td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
@@ -327,16 +319,6 @@ Main config reader</p>
 <table class="detail wide_list">
 <tr class="list">
 <td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
-<td class="itemcode"><a name="FWaitEvent"></a><code><b>FWaitEvent</b>: PRtlEvent ;</code></td>
-</tr>
-<tr><td colspan="2">
-<p>
-Wait envent</p>
-</td></tr>
-</table>
-<table class="detail wide_list">
-<tr class="list">
-<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
 <td class="itemcode"><a name="FClientCount"></a><code><b>FClientCount</b>: Integer ;</code></td>
 </tr>
 <tr><td colspan="2">
@@ -357,16 +339,6 @@ Config reader</p>
 <table class="detail wide_list">
 <tr class="list">
 <td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
-<td class="itemcode"><a name="FGuiApplication"></a><code><b>FGuiApplication</b>: Boolean ;</code></td>
-</tr>
-<tr><td colspan="2">
-<p>
-Gui application for non-freeze log in console mode</p>
-</td></tr>
-</table>
-<table class="detail wide_list">
-<tr class="list">
-<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
 <td class="itemcode"><a name="FOnLogin"></a><code><b>FOnLogin</b>: <a   href="ftptypes.html#TLoginLogoutProcedure">TLoginLogoutProcedure</a> ;</code></td>
 </tr>
 <tr><td colspan="2">
@@ -382,6 +354,26 @@ Callback procedure for logout</p>
 <tr><td colspan="2">
 <p>
 Callback procedure for logout</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="FRunning"></a><code><b>FRunning</b>: Boolean ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+If running</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="FExitStatus"></a><code><b>FExitStatus</b>: Boolean ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Ture if ok, false if an error occur</p>
 </td></tr>
 </table>
 <table class="detail wide_list">
@@ -666,26 +658,6 @@ Call FOnError if set</p>
 <table class="detail wide_list">
 <tr class="list">
 <td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
-<td class="itemcode"><a name="SynchronizeLog"></a><code>procedure <b>SynchronizeLog</b> ;</code></td>
-</tr>
-<tr><td colspan="2">
-<p>
-Synchronized Log. Don't use directely. Use Log()</p>
-</td></tr>
-</table>
-<table class="detail wide_list">
-<tr class="list">
-<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
-<td class="itemcode"><a name="SynchronizeError"></a><code>procedure <b>SynchronizeError</b> ;</code></td>
-</tr>
-<tr><td colspan="2">
-<p>
-Synchronized Error. Don't use directely. Use Error()</p>
-</td></tr>
-</table>
-<table class="detail wide_list">
-<tr class="list">
-<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
 <td class="itemcode"><a name="SynchronizeLogin"></a><code>procedure <b>SynchronizeLogin</b> ;</code></td>
 </tr>
 <tr><td colspan="2">
@@ -806,7 +778,7 @@ Constructor</p>
 <table class="detail wide_list">
 <tr class="list">
 <td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
-<td class="itemcode"><a name="Destroy"></a><code>destructor <b>Destroy</b> ; override;</code></td>
+<td class="itemcode"><a name="Free"></a><code>destructor <b>Free</b> ;</code></td>
 </tr>
 <tr><td colspan="2">
 <p>
@@ -867,21 +839,21 @@ Number of connection</p>
 <table class="detail wide_list">
 <tr class="list">
 <td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
-<td class="itemcode"><a name="WaitEvent"></a><code>property <b>WaitEvent</b> : PRtlEvent read <a   href="ftpmain.TFtpMain.html#FWaitEvent">FWaitEvent</a> ;</code></td>
+<td class="itemcode"><a name="Running"></a><code>property <b>Running</b> : Boolean read <a   href="ftpmain.TFtpMain.html#FRunning">FRunning</a> ;</code></td>
 </tr>
 <tr><td colspan="2">
 <p>
-Used by caller for wait end of FtpMain thread</p>
+If running</p>
 </td></tr>
 </table>
 <table class="detail wide_list">
 <tr class="list">
 <td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
-<td class="itemcode"><a name="GuiApplication"></a><code>property <b>GuiApplication</b> : Boolean read <a   href="ftpmain.TFtpMain.html#FGuiApplication">FGuiApplication</a> write <a   href="ftpmain.TFtpMain.html#FGuiApplication">FGuiApplication</a> ;</code></td>
+<td class="itemcode"><a name="ExitStatus"></a><code>property <b>ExitStatus</b> : Boolean read <a   href="ftpmain.TFtpMain.html#FExitStatus">FExitStatus</a> ;</code></td>
 </tr>
 <tr><td colspan="2">
 <p>
-Gui application for non-freeze log in console mode</p>
+Exit status</p>
 </td></tr>
 </table>
 <table class="detail wide_list">
@@ -931,7 +903,7 @@ Client config reader</p>
 </tr>
 <tr><td colspan="2">
 <p>
-Callback procedure for logout</p>
+Callback procedure for logout. Must be shortest possible</p>
 </td></tr>
 </table>
 <table class="detail wide_list">
@@ -941,9 +913,9 @@ Callback procedure for logout</p>
 </tr>
 <tr><td colspan="2">
 <p>
-Callback procedure for logout</p>
+Callback procedure for logout. Must be shortest possible</p>
 </td></tr>
 </table>
-<hr noshade size="1"><span class="appinfo"><em>Generated by <a  target="_parent" href="http://pasdoc.sourceforge.net/">PasDoc 0.11.0</a> on 2010-01-16 19:07:42</em>
+<hr noshade size="1"><span class="appinfo"><em>Generated by <a  target="_parent" href="http://pasdoc.sourceforge.net/">PasDoc 0.11.0</a> on 2010-01-19 20:17:03</em>
 </span>
 </body></html>

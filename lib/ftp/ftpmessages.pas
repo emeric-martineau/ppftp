@@ -22,6 +22,7 @@ const
     // MESSAGE
     MSG_LOG_READ_CONFIG : String = 'Read configuration' ;
     MSG_LOG_SERVER_START : String = 'Server start at %s on port %d' ;
+    MSG_LOG_SHUTDOWN : String = 'Server shutdown' ;
     MSG_LOG_NEW_CONNECTION : String = '[%s] New connection' ;
     MSG_LOG_CONNECTION_CLOSE : String = '[%s] Connection close' ;
     MSG_LOG_COMMAND : String = '[%s] %s' ;
@@ -37,7 +38,8 @@ const
     MSG_ERROR_CHECK_PASSIVE_PORT : String = 'Start passive port must be lower than end' ;
     MSG_ERROR_BUFFER_SIZE : String = 'Buffer size value invalid. Must be a integer' ;
     MSG_ERROR_USER_BYTE_RATE : String = 'Default user byte rate value invalid. Must be a integer' ;
-    MSG_ERRO_ROOT_USER_NOT_FOUND : String = 'Cannot find home directory for user %s' ;
+    MSG_ERROR_ROOT_USER_NOT_FOUND : String = 'Cannot find home directory for user %s' ;
+    MSG_ERROR_CANT_CREATE_SOCKET : String = 'Cannot listen port %d, maybe in use' ;
 
     // Ftp message
     MSG_FTP_UNAUTHORIZED : String = '421 Unauthorized.' ;

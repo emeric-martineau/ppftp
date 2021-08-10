@@ -1,0 +1,51 @@
+object CommandLineForm: TCommandLineForm
+  Left = 290
+  Height = 234
+  Top = 175
+  Width = 430
+  Align = alClient
+  Caption = 'Command line'
+  ClientHeight = 234
+  ClientWidth = 430
+  Position = poOwnerFormCenter
+  LCLVersion = '0.9.28.2'
+  object Memo1: TMemo
+    Left = 0
+    Height = 203
+    Top = 0
+    Width = 430
+    Align = alClient
+    Lines.Strings = (
+      'Command line options :'
+      ''
+      '-root <directory> : directory who contain main config file and users config '
+      'file'
+      '-notrayicon : don''t reduce the form in trayicon'
+      '-minimize : start at minimize'
+      '-lauch : lauch server at startup'
+    )
+    ReadOnly = True
+    ScrollBars = ssBoth
+    TabOrder = 0
+  end
+  object Panel1: TPanel
+    Left = 0
+    Height = 31
+    Top = 203
+    Width = 430
+    Align = alBottom
+    BevelOuter = bvNone
+    ClientHeight = 31
+    ClientWidth = 430
+    TabOrder = 1
+    object Button1: TButton
+      Left = 344
+      Height = 25
+      Top = 3
+      Width = 75
+      Caption = 'Close'
+      OnClick = Button1Click
+      TabOrder = 0
+    end
+  end
+end

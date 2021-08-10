@@ -17,7 +17,9 @@ interface
 
 uses
   Classes, SysUtils, FtpTypes, FtpFunctions, FtpMessages, FtpConst, FtpClient,
-  blcksock, synsock, contnrs ;
+  blcksock, synsock, ssl_openssl, contnrs ;
+
+{$I config.inc}
 
 type
     // Mother class of FTP server
@@ -29,18 +31,22 @@ type
         FOnError : TLogProcedure ;
         // Main config reader
         FOnMainConfigRead : TMainConfigReader ;
-        // Wait envent
-        FWaitEvent : PRtlEvent ;
         // Number of current client
         FClientCount : Integer ;
         // Config reader
         FOnClientConfigRead : TClientConfigReader ;
+        {$IFDEF GUI_APPLICATION_SUPPORT}
         // Gui application for non-freeze log in console mode
         FGuiApplication : Boolean ;
+        {$ENDIF}
         // Callback procedure for logout
         FOnLogin : TLoginLogoutProcedure ;
         // Callback procedure for logout
         FOnLogout : TLoginLogoutProcedure ;
+        // If running
+        FRunning : Boolean ;
+        // Ture if ok, false if an error occur
+        FExitStatus : Boolean ;
 
         // Port
         piListenPort : Integer ;
@@ -101,10 +107,12 @@ type
         procedure Log(const asMessage : String) ;
         // Call FOnError if set
         procedure Error(const asMessage : String) ;
+        {$IFDEF GUI_APPLICATION_SUPPORT}
         // Synchronized Log. Don't use directely. Use Log()
         procedure SynchronizeLog ;
         // Synchronized Error. Don't use directely. Use Error()
         procedure SynchronizeError ;
+        {$ENDIF}
         // Synchronized login. Don't use directely, use AddLogin
         procedure SynchronizeLogin ;
         // Synchronized logout. Don't use directely, use AddLogin
@@ -131,10 +139,14 @@ type
       public
         // Number of connection
         property ClientCount : Integer read FClientCount ;
-        // Used by caller for wait end of FtpMain thread
-        property WaitEvent : PRtlEvent read FWaitEvent ;
-        // Gui application for non-freeze log in console mode
+        {$IFDEF GUI_APPLICATION_SUPPORT}
+        // Gui application for non-freeze log in console mode. Set define GUI_APPLICATION_SUPPORT in config.inc
         property GuiApplication : Boolean read FGuiApplication write FGuiApplication ;
+        {$ENDIF}
+        // If running
+        property Running : Boolean read FRunning ;
+        // Exit status
+        property ExitStatus : Boolean read FExitStatus ;
         // Log
         property OnLog : TLogProcedure read FOnLog write FOnLog ;
         // Error
@@ -143,15 +155,14 @@ type
         property OnMainConfigRead : TMainConfigReader read FOnMainConfigRead write FOnMainConfigRead  ;
         // Client config reader
         property OnClientConfigRead : TClientConfigReader read FOnClientConfigRead write FOnClientConfigRead  ;
-        // Callback procedure for logout
+        // Callback procedure for logout. Must be shortest possible
         property OnLogin : TLoginLogoutProcedure read FOnLogin write FOnLogin ;
-        // Callback procedure for logout
+        // Callback procedure for logout. Must be shortest possible
         property OnLogout : TLoginLogoutProcedure read FOnLogout write FOnLogout ;
-
         // Constructor
         constructor Create(const abCreateSuspended : Boolean) ;
         // Destructor
-        destructor Destroy ; override ;
+        destructor Free ;
         // Execute main thread
         procedure Execute; override;
         // Delete client. Internal using only
@@ -175,11 +186,11 @@ begin
     FOnLog := nil ;
     FOnError := nil ;
 
-    FWaitEvent := RTLEventCreate ;
-
     poFirstFtpClient := nil ;
 
+    {$IFDEF GUI_APPLICATION_SUPPORT}
     FGuiApplication := False ;
+    {$ENDIF}
 
     pbShutDownInProgress := False ;
 
@@ -192,11 +203,13 @@ begin
     FOnLogin := nil ;
 
     FOnLogout := nil ;
+
+    FRunning := False ;
 end ;
 
 //
 // Destructor
-destructor TftpMain.Destroy ;
+destructor TftpMain.Free ;
 begin
     pbShutDownInProgress := True ;
 
@@ -210,7 +223,7 @@ begin
 
     poListLoginCount.Free ;
 
-    inherited Destroy ;
+    //inherited Free ;
 end ;
 
 //
@@ -221,6 +234,7 @@ procedure TFtpMain.Log(const asMessage : String) ;
 begin
     if (asMessage <> '') and (FOnLog <> nil)
     then begin
+        {$IFDEF GUI_APPLICATION_SUPPORT}
         if FGuiApplication
         then begin
             psMessageLogOrError := asMessage ;
@@ -228,8 +242,11 @@ begin
             Synchronize(@SynchronizeLog) ;
         end
         else begin
+        {$ENDIF}
             FOnLog(asMessage) ;
+        {$IFDEF GUI_APPLICATION_SUPPORT}
         end ;
+        {$ENDIF}
     end ;
 end ;
 
@@ -241,6 +258,7 @@ procedure TFtpMain.Error(const asMessage : String) ;
 begin
     if (asMessage <> '') and (FOnError <> nil)
     then begin
+        {$IFDEF GUI_APPLICATION_SUPPORT}
         if FGuiApplication
         then begin
             psMessageLogOrError := asMessage ;
@@ -248,11 +266,15 @@ begin
             Synchronize(@SynchronizeError) ;
         end
         else begin
+        {$ENDIF}
             FOnError(asMessage) ;
+        {$IFDEF GUI_APPLICATION_SUPPORT}
         end ;
+        {$ENDIF}
     end ;
 end ;
 
+{$IFDEF GUI_APPLICATION_SUPPORT}
 //
 // Synchronized Log
 // Don't use directely. Use Log()
@@ -268,6 +290,7 @@ procedure TFtpMain.SynchronizeError ;
 begin
     FOnError(psMessageLogOrError) ;
 end ;
+{$ENDIF}
 
 //
 // Convert integer from config
@@ -746,8 +769,6 @@ begin
             poListLoginCount.Add(lsLogin, lpCurrentCounter) ;
         end ;
 
-        LeaveCriticalsection(poLockLoginLogout) ;
-
         Result := lpCurrentCounter^ < piMaxUser ;
 
         if Result
@@ -756,6 +777,7 @@ begin
 
             if FOnLogin <> nil
             then begin
+                {$IFDEF GUI_APPLICATION_SUPPORT}
                 if FGuiApplication = True
                 then begin
                     psLoginName := asLoginName ;
@@ -764,10 +786,15 @@ begin
                     Synchronize(@SynchronizeLogin);
                 end
                 else begin
+                {$ENDIF}
                     FOnLogin(asLoginName, lpCurrentCounter^) ;
+                {$IFDEF GUI_APPLICATION_SUPPORT}
                 end;
+                {$ENDIF}
             end ;
         end ;
+
+        LeaveCriticalsection(poLockLoginLogout) ;
     end
     else begin
         Result := False ;
@@ -797,6 +824,25 @@ begin
         then begin
             lpCurrentCounter^ := lpCurrentCounter^ - 1 ;
 
+            // Must be in critical section for syncronize
+            if (FOnLogout <> nil) and (lpCurrentCounter <> nil)
+            then begin
+                {$IFDEF GUI_APPLICATION_SUPPORT}
+                if FGuiApplication = True
+                then begin
+                    psLoginName := asLoginName ;
+                    piLoginCount := lpCurrentCounter^ ;
+
+                    Synchronize(@SynchronizeLogout) ;
+                end
+                else begin
+                {$ENDIF}
+                    FOnLogout(asLoginName, lpCurrentCounter^) ;
+                {$IFDEF GUI_APPLICATION_SUPPORT}
+                end ;
+                {$ENDIF}
+            end ;
+
             if lpCurrentCounter^ = 0
             then begin
                 Dispose(lpCurrentCounter) ;
@@ -809,20 +855,6 @@ begin
         end ;
 
         LeaveCriticalsection(poLockLoginLogout) ;
-
-        if (FOnLogout <> nil) and (lpCurrentCounter <> nil)
-        then begin
-            if FGuiApplication = True
-            then begin
-                psLoginName := asLoginName ;
-                piLoginCount := lpCurrentCounter^ ;
-
-                Synchronize(@SynchronizeLogout) ;
-            end
-            else begin
-                FOnLogout(asLoginName, lpCurrentCounter^) ;
-            end ;
-        end ;
     end ;
 end ;
 
@@ -843,15 +875,20 @@ end ;
 procedure TFtpMain.Execute ;
 begin
     // Read configuration
-    if ReadConfig
+    FExitStatus := ReadConfig ;
+
+    if FExitStatus
     then begin
+        FRunning := True ;
+
         Run ;
+
+        FRunning := False ;
 
         RemoveAllClient ;
     end ;
 
-    // Release caller if wait
-    RtlEventSetEvent(FWaitEvent) ;
+    Log(MSG_LOG_SHUTDOWN) ;
 end ;
 
 //
@@ -923,6 +960,9 @@ begin
                     end ;
                 end ;
             end ;
+        end
+        else begin
+            Error(Format(MSG_ERROR_CANT_CREATE_SOCKET, [piListenPort])) ;
         end ;
     finally
         loServerSock.Free ;

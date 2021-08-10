@@ -1,0 +1,18 @@
+{ Ceci est un fichier ressource généré automatiquement par Lazarus }
+
+LazarusResources.Add('TCommandLineForm','FORMDATA',[
+  'TPF0'#16'TCommandLineForm'#15'CommandLineForm'#4'Left'#3'"'#1#6'Height'#3#234
+  +#0#3'Top'#3#175#0#5'Width'#3#174#1#5'Align'#7#8'alClient'#7'Caption'#6#12'Co'
+  +'mmand line'#12'ClientHeight'#3#234#0#11'ClientWidth'#3#174#1#8'Position'#7
+  +#17'poOwnerFormCenter'#10'LCLVersion'#6#8'0.9.28.2'#0#5'TMemo'#5'Memo1'#4'Le'
+  +'ft'#2#0#6'Height'#3#203#0#3'Top'#2#0#5'Width'#3#174#1#5'Align'#7#8'alClient'
+  +#13'Lines.Strings'#1#6#22'Command line options :'#6#0#6'L-root <directory> :'
+  +' directory who contain main config file and users config '#6#4'file'#6'/-no'
+  +'trayicon : don''t reduce the form in trayicon'#6#29'-minimize : start at mi'
+  +'nimize'#6' -lauch : lauch server at startup'#0#8'ReadOnly'#9#10'ScrollBars'
+  +#7#6'ssBoth'#8'TabOrder'#2#0#0#0#6'TPanel'#6'Panel1'#4'Left'#2#0#6'Height'#2
+  +#31#3'Top'#3#203#0#5'Width'#3#174#1#5'Align'#7#8'alBottom'#10'BevelOuter'#7#6
+  +'bvNone'#12'ClientHeight'#2#31#11'ClientWidth'#3#174#1#8'TabOrder'#2#1#0#7'T'
+  +'Button'#7'Button1'#4'Left'#3'X'#1#6'Height'#2#25#3'Top'#2#3#5'Width'#2'K'#7
+  +'Caption'#6#5'Close'#7'OnClick'#7#12'Button1Click'#8'TabOrder'#2#0#0#0#0#0
+]);

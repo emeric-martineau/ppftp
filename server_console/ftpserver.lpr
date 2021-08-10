@@ -110,7 +110,7 @@ end ;
 // @param asMessage message to log
 procedure ErrorMsg(const asMessage : String) ;
 begin
-    WriteLn(ErrOutput, asMessage) ;
+    WriteLn(ErrOutput, ParseDatePattern(gsLogFormat) + asMessage) ;
 end ;
 
 //
@@ -158,7 +158,7 @@ procedure LogMsg(const asMessage : String) ;
 var
     // File name
     lsFileName : String ;
-begin
+begin    
     if gbLogFile and (TTextRec(gfLogFile).Mode <> fmClosed)
     then begin
         WriteLn(gfLogFile,
@@ -228,6 +228,11 @@ begin
 
     Result.UserFound := FileExists(lsFile);
 
+    if not Result.UserFound
+    then begin
+        ErrorMsg('User config ''' + lsFile + ''' not found ! Maybe user doesn''t exist.') ;
+    end ;
+
     loUserConfig := TIniFile.Create(lsFile) ;
 
     loUserConfig.CaseSensitive := False ;
@@ -275,9 +280,9 @@ begin
     // Defaut log format
     gsLogFormat := '%Y/%M/%d %H:%m:%s ' ;
     
-    liIndexParamStr := 0 ;
+    liIndexParamStr := 1 ;
 
-    while (liIndexParamStr < ParamCount) and (lbQuit = False) do
+    while (liIndexParamStr <= ParamCount) and (lbQuit = False) do
     begin
         if (ParamStr(liIndexParamStr) = '-root')
         then begin
@@ -405,8 +410,13 @@ begin
         WriteLn('CopyLeft (C) MARTINEAU Emeric (bubulemaster@yahoo.fr)') ;
         WriteLn('Web site : http://www.bubulemaster.fr') ;
         WriteLn('License : GNU LGPL v3') ;
-        WriteLn('Powered by FreePascal/Lazarus and Synapse librairie') ;
+        WriteLn('Powered by FreePascal/Lazarus and Synapse library') ;
         WriteLn('') ;
+
+        if not FileExists(giRootConfigDirectory + 'ppftpconf.ini')
+        then begin
+            ErrorMsg('Main config file ''' + giRootConfigDirectory + 'ppftpconf.ini' + ''' not found !') ;
+        end ;
 
         // Create ini file reader
         goMainConfig := TIniFile.Create(giRootConfigDirectory + 'ppftpconf.ini') ;
@@ -422,11 +432,11 @@ begin
 
         loFtpMain.FreeOnTerminate := True ;
         // Set False if console application, else true
-        loFtpMain.GuiApplication := False ;
+        //loFtpMain.GuiApplication := False ;
 
         loFtpMain.Resume ;
 
-        RtlEventWaitFor(loFtpMain.WaitEvent) ;
+        loFtpMain.WaitFor ;
 
         goMainConfig.Free ;
     end ;

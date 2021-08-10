@@ -20,7 +20,7 @@ uses
 
 const
      // Ftp eand-of-line
-     FTP_EOL : String = #10#13 ;
+     FTP_EOL : String = #13#10 ;
      // YES
      YES_VALUE : String = 'yes' ;
      // YES

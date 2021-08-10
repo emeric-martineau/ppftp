@@ -19,6 +19,8 @@ uses
   Classes, SysUtils, FtpTypes, FtpFunctions, FtpMessages, FtpConst
   , blcksock, synsock, MD5Api ;
 
+{$I config.inc}
+
 type
   TFtpClient = class ;
 
@@ -50,8 +52,10 @@ type
     FFullLog : Boolean ;
     // Utf8 support
     FUtf8Support : Boolean ;
+    {$IFDEF GUI_APPLICATION_SUPPORT}
     // Gui application for non-freeze log in console mode
     FGuiApplication : Boolean ;
+    {$ENDIF}
 
     // Command socket
     poClientSock:     TTCPBlockSocket;
@@ -71,22 +75,27 @@ type
     // Message to show
     psMessageLogOrError : String ;
 
+    // Current directory
+    psCurrentDirectory : String ;
+
     // Return True if can login
     function CheckLogin(const asLoginName : String) : Boolean ;
     // Logout
     procedure Logout(const asLoginName : String) ;
     // Call FOnLog if set
     procedure Log(const asMessage : String) ;
+    {$IFDEF GUI_APPLICATION_SUPPORT}
     // Synchronized Log. Don't use directely. Use Log()
     procedure SynchronizeLog ;
     // Synchronized Error. Don't use directely. Use Error()
     procedure SynchronizeError ;
+    {$ENDIF}
     // Call FOnError if set
     procedure Error(const asMessage : String) ;
     // Get config
     procedure ReadConfig(const asLoginName : String) ;
     // Read remote string
-    function ReadRemoteString(var asString : String) : Boolean ;
+    function ReadRemoteString(var asString : String) : Integer ;
     // Split user string to command and parameter
     procedure ExplodeCommand(const asString : String; var asCmd : String;
         var asParameter : String) ;
@@ -100,7 +109,7 @@ type
     procedure ValideUserPassword(const asPassword : String) ;
     // Execute user command
     procedure ExecuteUserCommand(const asCommand : String;
-        const asParameter : String; var asCurrentDirectory : String) ;
+        const asParameter : String) ;
 
     // FEAT command
     procedure FeatCommand ;
@@ -116,8 +125,10 @@ type
     property FullLog : Boolean read FFullLog write FFullLog ;
     // Utf8 support
     property Utf8Support : Boolean read FUtf8Support write FUtf8Support ;
-    // Gui application for non-freeze log in console mode
+    {$IFDEF GUI_APPLICATION_SUPPORT}
+    // Gui application for non-freeze log in console mode. Set define GUI_APPLICATION_SUPPORT in config.inc
     property GuiApplication : Boolean read FGuiApplication write FGuiApplication ;
+    {$ENDIF}
 
     // Log
     property OnLog: TLogProcedure read FOnLog write FOnLog;
@@ -145,6 +156,15 @@ type
     procedure Execute; override;
   end;
 
+const
+    // ReadRemoteString() result function. We have read a string
+    READ_REMOTE_STRING_OK : Integer = 0 ;
+    // ReadRemoteString() result function. We have time out
+    READ_REMOTE_STRING_TIME_OUT : Integer = 1 ;
+    // ReadRemoteString() result function. Thread must be terminated
+    READ_REMOTE_STRING_TERMINATED : Integer = 2 ;
+    // ReadRemoteString() result function. Erro
+    READ_REMOTE_STRING_ERROR : Integer = 3 ;
 implementation
 
 //
@@ -277,14 +297,23 @@ end ;
 // Read client string
 //
 // @param asString string from client
-function TFtpClient.ReadRemoteString(var asString : String) : Boolean ;
+//
+// @return READ_REMOTE_STRING_OK, READ_REMOTE_STRING_TIME_OUT, READ_REMOTE_STRING_TERMINATED, READ_REMOTE_STRING_ERROR
+//
+// @seealso(READ_REMOTE_STRING_OK)
+// @seealso(READ_REMOTE_STRING_TIME_OUT)
+// @seealso(READ_REMOTE_STRING_TERMINATED)
+// @seealso(READ_REMOTE_STRING_ERROR)
+function TFtpClient.ReadRemoteString(var asString : String) : Integer ;
 var
     // Local time out
     liTimeOut : Integer ;
+    // String for log
+    lsStringForLog : String ;
 begin
     liTimeOut := piTimeOut ;
 
-    Result := False ;
+    Result := READ_REMOTE_STRING_TIME_OUT ;
 
     while (liTimeOut > 0) and (Terminated = False) do
     begin
@@ -292,23 +321,37 @@ begin
 
         if poClientSock.LastError = 0
         then begin
-            Result := True ;
+            Result := READ_REMOTE_STRING_OK ;
 
             if FFullLog
             then begin
+                lsStringForLog := asString ;
+
+                if UpperCase(Copy(asString, 1, 4)) = 'PASS'
+                then begin
+                    lsStringForLog := Copy(asString, 1, 4) + ' ****' ;
+                end ;
+
                 Log(Format(MSG_LOG_COMMAND,
-                    [poClientSock.GetRemoteSinIP, asString])) ;
+                    [poClientSock.GetRemoteSinIP, lsStringForLog])) ;
             end ;
 
             break ;
         end
         else if poClientSock.LastError <> WSAETIMEDOUT
         then begin
+            Result := READ_REMOTE_STRING_ERROR ;
+
             break ;
         end ;
 
         Dec(liTimeOut) ;
     end ;
+
+    if Terminated = True
+    then begin
+        Result := READ_REMOTE_STRING_TERMINATED ;
+    end;
 end ;
 
 //
@@ -375,6 +418,7 @@ procedure TFtpClient.Log(const asMessage : String) ;
 begin
     if (asMessage <> '') and (FOnLog <> nil)
     then begin
+        {$IFDEF GUI_APPLICATION_SUPPORT}
         if FGuiApplication
         then begin
             psMessageLogOrError := asMessage ;
@@ -382,8 +426,11 @@ begin
             Synchronize(@SynchronizeLog) ;
         end
         else begin
+        {$ENDIF}
             FOnLog(asMessage) ;
+        {$IFDEF GUI_APPLICATION_SUPPORT}
         end ;
+        {$ENDIF}
     end ;
 end ;
 
@@ -395,6 +442,7 @@ procedure TFtpClient.Error(const asMessage : String) ;
 begin
     if (asMessage <> '') and (FOnError <> nil)
     then begin
+        {$IFDEF GUI_APPLICATION_SUPPORT}
         if FGuiApplication
         then begin
             psMessageLogOrError := asMessage ;
@@ -402,11 +450,15 @@ begin
             Synchronize(@SynchronizeError) ;
         end
         else begin
+        {$ENDIF}
             FOnError(asMessage) ;
+        {$IFDEF GUI_APPLICATION_SUPPORT}
         end ;
+        {$ENDIF}
     end ;
 end ;
 
+{$IFDEF GUI_APPLICATION_SUPPORT}
 //
 // Synchronized Log
 // Don't use directely. Use Log()
@@ -422,6 +474,7 @@ procedure TFtpClient.SynchronizeError ;
 begin
     FOnError(psMessageLogOrError) ;
 end ;
+{$ENDIF}
 
 //
 // Send answer to the client
@@ -479,7 +532,7 @@ begin
             else begin
                 SendAnswer(MSG_FTP_ROOT_NOT_EXISTS) ;
 
-                OnError(Format(MSG_ERRO_ROOT_USER_NOT_FOUND,
+                OnError(Format(MSG_ERROR_ROOT_USER_NOT_FOUND,
                     [prUserConfig.Login])) ;
 
                 prUserConfig.Connected := False ;
@@ -503,8 +556,8 @@ var
     lsParameter : String ;
     // Quit
     lbQuit : Boolean ;
-    // Current directory
-    lsCurrentDirectory : String ;
+    // ReadRemoteString result
+    liReadRemoteStringResult : Integer ;
 begin
     Log(Format(MSG_LOG_NEW_CONNECTION,
         [poClientSock.GetRemoteSinIP])) ;
@@ -520,8 +573,11 @@ begin
 
     while (Terminated = False) and (lbQuit = False) do
     begin
+        liReadRemoteStringResult := ReadRemoteString(lsRemoteString) ;
+
         // If can read
-        if ReadRemoteString(lsRemoteString) and (Terminated = False)
+        if (liReadRemoteStringResult = READ_REMOTE_STRING_OK) and
+            (Terminated = False)
         then begin
             // Split user string into command and parametter
             ExplodeCommand(lsRemoteString, lsCommand, lsParameter) ;
@@ -560,7 +616,7 @@ begin
                 end;
             end
             // TODO HELP command
-            // TODO REIN InitDefaultUser + lsCurrentDirectory
+            // TODO REIN InitDefaultUser + psCurrentDirectory
             else if prUserConfig.Login = ''
             then begin
                 // Login not send
@@ -572,17 +628,17 @@ begin
 
                 if prUserConfig.Connected
                 then begin
-                    lsCurrentDirectory := prUserConfig.Root ;
+                    psCurrentDirectory := prUserConfig.Root ;
                 end ;
             end
             else if prUserConfig.Connected = True
             then begin
                 // Procedure for all command
-                ExecuteUserCommand(lsCommand, lsParameter, lsCurrentDirectory) ;
+                ExecuteUserCommand(lsCommand, lsParameter) ;
             end ;
         end
         else begin
-            if not Terminated
+            if liReadRemoteStringResult = READ_REMOTE_STRING_TIME_OUT
             then begin
                 SendAnswer(Format(MSG_FTP_TIME_OUT, [piTimeOut])) ;
             end ;
@@ -612,9 +668,8 @@ end ;
 //
 // @param asCommand user command
 // @param asParameter user parameter
-// @param asCurrentDirectory current directory
-procedure TFtpClient.ExecuteUserCommand(const asCommand : String; const asParameter : String;
-    var asCurrentDirectory : String) ;
+procedure TFtpClient.ExecuteUserCommand(const asCommand : String;
+    const asParameter : String) ;
 begin
     if (asCommand = 'NOP') or (asCommand = 'NOOP')
     then begin
