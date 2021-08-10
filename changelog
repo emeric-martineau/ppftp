@@ -1,8 +1,10 @@
-0.6.0 -
+0.7.0 - 2010/03/23
+  - support SIZE, MDTM, MFMT, CLNT,
+  
+0.6.0 - 2010/03/22
   - bug in UTF8 with ConvertFtpPathToSysPath(), ExplodeCommand(),
     CanReadDirectory(), ftpcwdcmd.inc, AddTrailing(),
   - security missing,
-  - support SIZE,
 
 0.5.0 - 2010/03/12
   - support RNFR, RNTO, DELE, MKD/XMKD, RMD/XRMD,

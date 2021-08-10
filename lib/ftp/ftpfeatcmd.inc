@@ -9,15 +9,15 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 begin
     SendAnswer(MSG_FTP_FEAT_START) ;
-    //SendAnswer(' MDTM') ;
-    //SendAnswer(' SIZE') ;
+    SendAnswer(' MDTM') ;
+    SendAnswer(' SIZE') ;
 
     if FUtf8Support
     then begin
         SendAnswer(' UTF8') ;
     end ;
 
-    //SendAnswer(' CLNT') ;
-    //SendAnswer(' MFMT') ;
+    SendAnswer(' CLNT') ;
+    SendAnswer(' MFMT') ;
     SendAnswer(MSG_FTP_FEAT_STOP) ;
 end ;

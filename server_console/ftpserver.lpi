@@ -273,7 +273,7 @@
         <Filename Value="..\lib\ftp\ftpunixdirectory.pas"/>
         <UnitName Value="ftpunixdirectory"/>
         <CursorPos X="66" Y="144"/>
-        <TopLine Value="105"/>
+        <TopLine Value="107"/>
         <EditorIndex Value="7"/>
         <UsageCount Value="14"/>
         <Loaded Value="True"/>

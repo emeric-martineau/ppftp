@@ -107,6 +107,10 @@ const
     MSG_FTP_DIR_DELETED : String = '250 ''%s'': directory deleted.' ;
     MSG_FTP_DIR_CONTAIN_FILE : String = '550 ''%s'': File exists.' ;
     MSG_FTP_FILE_SIZE : String = '213 %d' ;
+    MSG_FTP_CLIENT_NAME : String = '200 Thank you.' ;
+    MSG_FTP_FILE_MDTM : String = '213 %s' ;
+    MSG_FTP_SYNTAX_ERROR : String = '501 Syntax error.' ;
+    MSG_FTP_FILE_MFMT : String = '213 modify=%s; %s' ;
 
 implementation
 

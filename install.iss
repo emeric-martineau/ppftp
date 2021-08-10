@@ -1,6 +1,6 @@
 [Setup]
 AppName=PPFtp Server
-AppVerName=PPFtp Server 0.6.0
+AppVerName=PPFtp Server 0.7.0
 DefaultDirName={pf}\ppftp_server
 DefaultGroupName=PPFtp Server
 UninstallDisplayIcon={uninstallexe}
@@ -9,7 +9,7 @@ WizardImageFile=WizModernImage-IS.bmp
 WizardSmallImageFile=WizModernSmallImage-IS.bmp
 LanguageDetectionMethod=none
 OutPutDir=".\"
-OutputBaseFilename="ppftp_server-0.6.0"
+OutputBaseFilename="ppftp_server-0.7.0"
 
 [Languages]
 Name: "en"; MessagesFile: "compiler:Default.isl"

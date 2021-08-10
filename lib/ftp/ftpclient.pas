@@ -239,6 +239,12 @@ type
     procedure RmdCommand(const asParameter : String) ;
     // SIZE feature
     procedure SizeCommand(const asParameter : String) ;
+    // CLNT feature
+    procedure ClntCommand(const asParameter : String) ;
+    // MDTM feature
+    procedure MdtmCommand(const asParameter : String) ;
+    // MFMT feature
+    procedure MfmtCommand(const asParameter : String) ;
 
   public
     // Previous client
@@ -1377,6 +1383,18 @@ begin
     then begin
         SizeCommand(asParameter) ;
     end
+    else if (asCommand = 'CLNT')
+    then begin
+        ClntCommand(asParameter) ;
+    end
+    else if (asCommand = 'MDTM')
+    then begin
+        MdtmCommand(asParameter) ;
+    end
+    else if (asCommand = 'MFMT')
+    then begin
+        MfmtCommand(asParameter) ;
+    end
     else begin
         SendAnswer(MSG_FTP_CMD_NOT_UNDERSTOOD) ;
     end ;
@@ -1510,6 +1528,27 @@ procedure TFtpClient.RmdCommand(const asParameter : String) ;
 // @param asParameter parameter is file name
 procedure TFtpClient.SizeCommand(const asParameter : String) ;
 {$I ftpsizecmd.inc}
+
+//
+// Clnt feature
+//
+// @param asParameter client name
+procedure TFtpClient.ClntCommand(const asParameter : String) ;
+{$I ftpclntcmd.inc}
+
+//
+// Mdtm feature
+//
+// @param asParameter parameter is file name
+procedure TFtpClient.MdtmCommand(const asParameter : String) ;
+{$I ftpmdtmcmd.inc}
+
+//
+// Mfmt feature
+//
+// @param asParameter parameter is file name
+procedure TFtpClient.MfmtCommand(const asParameter : String) ;
+{$I ftpmfmtcmd.inc}
 
 end.
 
