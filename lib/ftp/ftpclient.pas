@@ -184,7 +184,9 @@ type
         const asCurrentPath : String; const abUtf8 : Boolean) : Boolean ;
     // List a directory
     procedure ListDirectory(const asFtpFolderName : String;
-        const aoDataSocket : TTCPBlockSocket; const abNlst : Boolean) ;
+        const aoDataSocket : TTCPBlockSocket; const abNlst : Boolean;
+        const asPrefixe : String; const asStartMessage : String;
+        const asEndMessage : String) ;
     // File protected
     function IsFileProtected(const asPathAndFileName : String) : Boolean ;
     // File protected
@@ -247,6 +249,8 @@ type
     procedure MfmtCommand(const asParameter : String) ;
     // REIN feature
     procedure ReinCommand(const asParameter : String) ;
+    // STAT feature
+    procedure StatCommand(const asParameter : String) ;
 
   public
     // Previous client
@@ -993,8 +997,17 @@ end ;
 
 //
 // List a directory
+//
+// @param asFtpFolderName name of directory or file
+// @param aoDataSocket socket to send result
+// @param abNlst true displau nlst style
+// @param asPrefixe prefixe to each line
+// @param asStartMessage start message transfert
+// @param asEndMessage end message transfert
 procedure TFtpClient.ListDirectory(const asFtpFolderName : String;
-    const aoDataSocket : TTCPBlockSocket; const abNlst : Boolean) ;
+    const aoDataSocket : TTCPBlockSocket; const abNlst : Boolean;
+    const asPrefixe : String; const asStartMessage : String;
+    const asEndMessage : String) ;
 {$I ftplistdirectory.inc}
 
 //
@@ -1408,12 +1421,16 @@ begin
     then begin
         ReinCommand(asParameter) ;
     end
+    else if (asCommand = 'STAT')
+    then begin
+        StatCommand(asParameter) ;
+    end
     else begin
         SendAnswer(MSG_FTP_CMD_NOT_UNDERSTOOD) ;
     end ;
 
     // We reinit rest value if not rest command
-    if asCommand <> 'REST'
+    if (asCommand <> 'REST') and (asCommand <> 'STAT')
     then begin
         piStartTransfertFileValue := 0 ;
     end ;
@@ -1569,6 +1586,13 @@ procedure TFtpClient.MfmtCommand(const asParameter : String) ;
 // @param asParameter parameter is file name
 procedure TFtpClient.ReinCommand(const asParameter : String) ;
 {$I ftpreincmd.inc}
+
+//
+// Stat feature
+//
+// @param asParameter parameter is file name
+procedure TFtpClient.StatCommand(const asParameter : String) ;
+{$I ftpstatcmd.inc}
 
 end.
 

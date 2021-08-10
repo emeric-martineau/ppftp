@@ -112,6 +112,10 @@ const
     MSG_FTP_SYNTAX_ERROR : String = '501 Syntax error.' ;
     MSG_FTP_FILE_MFMT : String = '213 modify=%s; %s' ;
     MSG_FTP_REIN_OK : String = '220 Reinitialize ok.' ;
+    MSG_FTP_STAT_START : String = '211-FTP server status:' ;
+    MSG_FTP_STAT_STOP : String = '211 End of status' ;
+    MSG_FTP_STAT_FILE_START : String = '213-status of %s:' ;
+    MSG_FTP_STAT_FILE_STOP : String = '213 End of status.' ;
 
 implementation
 

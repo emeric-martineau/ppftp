@@ -8,7 +8,7 @@
       <TargetFileExt Value=".exe"/>
       <Icon Value="0"/>
       <UseXPManifest Value="True"/>
-      <ActiveEditorIndexAtStart Value="2"/>
+      <ActiveEditorIndexAtStart Value="5"/>
     </General>
     <VersionInfo>
       <UseVersionInfo Value="True"/>
@@ -33,14 +33,14 @@
         <PackageName Value="LCL"/>
       </Item1>
     </RequiredPackages>
-    <Units Count="73">
+    <Units Count="77">
       <Unit0>
         <Filename Value="gui.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="gui"/>
         <CursorPos X="1" Y="15"/>
         <TopLine Value="1"/>
-        <UsageCount Value="82"/>
+        <UsageCount Value="84"/>
       </Unit0>
       <Unit1>
         <Filename Value="maingui.pas"/>
@@ -51,7 +51,7 @@
         <CursorPos X="67" Y="718"/>
         <TopLine Value="699"/>
         <EditorIndex Value="0"/>
-        <UsageCount Value="82"/>
+        <UsageCount Value="84"/>
         <Loaded Value="True"/>
       </Unit1>
       <Unit2>
@@ -71,9 +71,9 @@
       <Unit4>
         <Filename Value="..\lib\ftp\ftpmessages.pas"/>
         <UnitName Value="ftpmessages"/>
-        <CursorPos X="22" Y="113"/>
-        <TopLine Value="79"/>
-        <EditorIndex Value="5"/>
+        <CursorPos X="5" Y="118"/>
+        <TopLine Value="86"/>
+        <EditorIndex Value="10"/>
         <UsageCount Value="30"/>
         <Loaded Value="True"/>
       </Unit4>
@@ -98,7 +98,7 @@
         <UnitName Value="commandline"/>
         <CursorPos X="24" Y="7"/>
         <TopLine Value="1"/>
-        <UsageCount Value="82"/>
+        <UsageCount Value="84"/>
       </Unit7>
       <Unit8>
         <Filename Value="C:\travail\lazarus\lcl\include\control.inc"/>
@@ -114,7 +114,7 @@
         <UnitName Value="aboutform"/>
         <CursorPos X="61" Y="78"/>
         <TopLine Value="46"/>
-        <UsageCount Value="80"/>
+        <UsageCount Value="82"/>
       </Unit9>
       <Unit10>
         <Filename Value=""/>
@@ -151,8 +151,8 @@
       <Unit15>
         <Filename Value="..\lib\ftp\ftpclient.pas"/>
         <UnitName Value="ftpclient"/>
-        <CursorPos X="13" Y="1396"/>
-        <TopLine Value="1375"/>
+        <CursorPos X="18" Y="189"/>
+        <TopLine Value="172"/>
         <EditorIndex Value="1"/>
         <UsageCount Value="33"/>
         <Loaded Value="True"/>
@@ -175,9 +175,7 @@
         <UnitName Value="ftpfunctions"/>
         <CursorPos X="28" Y="195"/>
         <TopLine Value="180"/>
-        <EditorIndex Value="8"/>
         <UsageCount Value="31"/>
-        <Loaded Value="True"/>
       </Unit18>
       <Unit19>
         <Filename Value="..\lib\ftp\ftppwdcmd.inc"/>
@@ -189,7 +187,7 @@
         <Filename Value="..\lib\ftp\ftpfeatcmd.inc"/>
         <CursorPos X="5" Y="21"/>
         <TopLine Value="1"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="11"/>
         <UsageCount Value="11"/>
         <Loaded Value="True"/>
       </Unit20>
@@ -259,7 +257,7 @@
         <UnitName Value="mainconfig"/>
         <CursorPos X="50" Y="268"/>
         <TopLine Value="236"/>
-        <UsageCount Value="68"/>
+        <UsageCount Value="70"/>
       </Unit30>
       <Unit31>
         <Filename Value="..\lib\synapse\sswin32.pas"/>
@@ -297,23 +295,23 @@
         <UnitName Value="user"/>
         <CursorPos X="9" Y="167"/>
         <TopLine Value="147"/>
-        <EditorIndex Value="7"/>
-        <UsageCount Value="62"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="64"/>
       </Unit35>
       <Unit36>
         <Filename Value="..\lib\ftp\ftplistcmd.inc"/>
-        <CursorPos X="1" Y="22"/>
+        <CursorPos X="13" Y="36"/>
         <TopLine Value="2"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="6"/>
         <UsageCount Value="15"/>
         <Loaded Value="True"/>
       </Unit36>
       <Unit37>
         <Filename Value="..\lib\ftp\ftplistdirectory.inc"/>
-        <CursorPos X="13" Y="296"/>
-        <TopLine Value="273"/>
+        <CursorPos X="44" Y="339"/>
+        <TopLine Value="310"/>
+        <EditorIndex Value="7"/>
         <UsageCount Value="16"/>
+        <Loaded Value="True"/>
       </Unit37>
       <Unit38>
         <Filename Value="C:\travail\lazarus\lcl\lcltype.pp"/>
@@ -513,7 +511,7 @@
         <Filename Value="..\lib\ftp\ftpmdtmcmd.inc"/>
         <CursorPos X="1" Y="13"/>
         <TopLine Value="1"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="9"/>
         <UsageCount Value="11"/>
         <Loaded Value="True"/>
       </Unit69>
@@ -527,7 +525,7 @@
         <Filename Value="..\lib\ftp\ftpmfmtcmd.inc"/>
         <CursorPos X="13" Y="85"/>
         <TopLine Value="49"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="4"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
       </Unit71>
@@ -537,120 +535,161 @@
         <TopLine Value="44"/>
         <UsageCount Value="10"/>
       </Unit72>
+      <Unit73>
+        <Filename Value="..\lib\ftp\ftpstatcmd.inc"/>
+        <CursorPos X="59" Y="18"/>
+        <TopLine Value="1"/>
+        <EditorIndex Value="5"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit73>
+      <Unit74>
+        <Filename Value="..\lib\ftp\ftptypecmd.inc"/>
+        <CursorPos X="24" Y="17"/>
+        <TopLine Value="1"/>
+        <EditorIndex Value="3"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit74>
+      <Unit75>
+        <Filename Value="..\lib\ftp\ftpmodecmd.inc"/>
+        <CursorPos X="1" Y="1"/>
+        <TopLine Value="1"/>
+        <EditorIndex Value="2"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit75>
+      <Unit76>
+        <Filename Value="..\lib\ftp\ftpunixdirectory.pas"/>
+        <UnitName Value="ftpunixdirectory"/>
+        <CursorPos X="10" Y="34"/>
+        <TopLine Value="15"/>
+        <EditorIndex Value="8"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit76>
     </Units>
-    <JumpHistory Count="28" HistoryIndex="27">
+    <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="..\lib\ftp\ftpmfmtcmd.inc"/>
-        <Caret Line="26" Column="1" TopLine="7"/>
+        <Filename Value="..\lib\ftp\ftpclient.pas"/>
+        <Caret Line="1584" Column="12" TopLine="1550"/>
       </Position1>
       <Position2>
-        <Filename Value="..\lib\ftp\ftpmfmtcmd.inc"/>
-        <Caret Line="28" Column="1" TopLine="9"/>
+        <Filename Value="..\lib\ftp\ftpclient.pas"/>
+        <Caret Line="1562" Column="27" TopLine="1550"/>
       </Position2>
       <Position3>
-        <Filename Value="..\lib\ftp\ftpmfmtcmd.inc"/>
-        <Caret Line="23" Column="22" TopLine="6"/>
+        <Filename Value="..\lib\ftp\ftpclient.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position3>
       <Position4>
-        <Filename Value="..\lib\ftp\ftpmfmtcmd.inc"/>
-        <Caret Line="26" Column="1" TopLine="7"/>
+        <Filename Value="..\lib\ftp\ftpclient.pas"/>
+        <Caret Line="153" Column="30" TopLine="134"/>
       </Position4>
       <Position5>
-        <Filename Value="..\lib\ftp\ftpmfmtcmd.inc"/>
-        <Caret Line="53" Column="63" TopLine="26"/>
+        <Filename Value="..\lib\ftp\ftpclient.pas"/>
+        <Caret Line="323" Column="24" TopLine="304"/>
       </Position5>
       <Position6>
-        <Filename Value="..\lib\ftp\ftpmfmtcmd.inc"/>
-        <Caret Line="50" Column="20" TopLine="20"/>
+        <Filename Value="..\lib\ftp\ftpclient.pas"/>
+        <Caret Line="325" Column="24" TopLine="304"/>
       </Position6>
       <Position7>
-        <Filename Value="..\lib\ftp\ftpmfmtcmd.inc"/>
-        <Caret Line="39" Column="37" TopLine="13"/>
+        <Filename Value="..\lib\ftp\ftpclient.pas"/>
+        <Caret Line="327" Column="24" TopLine="304"/>
       </Position7>
       <Position8>
-        <Filename Value="..\lib\ftp\ftpmfmtcmd.inc"/>
-        <Caret Line="34" Column="1" TopLine="15"/>
+        <Filename Value="..\lib\ftp\ftpclient.pas"/>
+        <Caret Line="329" Column="24" TopLine="304"/>
       </Position8>
       <Position9>
-        <Filename Value="..\lib\ftp\ftpmfmtcmd.inc"/>
-        <Caret Line="37" Column="1" TopLine="18"/>
+        <Filename Value="..\lib\ftp\ftpclient.pas"/>
+        <Caret Line="331" Column="24" TopLine="304"/>
       </Position9>
       <Position10>
-        <Filename Value="..\lib\ftp\ftpmfmtcmd.inc"/>
-        <Caret Line="32" Column="1" TopLine="13"/>
+        <Filename Value="..\lib\ftp\ftpclient.pas"/>
+        <Caret Line="544" Column="23" TopLine="533"/>
       </Position10>
       <Position11>
-        <Filename Value="..\lib\ftp\ftpmfmtcmd.inc"/>
-        <Caret Line="34" Column="1" TopLine="15"/>
+        <Filename Value="..\lib\ftp\ftpclient.pas"/>
+        <Caret Line="1477" Column="11" TopLine="1463"/>
       </Position11>
       <Position12>
-        <Filename Value="..\lib\ftp\ftpmfmtcmd.inc"/>
-        <Caret Line="35" Column="1" TopLine="16"/>
+        <Filename Value="..\lib\ftp\ftpclient.pas"/>
+        <Caret Line="118" Column="22" TopLine="94"/>
       </Position12>
       <Position13>
-        <Filename Value="..\lib\ftp\ftpmfmtcmd.inc"/>
-        <Caret Line="40" Column="1" TopLine="21"/>
+        <Filename Value="..\lib\ftp\ftpclient.pas"/>
+        <Caret Line="172" Column="27" TopLine="153"/>
       </Position13>
       <Position14>
-        <Filename Value="..\lib\ftp\ftpmfmtcmd.inc"/>
-        <Caret Line="41" Column="1" TopLine="22"/>
+        <Filename Value="..\lib\ftp\ftpstatcmd.inc"/>
+        <Caret Line="44" Column="66" TopLine="18"/>
       </Position14>
       <Position15>
-        <Filename Value="..\lib\ftp\ftpmfmtcmd.inc"/>
-        <Caret Line="42" Column="1" TopLine="23"/>
+        <Filename Value="..\lib\ftp\ftpclient.pas"/>
+        <Caret Line="124" Column="5" TopLine="105"/>
       </Position15>
       <Position16>
-        <Filename Value="..\lib\ftp\ftpmfmtcmd.inc"/>
-        <Caret Line="43" Column="1" TopLine="24"/>
+        <Filename Value="..\lib\ftp\ftpclient.pas"/>
+        <Caret Line="1484" Column="9" TopLine="1472"/>
       </Position16>
       <Position17>
-        <Filename Value="..\lib\ftp\ftpmfmtcmd.inc"/>
-        <Caret Line="45" Column="1" TopLine="26"/>
+        <Filename Value="..\lib\ftp\ftpclient.pas"/>
+        <Caret Line="1487" Column="34" TopLine="1472"/>
       </Position17>
       <Position18>
-        <Filename Value="..\lib\ftp\ftpmfmtcmd.inc"/>
-        <Caret Line="46" Column="1" TopLine="27"/>
+        <Filename Value="..\lib\ftp\ftpmessages.pas"/>
+        <Caret Line="115" Column="23" TopLine="80"/>
       </Position18>
       <Position19>
-        <Filename Value="..\lib\ftp\ftpmfmtcmd.inc"/>
-        <Caret Line="47" Column="1" TopLine="28"/>
+        <Filename Value="..\lib\ftp\ftpstatcmd.inc"/>
+        <Caret Line="37" Column="65" TopLine="4"/>
       </Position19>
       <Position20>
-        <Filename Value="..\lib\ftp\ftpmfmtcmd.inc"/>
-        <Caret Line="48" Column="1" TopLine="29"/>
+        <Filename Value="..\lib\ftp\ftpclient.pas"/>
+        <Caret Line="1470" Column="9" TopLine="1439"/>
       </Position20>
       <Position21>
-        <Filename Value="..\lib\ftp\ftpmfmtcmd.inc"/>
-        <Caret Line="49" Column="1" TopLine="30"/>
+        <Filename Value="..\lib\ftp\ftplistcmd.inc"/>
+        <Caret Line="35" Column="15" TopLine="2"/>
       </Position21>
       <Position22>
-        <Filename Value="..\lib\ftp\ftpmfmtcmd.inc"/>
-        <Caret Line="50" Column="1" TopLine="31"/>
+        <Filename Value="..\lib\ftp\ftpclient.pas"/>
+        <Caret Line="188" Column="33" TopLine="167"/>
       </Position22>
       <Position23>
-        <Filename Value="..\lib\ftp\ftpmfmtcmd.inc"/>
-        <Caret Line="52" Column="36" TopLine="34"/>
+        <Filename Value="..\lib\ftp\ftplistcmd.inc"/>
+        <Caret Line="35" Column="15" TopLine="2"/>
       </Position23>
       <Position24>
-        <Filename Value="..\lib\ftp\ftpmfmtcmd.inc"/>
-        <Caret Line="45" Column="20" TopLine="34"/>
+        <Filename Value="..\lib\ftp\ftpclient.pas"/>
+        <Caret Line="1001" Column="12" TopLine="980"/>
       </Position24>
       <Position25>
-        <Filename Value="..\lib\ftp\ftpmfmtcmd.inc"/>
-        <Caret Line="46" Column="19" TopLine="22"/>
+        <Filename Value="..\lib\ftp\ftplistdirectory.inc"/>
+        <Caret Line="134" Column="53" TopLine="114"/>
       </Position25>
       <Position26>
-        <Filename Value="..\lib\ftp\ftpmfmtcmd.inc"/>
-        <Caret Line="55" Column="29" TopLine="25"/>
+        <Filename Value="..\lib\ftp\ftplistdirectory.inc"/>
+        <Caret Line="233" Column="44" TopLine="226"/>
       </Position26>
       <Position27>
-        <Filename Value="..\lib\ftp\ftpmfmtcmd.inc"/>
-        <Caret Line="46" Column="22" TopLine="25"/>
+        <Filename Value="..\lib\ftp\ftpclient.pas"/>
+        <Caret Line="1006" Column="45" TopLine="979"/>
       </Position27>
       <Position28>
-        <Filename Value="..\lib\ftp\ftpmfmtcmd.inc"/>
-        <Caret Line="52" Column="63" TopLine="31"/>
+        <Filename Value="..\lib\ftp\ftplistcmd.inc"/>
+        <Caret Line="35" Column="60" TopLine="2"/>
       </Position28>
+      <Position29>
+        <Filename Value="..\lib\ftp\ftpstatcmd.inc"/>
+        <Caret Line="18" Column="1" TopLine="4"/>
+      </Position29>
+      <Position30>
+        <Filename Value="..\lib\ftp\ftpstatcmd.inc"/>
+        <Caret Line="19" Column="22" TopLine="1"/>
+      </Position30>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>

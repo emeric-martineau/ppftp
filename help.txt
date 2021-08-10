@@ -1,0 +1,29 @@
+214-The following commands are recognized:
+   USER    EPRT    STRU    MAIL*   ALLO    CWD     STAT*   XRMD
+   PASS    LPRT    MODE    MSND*   REST*   XCWD    HELP    PWD
+   ACCT*   EPSV    RETR    MSOM*   RNFR    LIST    NOOP    XPWD
+   REIN*   LPSV    STOR    MSAM*   RNTO    NLST    MKD     CDUP
+   QUIT    PASV    APPE    MRSQ*   ABOR    SITE*   XMKD    XCUP
+   PORT    TYPE    MLFL*   MRCP*   DELE    SYST    RMD     STOU
+214 (*'s => unimplemented)
+
+214 Syntax: USER <sp> username
+214 Syntax: PASS <sp> password
+214 Syntax: QUIT (terminate service)
+nop
+214 Syntax: SYST (get type of operating system)
+feat
+opts
+214 Syntax: PWD (return current directory)
+214 Syntax: XPWD (return current directory)
+214 Syntax: CWD [ <sp> directory-name]
+214 Syntax: CDUP (change to parent directory)
+214 Syntax: PORT <sp> b0, b1, b2, b3, b4
+214 Syntax: PASV (set server in passive mode)
+214 Syntax: LIST [ <sp> path-name ]
+214 Syntax: NLST [ <sp> path-name ]
+rest
+214 Syntax: ABOR (abort operation)
+214 Syntax: RETR <sp> file-name
+
+502 Unknown command FEAT.

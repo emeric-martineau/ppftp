@@ -61,14 +61,14 @@ var
                     if (lrSearchRec.Name <> '.') and (lrSearchRec.Name <> '..')
                         and prUserConfig.SubDir
                     then begin
-                        aoDataSocket.SendString(GetDirectory(lrSearchRec) +
+                        aoDataSocket.SendString(asPrefixe + GetDirectory(lrSearchRec) +
                             FTP_EOL) ;
                     end ;
                 end
                 else begin
                     if not IsFileProtected(lsFullDir + lrSearchRec.Name)
                     then begin
-                         aoDataSocket.SendString(GetFile(lrSearchRec) +
+                         aoDataSocket.SendString(asPrefixe + GetFile(lrSearchRec) +
                             FTP_EOL) ;
                     end    ;
                 end ;
@@ -124,14 +124,14 @@ var
                     if (lrSearchRec.Name <> '.') and (lrSearchRec.Name <> '..')
                         and prUserConfig.SubDir
                     then begin
-                        aoDataSocket.SendString(GetDirectory(lrSearchRec) +
+                        aoDataSocket.SendString(asPrefixe + GetDirectory(lrSearchRec) +
                             FTP_EOL) ;
                     end ;
                 end
                 else begin
                     if not IsFileProtected(lsFullDir + lrSearchRec.Name)
                     then begin
-                         aoDataSocket.SendString(GetFile(lrSearchRec) +
+                         aoDataSocket.SendString(asPrefixe + GetFile(lrSearchRec) +
                             FTP_EOL) ;
                     end    ;
                 end ;
@@ -187,14 +187,14 @@ var
                     if (lrSearchRec.Name <> '.') and (lrSearchRec.Name <> '..')
                         and prUserConfig.SubDir
                     then begin
-                        aoDataSocket.SendString(lrSearchRec.Name +
+                        aoDataSocket.SendString(asPrefixe + lrSearchRec.Name +
                             FTP_EOL) ;
                     end ;
                 end
                 else begin
                     if not IsFileProtected(lsFullDir + lrSearchRec.Name)
                     then begin
-                         aoDataSocket.SendString(lrSearchRec.Name +
+                         aoDataSocket.SendString(asPrefixe + lrSearchRec.Name +
                             FTP_EOL) ;
                     end    ;
                 end ;
@@ -250,14 +250,14 @@ var
                     if (lrSearchRec.Name <> '.') and (lrSearchRec.Name <> '..')
                         and prUserConfig.SubDir
                     then begin
-                        aoDataSocket.SendString(lrSearchRec.Name +
+                        aoDataSocket.SendString(asPrefixe + lrSearchRec.Name +
                             FTP_EOL) ;
                     end ;
                 end
                 else begin
                     if not IsFileProtected(lsFullDir + lrSearchRec.Name)
                     then begin
-                         aoDataSocket.SendString(lrSearchRec.Name +
+                         aoDataSocket.SendString(asPrefixe + lrSearchRec.Name +
                             FTP_EOL) ;
                     end    ;
                 end ;
@@ -305,7 +305,7 @@ begin
         else begin
             if Assigned(aoDataSocket)
             then begin
-                SendAnswer(MSG_FTP_OPEN_ASCII_DATA_CONNECTION) ;
+                SendAnswer(asStartMessage) ;
 
                 if abNlst
                 then begin
@@ -336,7 +336,7 @@ begin
                     SendAnswer(MSG_FTP_TRANS_ABORTED) ;
                 end
                 else begin
-                    SendAnswer(MSG_FTP_END_DATA_CONNECTION) ;
+                    SendAnswer(asEndMessage) ;
                 end ;
             end ;
         end ;

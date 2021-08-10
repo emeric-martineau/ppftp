@@ -32,7 +32,8 @@ begin
 
     if Assigned(loDataSocket)
     then begin
-        ListDirectory(lsParameter, loDataSocket, abNlst) ;
+        ListDirectory(lsParameter, loDataSocket, abNlst, '',
+            MSG_FTP_OPEN_ASCII_DATA_CONNECTION, MSG_FTP_END_DATA_CONNECTION) ;
 
         CloseDataConnection(loDataSocket) ;
     end ;
