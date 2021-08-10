@@ -3,3 +3,11 @@
 Readable=yes
 ; If user can read file
 Download=yes
+; If user can rename file
+Rename=yes
+; If user can delete file
+Delete=yes
+; If user can create directory
+MakeDirectory=yes
+; If user can remove directory
+DeleteDirectory=yes

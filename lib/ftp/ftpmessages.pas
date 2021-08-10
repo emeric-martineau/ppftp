@@ -97,6 +97,15 @@ const
     MSG_FTP_TRANS_ABORTED : String = '426 Connection closed; transfert aborted.' ;
     MSG_FTP_TRANS_ERROR : String = '500 Internal error.' ;
     MSG_FTP_STOU : String = '150 FILE: %s' ;
+    MSG_FTP_RENAME_FROM : String = '350 File exists, ready for destination name.' ;
+    MSG_FTP_FILE_EXISTS : String = '553 ''%s'': file already exists.' ;
+    MSG_FTP_DIR_EXISTS : String = '553 ''%s'': directory already exists.' ;
+    MSG_FTP_FILE_RENAMED : String = '250 File ''%s'' renamed to ''%s''' ;
+    MSG_FTP_DIR_RENAMED : String = '250 Directory ''%s'' renamed to ''%s''' ;
+    MSG_FTP_FILE_DELETED : String = '250 File ''%s'' deleted.' ;
+    MSG_FTP_DIR_CREATED : String = '257 ''%s'': directory created.' ;
+    MSG_FTP_DIR_DELETED : String = '250 ''%s'': directory deleted.' ;
+    MSG_FTP_DIR_CONTAIN_FILE : String = '550 ''%s'': File exists.' ;
 
 implementation
 

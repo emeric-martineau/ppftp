@@ -16,7 +16,7 @@ unit ftpversion;
 interface
 
 const
-    FTP_VERSION : String = '0.3.0' ;
+    FTP_VERSION : String = '0.5.0' ;
 
 implementation
 

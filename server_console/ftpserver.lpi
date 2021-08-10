@@ -10,14 +10,11 @@
       </Flags>
       <MainUnit Value="0"/>
       <TargetFileExt Value=".exe"/>
-      <Icon Value="0"/>
       <UseXPManifest Value="True"/>
-      <ActiveEditorIndexAtStart Value="1"/>
+      <ActiveEditorIndexAtStart Value="0"/>
     </General>
     <VersionInfo>
       <ProjectVersion Value=""/>
-      <Language Value=""/>
-      <CharSet Value=""/>
     </VersionInfo>
     <PublishOptions>
       <Version Value="2"/>
@@ -42,8 +39,8 @@
         <Filename Value="ftpserver.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="ftpserver"/>
-        <CursorPos X="1" Y="266"/>
-        <TopLine Value="240"/>
+        <CursorPos X="55" Y="310"/>
+        <TopLine Value="285"/>
         <EditorIndex Value="0"/>
         <UsageCount Value="95"/>
         <Loaded Value="True"/>
@@ -51,8 +48,8 @@
       <Unit1>
         <Filename Value="..\lib\ftp\ftpmain.pas"/>
         <UnitName Value="ftpmain"/>
-        <CursorPos X="32" Y="833"/>
-        <TopLine Value="820"/>
+        <CursorPos X="40" Y="838"/>
+        <TopLine Value="801"/>
         <EditorIndex Value="1"/>
         <UsageCount Value="45"/>
         <Loaded Value="True"/>

@@ -1,0 +1,17 @@
+Thanks for choose PPFtp Server.
+
+Directory "conf" have defaut configuration. You can change directory path by
+program switch.
+In this directory, you can found "ftp.access". This is an example of file to
+change restrict right for a directory.
+For example. If user "blabla" can create directory and you want no ftp user
+create a directory in "/tmp", you can put "ftp.access" file in this directory
+and retrict rights.
+DON'T FORGET. If file "ftp.access" file is readonly, directory who contain this
+file can't remove cause this file can be deleted by DELE FTP command ! Only
+RMD/XRMD can delete this file.
+
+For users (create or delete), just copy a user file (example "emeric.ini").
+The name of file is the name of user.
+All users files must be in "users" directory in root config directory (where 
+"ppftpconf.ini" is).

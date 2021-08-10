@@ -74,6 +74,8 @@ type
     FOnCheckPassword : TClientCheckPasswordFunction ;
     // File protected
     FOnFileProtected : TFileProtectedFunction ;
+    // File protected
+    FOnRemoveFileProtected : TFileProtectedFunction ;
     // Main byte rate
     FMainByteRate : Integer ;
     // Buffer size
@@ -126,6 +128,10 @@ type
     piUserBufferSize : Integer ;
     // Last file transfert
     prLastFileTransfert : TDateTime ;
+    // Rename from
+    psRenameFromFile : String ;
+    // Rename from file name on system
+    psRenameFromFileSys : String ;
 
     // Return True if can login
     function CheckLogin(const asLoginName : String) : Boolean ;
@@ -181,6 +187,8 @@ type
         const aoDataSocket : TTCPBlockSocket; const abNlst : Boolean) ;
     // File protected
     function IsFileProtected(const asPathAndFileName : String) : Boolean ;
+    // File protected
+    function RemoveFileProtected(const asPath : String) : Boolean ;
     // Close data connection
     procedure CloseDataConnection(aoDataSocket : TTCPBlockSocket) ;
     // Check if client abord transfert
@@ -219,6 +227,16 @@ type
     // STOR/STOU/APPE feature
     procedure StorStouAppeCommand(const asParameter : String;
         const atMode : TStoreCommandeMode) ;
+    // RNFR feature
+    procedure RnfrCommand(const asParameter : String) ;
+    // RNTO feature
+    procedure RntoCommand(const asParameter : String) ;
+    // DELE feature
+    procedure DeleCommand(const asParameter : String) ;
+    // MKD feature
+    procedure MkdCommand(const asParameter : String) ;
+    // RMD feature
+    procedure RmdCommand(const asParameter : String) ;
 
   public
     // Previous client
@@ -269,6 +287,9 @@ type
     // If file protected
     property OnFileProtected : TFileProtectedFunction read FOnFileProtected
         write FOnFileProtected ;
+    // If file protected
+    property OnRemoveFileProtected : TFileProtectedFunction read FOnRemoveFileProtected
+        write FOnRemoveFileProtected ;
     {$IFDEF CALL_BACK_TRANSFERT}
     // Transfert
     property OnTransfert : TTransfertProcedure read FOnTransfert
@@ -369,6 +390,12 @@ begin
     pbTransfertMode := tmAscii ;
 
     FCancel := False ;
+
+    psRenameFromFile := '' ;
+
+    psRenameFromFileSys := '' ;
+
+    FOnRemoveFileProtected := nil ;
 
     InitDefaultUser ;
 end;
@@ -936,15 +963,16 @@ begin
     aoDataSocket.Free ;
 end ;
 
+//
 // List a directory
 procedure TFtpClient.ListDirectory(const asFtpFolderName : String;
     const aoDataSocket : TTCPBlockSocket; const abNlst : Boolean) ;
 {$I ftplistdirectory.inc}
 
+//
 // If file is protected and therefore we say doesn't exists
 //
 // @param asPathAndFileName complete file name with path
-// @param asUtf8 utf8 mode enabled
 function TFtpClient.IsFileProtected(const asPathAndFileName : String) : Boolean ;
 begin
     Result := False ;
@@ -952,6 +980,18 @@ begin
     if Assigned(FOnFileProtected)
     then begin
         Result := FOnFileProtected(asPathAndFileName, pbUtf8) ;
+    end ;
+end ;
+
+//
+// Remove all protected file in directory
+function TFtpClient.RemoveFileProtected(const asPath : String) : Boolean ;
+begin
+    Result := True ;
+
+    if Assigned(FOnRemoveFileProtected)
+    then begin
+        Result := FOnRemoveFileProtected(asPath, pbUtf8) ;
     end ;
 end ;
 
@@ -1296,6 +1336,26 @@ begin
 
         prLastFileTransfert := Now ;
     end
+    else if (asCommand = 'RNFR')
+    then begin
+        RnfrCommand(asParameter) ;
+    end
+    else if (asCommand = 'RNTO')
+    then begin
+        RntoCommand(asParameter) ;
+    end
+    else if (asCommand = 'DELE')
+    then begin
+        DeleCommand(asParameter) ;
+    end
+    else if (asCommand = 'MKD') or (asCommand = 'XMKD')
+    then begin
+        MkdCommand(asParameter) ;
+    end
+    else if (asCommand = 'RMD') or (asCommand = 'XRMD')
+    then begin
+        RmdCommand(asParameter) ;
+    end
     else begin
         SendAnswer(MSG_FTP_CMD_NOT_UNDERSTOOD) ;
     end ;
@@ -1387,6 +1447,41 @@ procedure TFtpClient.RetrCommand(const asParameter : String) ;
 procedure TFtpClient.StorStouAppeCommand(const asParameter : String;
     const atMode : TStoreCommandeMode) ;
 {$I ftpstorcmd.inc}
+
+//
+// Rnfr feature
+//
+// @param asParameter parameter is file name
+procedure TFtpClient.RnfrCommand(const asParameter : String) ;
+{$I ftprnfrcmd.inc}
+
+//
+// Rnfr feature
+//
+// @param asParameter parameter is file name
+procedure TFtpClient.RntoCommand(const asParameter : String) ;
+{$I ftprntocmd.inc}
+
+//
+// Dele feature
+//
+// @param asParameter parameter is file name
+procedure TFtpClient.DeleCommand(const asParameter : String) ;
+{$I ftpdelecmd.inc}
+
+//
+// Mkd feature
+//
+// @param asParameter parameter is file name
+procedure TFtpClient.MkdCommand(const asParameter : String) ;
+{$I ftpmkdcmd.inc}
+
+//
+// Rmd feature
+//
+// @param asParameter parameter is file name
+procedure TFtpClient.RmdCommand(const asParameter : String) ;
+{$I ftprmdcmd.inc}
 
 end.
 

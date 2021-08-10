@@ -137,6 +137,8 @@ function CheckPassword(const asLoginName : String;
     const asPassword : String) : Boolean ;
 function FileProtected(const asPathAndFileName : String;
     const abUtf8 : Boolean) : Boolean ;
+function RemoveFileProtected(const asPathAndFileName : String;
+    const abUtf8 : Boolean) : Boolean ;
 function FolderLocalConfigReader(const asFolderName : String;
         const abUtf8 : Boolean; const asKey : String;
         var asValue : String) : Boolean ;
@@ -374,7 +376,7 @@ begin
         goFtpMain.OnLogin := nil ;
         goFtpMain.OnLogout := nil ;
         goFtpMain.OnClientCheckPassword := nil ;
-        goFtpMain.OnFileProtected := nil ;
+        //goFtpMain.OnFileProtected := nil ;
         goFtpMain.OnLocalConfigExists := nil ;
         goFtpMain.OnTransfert := nil ;
         goFtpMain.OnStart := nil ;
@@ -501,6 +503,7 @@ begin
     goFtpMain.OnLogout := @UpdateLoginCount ;
     goFtpMain.OnClientCheckPassword := @CheckPassword ;
     goFtpMain.OnFileProtected := @FileProtected ;
+    goFtpMain.OnRemoveFileProtected := @RemoveFileProtected ;
     goFtpMain.OnLocalConfigExists := @FolderLocalConfigReader ;
     goFtpMain.OnTransfert := @TransfertFile ;
     goFtpMain.OnStart := @StartServerCallBack ;
@@ -791,6 +794,25 @@ begin
     {$ELSE}
     Result := CompareFilenames(gsFolderLocalConfigName, lsFileName) = 0 ;
     {$ENDIF}
+end ;
+
+//
+// File portected
+//
+function RemoveFileProtected(const asPathAndFileName : String;
+    const abUtf8 : Boolean) : Boolean ;
+var
+    lsProtectFileName : String ;
+begin
+    Result := True ;
+
+    lsProtectFileName := AddTrailing(asPathAndFileName,
+        DirectorySeparator) + gsFolderLocalConfigName ;
+
+    if CheckFileExists(lsProtectFileName, abUtf8)
+    then begin
+        Result := InternalDeleteFile(lsProtectFileName , abUtf8) ;
+    end ;
 end ;
 
 //

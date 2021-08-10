@@ -293,6 +293,25 @@ begin
 end ;
 
 //
+// File portected
+//
+function RemoveFileProtected(const asPathAndFileName : String;
+    const abUtf8 : Boolean) : Boolean ;
+var
+    lsProtectFileName : String ;
+begin
+    Result := True ;
+
+    lsProtectFileName := AddTrailing(asPathAndFileName,
+        DirectorySeparator) + gsFolderLocalConfigName ;
+
+    if CheckFileExists(lsProtectFileName, abUtf8)
+    then begin
+        Result := InternalDeleteFile(lsProtectFileName , abUtf8) ;
+    end ;
+end ;
+
+//
 // Read local folder config
 //
 // @param asFolderName name of folder
@@ -552,6 +571,7 @@ begin
         loFtpMain.OnLocalConfigExists := @FolderLocalConfigReader ;
         loFtpMain.OnClientCheckPassword := @CheckPassword ;
         loFtpMain.OnFileProtected := @FileProtected ;
+        loFtpMain.OnRemoveFileProtected := @RemoveFileProtected ;
 
         loFtpMain.FreeOnTerminate := True ;
         // Set False if console application, else true

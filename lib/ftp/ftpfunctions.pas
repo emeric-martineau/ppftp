@@ -205,6 +205,47 @@ function GetFileAttribut(const asFileName : String;
 // @param asFile var file
 procedure OpenTextFileForAppend(const asFileName : String; var asFile : TextFile);
 
+//
+// Rename file/directory
+//
+// @param asOldName old name of file
+// @param asNewName new name of file
+// @param abUtf8 true if utf8 mode enable
+//
+// @return true if ok
+function InternalRenameFile(const asOldName : String; const asNewName : String;
+    const abUtf8 : Boolean) : Boolean ;
+
+//
+// Delete file
+//
+// @param asFileName file name of file
+// @param abUtf8 true if utf8 mode enable
+//
+// @return true if ok
+function InternalDeleteFile(const asFileName : String;
+    const abUtf8 : Boolean) : Boolean ;
+
+//
+// Make directory
+//
+// @param asFileName file name of file
+// @param abUtf8 true if utf8 mode enable
+//
+// @return true if ok
+function InternalMakeDirectory(const asFileName : String;
+    const abUtf8 : Boolean) : Boolean ;
+
+//
+// Remove directory
+//
+// @param asFileName file name of file
+// @param abUtf8 true if utf8 mode enable
+//
+// @return true if ok
+function InternalRemoveDirectory(const asFileName : String;
+    const abUtf8 : Boolean) : Boolean ;
+
 implementation
 
 var
@@ -536,14 +577,14 @@ begin
 
     liLengthPath := Length(lsPath) ;
 
-    // If lsPath convert in lsPath start by '/', we
-    // delete it.
+    // If lsPath start by /, don't use current directory
     if (liLengthPath > 0) and (lsPath[1] = '/')
     then begin
-        lsPath := Copy(lsPath, 2, liLengthPath) ;
+        lsFtpPath := lsPath ;
+    end
+    else begin
+        lsFtpPath := lsFtpCurrentPath + lsPath ;
     end ;
-
-    lsFtpPath := lsFtpCurrentPath + lsPath ;
 
     liLengthPath := Length(lsFtpPath) ;
 
@@ -558,7 +599,7 @@ begin
     {$IFDEF WINDOWS}
     lsPath := AnsiReplaceStr(lsFtpPath, '/', DirectorySeparator) ;
     {$ELSE}
-    lsPath := '' ;
+    lsPath := lsFtpPath ;
     {$ENDIF}
 
     lsPath := AddTrailing(asRootPath, DirectorySeparator) + lsPath ;
@@ -829,6 +870,70 @@ begin
 
     LeaveCriticalsection(poLockFileMode) ;
 end ;
+
+//
+// Rename file/directory
+function InternalRenameFile(const asOldName : String; const asNewName : String;
+    const abUtf8 : Boolean) : Boolean ;
+begin
+    {$IOChecks off}
+    if abUtf8
+    then begin
+        Result := RenameFileUTF8(asOldName, asNewName) ;
+    end
+    else begin
+        Result := RenameFile(asOldName, asNewName) ;
+    end ;
+    {$IOChecks on}
+end;
+
+//
+// Delete file
+function InternalDeleteFile(const asFileName : String;
+    const abUtf8 : Boolean) : Boolean ;
+begin
+    {$IOChecks off}
+    if abUtf8
+    then begin
+        Result := DeleteFileUTF8(asFileName) ;
+    end
+    else begin
+        Result := DeleteFile(asFileName) ;
+    end ;
+    {$IOChecks on}
+end;
+
+//
+// Make directory
+function InternalMakeDirectory(const asFileName : String;
+    const abUtf8 : Boolean) : Boolean ;
+begin
+    {$IOChecks off}
+    if abUtf8
+    then begin
+        Result := CreateDirUTF8(asFileName) ;
+    end
+    else begin
+        Result := CreateDir(asFileName) ;
+    end ;
+    {$IOChecks on}
+end;
+
+//
+// Remove directory
+function InternalRemoveDirectory(const asFileName : String;
+    const abUtf8 : Boolean) : Boolean ;
+begin
+    {$IOChecks off}
+    if abUtf8
+    then begin
+        Result := RemoveDirUTF8(asFileName) ;
+    end
+    else begin
+        Result := RemoveDir(asFileName) ;
+    end ;
+    {$IOChecks on}
+end;
 
 initialization
     InitCriticalSection(poLockFileMode) ;

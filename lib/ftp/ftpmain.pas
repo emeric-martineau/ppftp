@@ -64,6 +64,8 @@ type
         FOnClientCheckPassword : TClientCheckPasswordFunction ;
         // File protected
         FOnFileProtected : TFileProtectedFunction ;
+        // File protected
+        FOnRemoveFileProtected : TFileProtectedFunction ;
         // Transfert
         FOnTransfert : TTransfertProcedure ;
         // Start server
@@ -223,6 +225,9 @@ type
         // If file protected
         property OnFileProtected : TFileProtectedFunction
             read FOnFileProtected write FOnFileProtected ;
+        // If file protected
+        property OnRemoveFileProtected : TFileProtectedFunction
+            read FOnRemoveFileProtected write FOnRemoveFileProtected ;
         // Transfert
         property OnTransfert : TTransfertProcedure read FOnTransfert
             write FOnTransfert ;
@@ -307,6 +312,10 @@ begin
     FOnStop := nil ;
 
     FOnStart := nil ;
+
+    FOnRemoveFileProtected := nil ;
+
+    FOnFileProtected := nil ;
 end ;
 
 //
@@ -839,6 +848,7 @@ begin
         loClientFtp.OnFreePassivePort := @FreePassivePort ;
         loClientFtp.OnCheckPassword := FOnClientCheckPassword ;
         loClientFtp.OnFileProtected := FOnFileProtected ;
+        loClientFtp.OnRemoveFileProtected := FOnRemoveFileProtected ;
         {$IFDEF CALL_BACK_TRANSFERT}
         loClientFtp.OnTransfert := FOnTransfert ;
         {$ENDIF}
