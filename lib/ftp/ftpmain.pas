@@ -79,6 +79,8 @@ type
         pbFullLog : Boolean ;
         // Time out
         piTimeOut : Integer ;
+        // File transfert timeout
+        piFileTransfertTimeOut : Integer ;
         // Passive port
         piPassivePortStart : Integer ;
         piPassivePortStop : Integer ;
@@ -457,7 +459,7 @@ begin
     // 2 - Ip Adress
     if Result
     then begin
-        psListenHost := ConvertString(MAIN_CONF_IP_ADRESS, DEFAULT_IP_ADDRESS) ;
+        psListenHost := ConvertString(MAIN_CONF_IP_ADDRESS, DEFAULT_IP_ADDRESS) ;
     end ;
 
     // 3 - Welcome
@@ -559,7 +561,8 @@ begin
     // 8 - Deny priority
     if Result
     then begin
-        pbDenyPriority := ConvertBoolean(MAIN_CONF_DENY_PRIORITY, DEFAULT_DENY_PRIORITY) ;
+        pbDenyPriority := ConvertBoolean(MAIN_CONF_DENY_PRIORITY,
+            DEFAULT_DENY_PRIORITY) ;
     end ;
 
     // 9 - Denied IP
@@ -567,7 +570,7 @@ begin
     then begin
         lsValue := ConvertString(MAIN_CONF_DENY_IP_ADRESS, DEFAULT_DENY_ADDRESS) ;
 
-        poDeniedIP := StringToTStringList(lsValue, ',') ;
+        poDeniedIP := StringToTStringList(lsValue, IP_ADDRESS_SEPARATOR) ;
     end ;
 
 
@@ -624,6 +627,19 @@ begin
     if Result
     then begin
         pbUtf8Support := ConvertBoolean(MAIN_CONF_UTF8, DEFAULT_UTF8) ;
+    end ;
+
+    // 13 - File transfert time out
+    if Result
+    then begin
+        Result := ConvertInteger(MAIN_CONF_FILE_TRANSFERT_TIME_OUT,
+            DEFAULT_FILE_TRANSFERT_TIME_OUT, liValue,
+            MSG_ERROR_MAX_SESSION_USER) ;
+
+        if Result
+        then begin
+            piFileTransfertTimeOut := liValue ;
+        end ;
     end ;
 end ;
 
@@ -746,7 +762,7 @@ begin
     if (FClientCount < piMaxClient) or (piMaxClient = 0)
     then begin
         loClientFtp := TFtpClient.Create(True, loClientSock, psWelcomeMessage,
-            psGoodbyMessage,piTimeOut, piMaxUser) ;
+            psGoodbyMessage,piTimeOut, piMaxUser, piFileTransfertTimeOut) ;
 
         // Add client to the list
         AddClient(loClientFtp) ;
@@ -834,7 +850,7 @@ begin
             poListLoginCount.Add(lsLogin, lpCurrentCounter) ;
         end ;
 
-        Result := lpCurrentCounter^ < piMaxUser ;
+        Result := (lpCurrentCounter^ < piMaxUser) or (piMaxUser = 0) ;
 
         if Result
         then begin

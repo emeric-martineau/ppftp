@@ -16,6 +16,7 @@ begin
   {$I gui.lrs}
   Application.Initialize;
   Application.CreateForm(TFormMain, FormMain);
+  Application.CreateForm(TMainConfigForm, MainConfigForm);
   Application.Run;
 end.
 

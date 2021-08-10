@@ -17,7 +17,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   Menus, ComCtrls, StdCtrls, ExtCtrls, IniFiles, StrUtils, LCLType, contnrs,
-  CommandLine, aboutform, FtpFunctions, FtpMain, FtpTypes, FtpConst ;
+  CommandLine, aboutform, mainconfig, FtpFunctions, FtpMain, FtpTypes, FtpConst ;
 
 type
 
@@ -32,6 +32,11 @@ type
     ExitMenu: TMenuItem;
     AboutMenu: TMenuItem;
     CommandLineMenu: TMenuItem;
+    MainConfigMenu: TMenuItem;
+    LogMenu: TMenuItem;
+    SaveLogMenuItem: TMenuItem;
+    ClearLogMenu: TMenuItem;
+    LogSaveDialog: TSaveDialog;
     SetupMenu: TMenuItem;
     HelphMenu: TMenuItem;
     PageControl1: TPageControl;
@@ -45,6 +50,7 @@ type
     TrayIcon1: TTrayIcon;
     UserTabSheet: TTabSheet;
     procedure AboutMenuClick(Sender: TObject);
+    procedure ClearLogMenuClick(Sender: TObject);
     procedure CommandLineMenuClick(Sender: TObject);
     procedure ExitMenuClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -52,6 +58,8 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure FormWindowStateChange(Sender: TObject);
+    procedure MainConfigMenuClick(Sender: TObject);
+    procedure SaveLogMenuItemClick(Sender: TObject);
     procedure ServerMenuClick(Sender: TObject);
     procedure StartMenuClick(Sender: TObject);
     procedure StopMenuClick(Sender: TObject);
@@ -101,6 +109,10 @@ const
   TIMER_DELAY : Cardinal = 500 ;
   MAIN_INI_SECTION : String = 'main' ;
   USER_SECTION : String = 'user' ;
+  DEFAULT_FTP_ACCESS : String = 'ftp.access' ;
+  FTP_ACCESS_KEY : String = 'FtpAccessFile' ;
+  MAX_INTEGER_VALUE : Integer = 2147483647 ;
+
 
 procedure ErrorMsg(const asMessage : String) ;
 procedure LogMsg(const asMessage : String) ;
@@ -206,6 +218,30 @@ begin
     if FormMain.WindowState = wsMinimized
     then begin
         HideForm ;
+    end ;
+end;
+
+procedure TFormMain.MainConfigMenuClick(Sender: TObject);
+var
+    loMainConfigForm : TMainConfigForm ;
+begin
+    loMainConfigForm := TMainConfigForm.Create(Self) ;
+
+    loMainConfigForm.piConfigPath := giRootConfigDirectory + 'ppftpconf.ini' ;
+    loMainConfigForm.psFolderLocalConfigName := DEFAULT_FTP_ACCESS ;
+    loMainConfigForm.psLocalConfigKey := FTP_ACCESS_KEY ;
+    loMainConfigForm.psMainConfigSection := MAIN_INI_SECTION ;
+
+    loMainConfigForm.ShowModal() ;
+
+    loMainConfigForm.Free ;
+end;
+
+procedure TFormMain.SaveLogMenuItemClick(Sender: TObject);
+begin
+    if LogSaveDialog.Execute
+    then begin
+        LogMemo.Lines.SaveToFile(LogSaveDialog.FileName) ;
     end ;
 end;
 
@@ -366,6 +402,17 @@ begin
 end;
 
 //
+// Clear log
+procedure TFormMain.ClearLogMenuClick(Sender: TObject);
+begin
+    if Application.MessageBox('Do you want clear current log ?',
+        'Clear log', MB_ICONQUESTION or MB_YESNO) = IDYES
+    then begin
+        LogMemo.Lines.Clear ;
+    end ;
+end;
+
+//
 // Start/Stop server
 procedure TFormMain.StartStopMenu(const abStart : Boolean) ;
 begin
@@ -385,7 +432,7 @@ begin
     end ;
 
     // Lacal config name
-    gsFolderLocalConfigName := 'ftp.access' ;
+    gsFolderLocalConfigName := DEFAULT_FTP_ACCESS ;
 
     // Create ini file reader
     goMainConfig := TIniFile.Create(giRootConfigDirectory + 'ppftpconf.ini') ;
@@ -402,7 +449,8 @@ begin
 
     // Read folder config file
     gsFolderLocalConfigName :=
-        goMainConfig.ReadString(MAIN_INI_SECTION, 'FtpAccessFile', gsFolderLocalConfigName) ;
+        goMainConfig.ReadString(MAIN_INI_SECTION, FTP_ACCESS_KEY,
+        gsFolderLocalConfigName) ;
 
     goFtpMain.OnMainConfigRead := @ReadMainConfig ;
     goFtpMain.OnLog := @LogMsg ;
@@ -411,6 +459,7 @@ begin
     goFtpMain.OnLogin := @UpdateLoginCount ;
     goFtpMain.OnLogout := @UpdateLoginCount ;
     goFtpMain.OnClientCheckPassword := @CheckPassword ;
+    goFtpMain.OnFileProtected := @FileProtected ;
 
     //goFtpMain.FreeOnTerminate := True ;
     // Set False if console application, else true
@@ -446,6 +495,11 @@ procedure ErrorMsg(const asMessage : String) ;
 begin
     if not gbShutdown
     then begin
+        if FormMain.ErrorMemo.Lines.Count = MAX_INTEGER_VALUE
+        then begin
+            FormMain.ErrorMemo.Lines.Clear ;
+        end ;
+
         FormMain.ErrorMemo.Lines.Add(ParseDatePattern(gsLogFormat) + asMessage) ;
     end ;
 end ;
@@ -455,9 +509,15 @@ end ;
 //
 // @param asMessage message to log
 procedure LogMsg(const asMessage : String) ;
+
 begin
     if not gbShutdown
     then begin
+        if FormMain.LogMemo.Lines.Count = MAX_INTEGER_VALUE
+        then begin
+            FormMain.LogMemo.Lines.Clear ;
+        end ;
+
         FormMain.LogMemo.Lines.Add(ParseDatePattern(gsLogFormat) + asMessage) ;
     end ;
 end ;
@@ -475,7 +535,7 @@ begin
         Result := ''
     end
     else begin
-        Result := goMainConfig.ReadString('main', asKey, '') ;
+        Result := goMainConfig.ReadString(MAIN_INI_SECTION, asKey, '') ;
     end ;
 end ;
 
@@ -615,8 +675,6 @@ begin
     then begin
         lsFile := ExpandFileName(giRootConfigDirectory + 'users' +
             DirectorySeparator + asLoginName + '.ini') ;
-
-
 
         if FileExists(lsFile)
         then begin

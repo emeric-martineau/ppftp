@@ -27,13 +27,15 @@ const
      NO_VALUE : String = 'no' ;
      // Separator of message
      MESSAGE_SEPARATOR : String = '\n' ;
+     // Separator of ip address
+     IP_ADDRESS_SEPARATOR : String = ',' ;
 
      // Port to listen
      // @seealso(DEFAULT_PORT)
      MAIN_CONF_PORT : String = 'Port' ;
      // IP adress or name to listen
      // @seealso(DEFAULT_IP_ADDRESS)
-     MAIN_CONF_IP_ADRESS : String = 'IPAddress' ;
+     MAIN_CONF_IP_ADDRESS : String = 'IPAddress' ;
      // Message to show at new client connection (\n to split in multiline)
      // @seealso(DEFAULT_WELCOME_MESSAGE)
      MAIN_CONF_WELCOME_MESSAGE : String = 'WelcomeMessage' ;
@@ -69,10 +71,13 @@ const
      MAIN_CONF_BUFFER_SIZE : String = 'BufferSize' ;
      // Default byte rate for user
      // @seealso(DEFAULT_USER_BYTE_RATE)
-     MAIN_CONF_USER_BYTE_RATE : String = 'UserByteRate' ;
+     MAIN_CONF_USER_BYTE_RATE : String = 'ByteRateUser' ;
      // If UTF8 support can be proposed to the client
      // @seealso(DEFAULT_UTF8)
      MAIN_CONF_UTF8 : String = 'Utf8Support' ;
+     // File transfert time out
+     // @seealso(DEFAULT_FILE_TRANSFERT_TIME_OUT)
+     MAIN_CONF_FILE_TRANSFERT_TIME_OUT : String = 'FileTransfertTimeOut' ;
 
      // Defaut port
      DEFAULT_PORT : Integer = 21 ;
@@ -104,6 +109,8 @@ const
      DEFAULT_USER_BYTE_RATE : Integer = 2048 ;
      // Default utf8 support
      DEFAULT_UTF8 : Boolean = False ;
+     // Default file tranfert time out
+     DEFAULT_FILE_TRANSFERT_TIME_OUT : Integer = 30 ;
 
      // Default waiting time
      DEFAULT_WAITING_TIME : Integer = 1000 ;

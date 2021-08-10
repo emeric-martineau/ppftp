@@ -115,33 +115,37 @@ Mother class of FTP server</p>
 </tr>
 <tr class="list">
 <td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
-<td class="itemcode"><code><b><a   href="ftpclient.TFtpClient.html#psMessageLogOrError">psMessageLogOrError</a></b>: String ;</code></td>
+<td class="itemcode"><code><b><a   href="ftpclient.TFtpClient.html#piFileTransfertTimeOut">piFileTransfertTimeOut</a></b>: Integer ;</code></td>
 </tr>
 <tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><code><b><a   href="ftpclient.TFtpClient.html#psMessageLogOrError">psMessageLogOrError</a></b>: String ;</code></td>
+</tr>
+<tr class="list">
 <td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
 <td class="itemcode"><code><b><a   href="ftpclient.TFtpClient.html#psFtpCurrentDirectory">psFtpCurrentDirectory</a></b>: String ;</code></td>
 </tr>
-<tr class="list">
+<tr class="list2">
 <td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
 <td class="itemcode"><code><b><a   href="ftpclient.TFtpClient.html#pbPassiveMode">pbPassiveMode</a></b>: Boolean ;</code></td>
 </tr>
-<tr class="list2">
+<tr class="list">
 <td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
 <td class="itemcode"><code><b><a   href="ftpclient.TFtpClient.html#psActiveModeIpAddresse">psActiveModeIpAddresse</a></b>: String ;</code></td>
 </tr>
-<tr class="list">
+<tr class="list2">
 <td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
 <td class="itemcode"><code><b><a   href="ftpclient.TFtpClient.html#psActiveModePort">psActiveModePort</a></b>: String ;</code></td>
 </tr>
-<tr class="list2">
+<tr class="list">
 <td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
 <td class="itemcode"><code><b><a   href="ftpclient.TFtpClient.html#poPassivePortSock">poPassivePortSock</a></b>: TTCPBlockSocket ;</code></td>
 </tr>
-<tr class="list">
+<tr class="list2">
 <td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
 <td class="itemcode"><code><b><a   href="ftpclient.TFtpClient.html#prPassivePort">prPassivePort</a></b>: <a   href="ftptypes.html#PFtpPassivePort">PFtpPassivePort</a> ;</code></td>
 </tr>
-<tr class="list2">
+<tr class="list">
 <td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
 <td class="itemcode"><code><b><a   href="ftpclient.TFtpClient.html#pbTransfertMode">pbTransfertMode</a></b>: <a   href="ftptypes.html#TTransfertMode">TTransfertMode</a> ;</code></td>
 </tr>
@@ -222,7 +226,7 @@ Mother class of FTP server</p>
 </tr>
 <tr class="list">
 <td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
-<td class="itemcode"><code>function <b><a   href="ftpclient.TFtpClient.html#CanReadDirectory">CanReadDirectory</a></b>(const asRoot : String; asCurrentPath : String) : Boolean ;</code></td>
+<td class="itemcode"><code>function <b><a   href="ftpclient.TFtpClient.html#CanReadDirectory">CanReadDirectory</a></b>(const asRoot : String; const asCurrentPath : String) : Boolean ;</code></td>
 </tr>
 <tr class="list2">
 <td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
@@ -270,7 +274,7 @@ Mother class of FTP server</p>
 </tr>
 <tr class="list">
 <td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
-<td class="itemcode"><code>constructor <b><a   href="ftpclient.TFtpClient.html#Create">Create</a></b>(const abCreateSuspended: boolean; const aoClientSock: TTCPBlockSocket; const asWelcomeMessage: String; const asGoodbyeMessage: String; const aiTimeOut : Integer; const aiMaxLogin : Integer);</code></td>
+<td class="itemcode"><code>constructor <b><a   href="ftpclient.TFtpClient.html#Create">Create</a></b>(const abCreateSuspended: boolean; const aoClientSock: TTCPBlockSocket; const asWelcomeMessage: String; const asGoodbyeMessage: String; const aiTimeOut : Integer; const aiMaxLogin : Integer; const aiFileTransfertTimeOut : Integer);</code></td>
 </tr>
 <tr class="list2">
 <td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
@@ -571,6 +575,16 @@ Utf8 mode enabled</p>
 <table class="detail wide_list">
 <tr class="list">
 <td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
+<td class="itemcode"><a name="piFileTransfertTimeOut"></a><code><b>piFileTransfertTimeOut</b>: Integer ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+File transfert timeout</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
 <td class="itemcode"><a name="psMessageLogOrError"></a><code><b>psMessageLogOrError</b>: String ;</code></td>
 </tr>
 <tr><td colspan="2">
@@ -832,7 +846,7 @@ Close and free passive port socket and port</p>
 <table class="detail wide_list">
 <tr class="list">
 <td class="visibility"><a   href="legend.html"><img  src="protected.gif" alt="Protected" title="Protected"></a></td>
-<td class="itemcode"><a name="CanReadDirectory"></a><code>function <b>CanReadDirectory</b>(const asRoot : String; asCurrentPath : String) : Boolean ;</code></td>
+<td class="itemcode"><a name="CanReadDirectory"></a><code>function <b>CanReadDirectory</b>(const asRoot : String; const asCurrentPath : String) : Boolean ;</code></td>
 </tr>
 <tr><td colspan="2">
 <p>
@@ -952,7 +966,7 @@ TYPE command</p>
 <table class="detail wide_list">
 <tr class="list">
 <td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
-<td class="itemcode"><a name="Create"></a><code>constructor <b>Create</b>(const abCreateSuspended: boolean; const aoClientSock: TTCPBlockSocket; const asWelcomeMessage: String; const asGoodbyeMessage: String; const aiTimeOut : Integer; const aiMaxLogin : Integer);</code></td>
+<td class="itemcode"><a name="Create"></a><code>constructor <b>Create</b>(const abCreateSuspended: boolean; const aoClientSock: TTCPBlockSocket; const asWelcomeMessage: String; const asGoodbyeMessage: String; const aiTimeOut : Integer; const aiMaxLogin : Integer; const aiFileTransfertTimeOut : Integer);</code></td>
 </tr>
 <tr><td colspan="2">
 <p>
@@ -1132,6 +1146,6 @@ Check password</p>
 If file protected</p>
 </td></tr>
 </table>
-<hr noshade size="1"><span class="appinfo"><em>Generated by <a  target="_parent" href="http://pasdoc.sourceforge.net/">PasDoc 0.11.0</a> on 2010-01-26 16:45:52</em>
+<hr noshade size="1"><span class="appinfo"><em>Generated by <a  target="_parent" href="http://pasdoc.sourceforge.net/">PasDoc 0.11.0</a> on 2010-01-29 13:55:11</em>
 </span>
 </body></html>

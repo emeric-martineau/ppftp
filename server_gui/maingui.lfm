@@ -111,8 +111,23 @@ object FormMain: TFormMain
         OnClick = ExitMenuClick
       end
     end
+    object LogMenu: TMenuItem
+      Caption = 'Log'
+      object ClearLogMenu: TMenuItem
+        Caption = 'Clear'
+        OnClick = ClearLogMenuClick
+      end
+      object SaveLogMenuItem: TMenuItem
+        Caption = 'Save'
+        OnClick = SaveLogMenuItemClick
+      end
+    end
     object SetupMenu: TMenuItem
       Caption = 'Setup'
+      object MainConfigMenu: TMenuItem
+        Caption = 'Main config'
+        OnClick = MainConfigMenuClick
+      end
     end
     object HelphMenu: TMenuItem
       Caption = 'Help'
@@ -7996,5 +8011,12 @@ object FormMain: TFormMain
     OnTimer = Timer1Timer
     left = 53
     top = 74
+  end
+  object LogSaveDialog: TSaveDialog
+    DefaultExt = '.log'
+    FileName = 'ppftp.log'
+    Filter = 'Log|*.log|Text|*.txt'
+    left = 170
+    top = 68
   end
 end

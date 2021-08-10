@@ -60,7 +60,7 @@ function StringToTStringList(const asString : String;
 // @param asSeparator separator to split
 // @param aoList list to store result
 procedure StringToTStringListNoCreate(const asString : String;
-    const asSeparator : String; const aoList : TStringList) ;
+    const asSeparator : String; const aoList : TStrings) ;
 
 //
 // Split string with '-' separator and convert both part in integer
@@ -221,7 +221,7 @@ end ;
 //
 // Split String to TStringList
 procedure StringToTStringListNoCreate(const asString : String;
-    const asSeparator : String; const aoList : TStringList) ;
+    const asSeparator : String; const aoList : TStrings) ;
 var
     // Length of separator
     liLengthSeparator : Integer ;
@@ -484,16 +484,7 @@ begin
         lsFtpCurrentPath := asFtpCurrentPath ;
     end ;
 
-//    liLength := Length(asFtpPath) ;
-
-//    // check if path start by '/'. If not, add current ftp path
-//    if (liLength > 0) and (asFtpPath[1] = '/')
-//    then begin
-//        lsFtpPath := asFtpPath ;
-//   end
-//    else begin
-        lsFtpPath := lsFtpCurrentPath + asFtpPath ;
-//    end ;
+    lsFtpPath := lsFtpCurrentPath + asFtpPath ;
 
     // Convert all '/' to '\'
     {$IFDEF WINDOWS}

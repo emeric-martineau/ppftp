@@ -1,3 +1,7 @@
+0.2.1 - 2010/01/29
+  - correct bug in CWD command,
+  - add main config window in GUI,
+  
 0.2.0 - 2010/01/26
   - suppot PWD/XPWD, CDUP/XCUP, PORT, PASV, TYPE, LIIST/NLST,
   - support of local folder configuration,

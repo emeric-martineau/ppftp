@@ -89,6 +89,8 @@ type
     piMaximumLogin : Integer ;
     // Utf8 mode enabled
     pbUtf8 : Boolean ;
+    // File transfert timeout
+    piFileTransfertTimeOut : Integer ;
 
     // Message to show
     psMessageLogOrError : String ;
@@ -156,7 +158,7 @@ type
     procedure ClosePassiveSocket ;
     // Check if directory is readable
     function CanReadDirectory(const asRoot : String;
-        asCurrentPath : String) : Boolean ;
+        const asCurrentPath : String) : Boolean ;
     // List a directory
     procedure ListDirectory(const asFtpFolderName : String;
         const aoCommandSocket : TTCPBlockSocket;
@@ -227,7 +229,7 @@ type
     constructor Create(const abCreateSuspended: boolean;
       const aoClientSock: TTCPBlockSocket; const asWelcomeMessage: String;
       const asGoodbyeMessage: String; const aiTimeOut : Integer;
-      const aiMaxLogin : Integer);
+      const aiMaxLogin : Integer; const aiFileTransfertTimeOut : Integer);
     // Destructor
     destructor Destroy; override;
     // Execute main thread
@@ -254,10 +256,11 @@ implementation
 // @param asGoodbyeMessage goodbye message (must be end by FTP_EOL)
 // @param aiTimeOut time out delay in second
 // @param aiMaximumLogin maximum login per user
+// @param aiFileTransfertTimeOut file transfert time out
 constructor TFtpClient.Create(const abCreateSuspended: boolean;
   const aoClientSock: TTCPBlockSocket; const asWelcomeMessage: String;
   const asGoodbyeMessage: String; const aiTimeOut : Integer;
-  const aiMaxLogin : Integer) ;
+  const aiMaxLogin : Integer; const aiFileTransfertTimeOut : Integer) ;
 begin
     inherited Create(abCreateSuspended);
 
@@ -276,6 +279,8 @@ begin
     piMaximumLogin := aiMaxLogin ;
 
     pbUtf8 := False ;
+
+    piFileTransfertTimeOut := aiFileTransfertTimeOut ;
 
     pbPassiveMode := False ;
 
@@ -407,7 +412,13 @@ var
     // String for log
     lsStringForLog : String ;
 begin
-    liTimeOut := piTimeOut ;
+    if piTimeOut > 0
+    then begin
+        liTimeOut := piTimeOut ;
+    end
+    else begin
+        liTimeOut := 1 ;
+    end ;
 
     Result := READ_REMOTE_STRING_TIME_OUT ;
 
@@ -441,7 +452,10 @@ begin
             break ;
         end ;
 
-        Dec(liTimeOut) ;
+        if piTimeOut > 0
+        then begin
+            Dec(liTimeOut) ;
+        end ;
     end ;
 
     if Terminated = True
@@ -783,26 +797,53 @@ begin
     pbPassiveMode := False ;
 end;
 
+//
+// Return true if can read. asCurrentPath must be start by asRoot
+//
+// @param asRoot user root dir
+// @param asCurrentPath path to read
 function TFtpClient.CanReadDirectory(const asRoot : String;
-    asCurrentPath : String) : Boolean ;
+    const asCurrentPath : String) : Boolean ;
 var
     // local config
     lsLocalConfigValue : String ;
+    // root dir
+    lsRoot : String ;
+    // current path
+    lsCurrentPath : String ;
+    // length of root
+    liLengthRoot : Integer ;
 begin
     // Check if local config exist and if we can go
     lsLocalConfigValue := NO_VALUE ;
     Result := True ;
 
-    while IsRootInPath(asRoot, asCurrentPath, pbUtf8) and
-        Result do
+    // Add directory separator to be sur we have same or higher size
+    lsRoot := AddTrailing(asRoot, DirectorySeparator) ;
+    lsCurrentPath := AddTrailing(asCurrentPath, DirectorySeparator) ;
+
+    // Now, we cut start
+    liLengthRoot := Length(lsRoot) ;
+
+    // +1 for end directory separator of lsRoot
+    // -1 for end directory separator of lsCurrentPath
+    lsCurrentPath := Copy(lsCurrentPath, liLengthRoot + 1,
+        Length(lsCurrentPath) - liLengthRoot - 1) ;
+
+    while Result do
     begin
-        if FolderLocalConfigReader(asCurrentPath, pbUtf8,
+        if FolderLocalConfigReader(lsRoot + lsCurrentPath, pbUtf8,
              FOLDER_CONF_DISABLED, lsLocalConfigValue)
         then begin
             Result := lsLocalConfigValue <> NO_VALUE ;
         end ;
 
-        asCurrentPath := ExtractFileDir(asCurrentPath) ;
+        if Length(lsCurrentPath) = 0
+        then begin
+            break ;
+        end ;
+
+        lsCurrentPath := ExtractFileDir(lsCurrentPath) ;
     end ;
 end ;
 

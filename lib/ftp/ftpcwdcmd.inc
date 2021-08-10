@@ -11,8 +11,6 @@ var
     lsPath : String ;
     // Sys path
     lsSysPath : String ;
-    // Current path
-    lsCurrentPath : String ;
 begin
     if prUserConfig.ListSubDir
     then begin
@@ -40,11 +38,7 @@ begin
             // Check if directory exist
             if CheckDirectoryExists(lsSysPath, pbUtf8)
             then begin
-                // Check for all directory in path
-                // Delete end DirectorySeparator
-                lsCurrentPath := Copy(lsSysPath, 1, Length(lsSysPath) - 1) ;
-
-                if CanReadDirectory(prUserConfig.Root, lsCurrentPath)
+                if CanReadDirectory(prUserConfig.Root, lsSysPath)
                 then begin
                     if Length(psFtpCurrentDirectory) > 0
                     then begin

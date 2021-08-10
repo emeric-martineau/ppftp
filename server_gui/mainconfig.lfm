@@ -1,0 +1,333 @@
+object MainConfigForm: TMainConfigForm
+  Left = 378
+  Height = 471
+  Top = 224
+  Width = 522
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsDialog
+  Caption = 'Main config'
+  ClientHeight = 471
+  ClientWidth = 522
+  OnShow = FormShow
+  Position = poMainFormCenter
+  LCLVersion = '0.9.28.2'
+  object MaxsessionUserLabel: TLabel
+    Left = 9
+    Height = 14
+    Top = 104
+    Width = 115
+    Caption = 'Max session per user* :'
+    ParentColor = False
+  end
+  object MaxClientLabel: TLabel
+    Left = 9
+    Height = 14
+    Top = 152
+    Width = 86
+    Caption = 'Maximum client* :'
+    ParentColor = False
+  end
+  object TimeOutLabel: TLabel
+    Left = 9
+    Height = 14
+    Top = 200
+    Width = 116
+    Caption = 'Time out (in seconds)* :'
+    ParentColor = False
+  end
+  object FileTransfertTimeOutLabel: TLabel
+    Left = 9
+    Height = 14
+    Top = 247
+    Width = 118
+    Caption = 'File transfert time out* :'
+    ParentColor = False
+  end
+  object PassivePortStartLabel: TLabel
+    Left = 10
+    Height = 14
+    Top = 296
+    Width = 93
+    Caption = 'Passive port start :'
+    ParentColor = False
+  end
+  object PassivePortStopLabel: TLabel
+    Left = 9
+    Height = 14
+    Top = 344
+    Width = 91
+    Caption = 'Passive port stop :'
+    ParentColor = False
+  end
+  object UserByteRateLabel: TLabel
+    Left = 152
+    Height = 14
+    Top = 8
+    Width = 121
+    Caption = 'Default user byte rate* :'
+    ParentColor = False
+  end
+  object UserByteRateLabel1: TLabel
+    Left = 152
+    Height = 14
+    Top = 56
+    Width = 59
+    Caption = 'Buffer size :'
+    ParentColor = False
+  end
+  object AllowedIpLabel: TLabel
+    Left = 152
+    Height = 14
+    Top = 170
+    Width = 122
+    Caption = 'Allowed IP (one per line):'
+    ParentColor = False
+  end
+  object DeniedIpLabel: TLabel
+    Left = 154
+    Height = 14
+    Top = 288
+    Width = 121
+    Caption = 'Denied IP (one per line) :'
+    ParentColor = False
+  end
+  object DisabledLabel: TLabel
+    Left = 10
+    Height = 14
+    Top = 403
+    Width = 76
+    Caption = '* : 0 = disabled'
+    ParentColor = False
+  end
+  object PortLabel: TLabel
+    Left = 10
+    Height = 14
+    Top = 6
+    Width = 67
+    Caption = 'Port number :'
+    ParentColor = False
+  end
+  object WelcomeLabel: TLabel
+    Left = 296
+    Height = 14
+    Top = 8
+    Width = 96
+    Caption = 'Welcome message :'
+    ParentColor = False
+  end
+  object GoodbyeLabel: TLabel
+    Left = 296
+    Height = 14
+    Top = 192
+    Width = 96
+    Caption = 'Goodbye message :'
+    ParentColor = False
+  end
+  object Shape1: TShape
+    Left = 9
+    Height = 1
+    Top = 424
+    Width = 506
+  end
+  object IpAddressLabeledEdit: TLabeledEdit
+    Left = 10
+    Height = 21
+    Top = 72
+    Width = 110
+    EditLabel.AnchorSideLeft.Control = IpAddressLabeledEdit
+    EditLabel.AnchorSideBottom.Control = IpAddressLabeledEdit
+    EditLabel.Left = 10
+    EditLabel.Height = 14
+    EditLabel.Top = 55
+    EditLabel.Width = 126
+    EditLabel.Caption = 'IP Address or host name :'
+    EditLabel.ParentColor = False
+    TabOrder = 0
+  end
+  object MaxSessionUserSpinEdit: TSpinEdit
+    Left = 10
+    Height = 21
+    Top = 120
+    Width = 108
+    MaxValue = 2147483647
+    TabOrder = 1
+  end
+  object MaxClientSpinEdit: TSpinEdit
+    Left = 9
+    Height = 21
+    Top = 168
+    Width = 109
+    MaxValue = 2147483647
+    TabOrder = 2
+  end
+  object TimeOutSpinEdit: TSpinEdit
+    Left = 10
+    Height = 21
+    Top = 216
+    Width = 108
+    MaxValue = 2147483647
+    TabOrder = 3
+  end
+  object FiletransfertTimeOutSpinEdit: TSpinEdit
+    Left = 9
+    Height = 21
+    Top = 264
+    Width = 106
+    MaxValue = 2147483647
+    TabOrder = 4
+  end
+  object PassivePortStartSpinEdit: TSpinEdit
+    Left = 10
+    Height = 21
+    Top = 312
+    Width = 102
+    MaxValue = 2147483647
+    TabOrder = 5
+  end
+  object PassivePortStopSpinEdit: TSpinEdit
+    Left = 9
+    Height = 21
+    Top = 360
+    Width = 102
+    MaxValue = 2147483647
+    TabOrder = 6
+  end
+  object UserByteRateSpinEdit: TSpinEdit
+    Left = 152
+    Height = 21
+    Top = 24
+    Width = 118
+    MaxValue = 2147483647
+    TabOrder = 7
+  end
+  object BufferSizeSpinEdit: TSpinEdit
+    Left = 152
+    Height = 21
+    Top = 72
+    Width = 118
+    MaxValue = 2147483647
+    TabOrder = 8
+  end
+  object FullLogCheckBox: TCheckBox
+    Left = 154
+    Height = 17
+    Top = 113
+    Width = 51
+    Caption = 'Full log'
+    TabOrder = 9
+  end
+  object Utf8CheckBox: TCheckBox
+    Left = 154
+    Height = 17
+    Top = 136
+    Width = 83
+    Caption = 'UTF8 support'
+    TabOrder = 10
+  end
+  object AllowedIpMemo: TMemo
+    Left = 152
+    Height = 92
+    Top = 184
+    Width = 118
+    ScrollBars = ssVertical
+    TabOrder = 11
+  end
+  object DeniedIpMemo: TMemo
+    Left = 154
+    Height = 92
+    Top = 302
+    Width = 116
+    ScrollBars = ssVertical
+    TabOrder = 12
+  end
+  object DeniedPriorityCheckBox: TCheckBox
+    Left = 152
+    Height = 17
+    Top = 400
+    Width = 88
+    Caption = 'Denied priority'
+    TabOrder = 13
+  end
+  object PortSpinEdit: TSpinEdit
+    Left = 10
+    Height = 21
+    Top = 24
+    Width = 108
+    MaxValue = 2147483647
+    TabOrder = 14
+  end
+  object WelcomeMemo: TMemo
+    Left = 296
+    Height = 90
+    Top = 28
+    Width = 216
+    ScrollBars = ssBoth
+    TabOrder = 15
+    WordWrap = False
+  end
+  object GoodbyeMemo: TMemo
+    Left = 296
+    Height = 90
+    Top = 212
+    Width = 216
+    ScrollBars = ssBoth
+    TabOrder = 16
+    WordWrap = False
+  end
+  object WelcomeButton: TButton
+    Left = 296
+    Height = 25
+    Top = 128
+    Width = 88
+    Caption = 'Load from file'
+    OnClick = WelcomeButtonClick
+    TabOrder = 17
+  end
+  object GoodbyeButton: TButton
+    Left = 296
+    Height = 25
+    Top = 312
+    Width = 88
+    Caption = 'Load from file'
+    OnClick = GoodbyeButtonClick
+    TabOrder = 18
+  end
+  object OkButton: TButton
+    Left = 8
+    Height = 25
+    Top = 440
+    Width = 75
+    Caption = 'OK'
+    OnClick = OkButtonClick
+    TabOrder = 19
+  end
+  object CancelButton: TButton
+    Left = 437
+    Height = 25
+    Top = 440
+    Width = 75
+    Caption = 'Cancel'
+    OnClick = CancelButtonClick
+    TabOrder = 20
+  end
+  object LocalFolderConfigNameLabeledEdit: TLabeledEdit
+    Left = 296
+    Height = 21
+    Top = 392
+    Width = 216
+    EditLabel.AnchorSideLeft.Control = LocalFolderConfigNameLabeledEdit
+    EditLabel.AnchorSideBottom.Control = LocalFolderConfigNameLabeledEdit
+    EditLabel.Left = 296
+    EditLabel.Height = 14
+    EditLabel.Top = 375
+    EditLabel.Width = 124
+    EditLabel.Caption = 'Local folder config name :'
+    EditLabel.ParentColor = False
+    TabOrder = 21
+  end
+  object OpenDialog1: TOpenDialog
+    Options = [ofPathMustExist, ofFileMustExist, ofEnableSizing, ofViewDetail]
+    left = 423
+    top = 156
+  end
+end
