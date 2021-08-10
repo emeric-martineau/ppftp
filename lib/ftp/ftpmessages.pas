@@ -15,8 +15,10 @@ unit ftpmessages;
 
 interface
 
+{$I ftpconfig.inc}
+
 uses
-  Classes, SysUtils; 
+  Classes, SysUtils ;
 
 const
     // MESSAGE
@@ -55,11 +57,33 @@ const
     MSG_FTP_ROOT_LOGGED : String = '230 User %s logged in.' ;
     MSG_FTP_NOOP : String = '200 NOOP command successful.' ;
     MSG_FTP_CMD_NOT_UNDERSTOOD : String = '500 Command not understood.' ;
-    MSG_FTP_SYST : String = '215 UNIX Type: L8' ;
+    MSG_FTP_SYST : String = '215 ' ; // 215 Windows_NT
     MSG_FTP_UTF8_ON : String = '200 UTF8 mode enabled' ;
     MSG_FTP_UFT8_OFF : String = '200 UTF8 mode disabled' ;
     MSG_FTP_UTF8_BAD : String = '501 Invalid UFT8 options' ;
-
+    MSG_FTP_FEAT_START : String = '211-Features:' ;
+    MSG_FTP_FEAT_STOP : String = '211 End' ;
+    MSG_FTP_PWD : String = '257 "%s" is current directory.' ;
+    MSG_FTP_ACCESS_DENIED : String = '501 Permission Denied.' ;
+    MSG_FTP_PASSWORD_REQUIERED : String = '503 Password requiered. Use PASS' ;
+    MSG_FTP_ACCESS_DIRECTORY_DENIED : String = '550 Permission Denied.' ;
+    MSG_FTP_FILE_OR_DIR_NOT_FOUND : String = '550 No such file or directory.' ;
+    MSG_FTP_CWD_OK : String = '250 CWD command successful.' ;
+    MSG_FTP_PORT_INVALID : String = '501 ''PORT'': Invalid number of parameters' ;
+    MSG_FTP_PORT_1024 : String = '500 PORT argument must be 1024 or greater.' ;
+    MSG_FTP_PORT_OK : String = '200 PORT command successful.' ;
+    MSG_FTP_PASSIVE_PORT_FAIL : String = '500 PASV exception: ''No available PASV Ports''.' ;
+    MSG_FTP_PASSIVE_PORT_SOCKET_FAIL : String = '500 Internal server error.' ;
+    MSG_FTP_PASSIVE_PORT_OK : String = '227 Entering Passive Mode (%s).' ;
+    MSG_FTP_LIST_NO_FOUND : String = '550 %s: No such file or directory.' ;
+    MSG_FTP_DATA_CONNECTION_FAIL : String = '425 Can''t build data connection: Connection refused.' ;
+    MSG_FTP_DATA_CONNECTION_IP_FAIL : String = '425 IP address creator connection is not the same to IP address connction.' ;
+    MSG_FTP_OPEN_ASCII_DATA_CONNECTION : String = '150 Opening ASCII mode data connection.' ;
+    MSG_FTP_END_DATA_CONNECTION : String = '226 Transfer complete.' ;
+    MSG_FTP_TYPE_I : String = '200 Type set to I.' ;
+    MSG_FTP_TYPE_A : String = '200 Type set to A.' ;
+    MSG_FTP_TYPE_ERROR : String = '504 TYPE must be A or I.' ;
+    MSG_FTP_NOT_A_DIRECTORY : String = '550 %s: Not a directory.' ;
 implementation
 
 end.

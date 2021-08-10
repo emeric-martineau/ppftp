@@ -113,7 +113,7 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="ftpconst"/>
         <CursorPos X="1" Y="170"/>
-        <TopLine Value="130"/>
+        <TopLine Value="133"/>
         <EditorIndex Value="2"/>
         <UsageCount Value="62"/>
         <Loaded Value="True"/>
@@ -180,7 +180,7 @@
         <Filename Value="..\lib\ftp\ftpclient.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="ftpclient"/>
-        <CursorPos X="52" Y="326"/>
+        <CursorPos X="33" Y="319"/>
         <TopLine Value="293"/>
         <EditorIndex Value="3"/>
         <UsageCount Value="43"/>

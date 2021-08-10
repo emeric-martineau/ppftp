@@ -1,10 +1,10 @@
 object AboutForm2: TAboutForm2
   Left = 351
-  Height = 305
+  Height = 318
   Top = 367
   Width = 413
   Caption = 'AboutForm2'
-  ClientHeight = 305
+  ClientHeight = 318
   ClientWidth = 413
   OnCreate = FormCreate
   OnShow = FormShow
@@ -165,9 +165,9 @@ object AboutForm2: TAboutForm2
   end
   object TitleLabel: TLabel
     Left = 64
-    Height = 16
+    Height = 14
     Top = 8
-    Width = 161
+    Width = 164
     Caption = 'Portable && Pascal FTP Server'
     Font.Style = [fsBold]
     ParentColor = False
@@ -175,51 +175,51 @@ object AboutForm2: TAboutForm2
   end
   object VersionLabel: TLabel
     Left = 64
-    Height = 16
+    Height = 14
     Top = 41
-    Width = 73
-    Caption = 'Version : 0.1.2'
+    Width = 46
+    Caption = 'Version : '
     ParentColor = False
   end
   object CopyrightLabel: TLabel
     Left = 64
-    Height = 16
+    Height = 14
     Top = 56
-    Width = 217
+    Width = 196
     Caption = 'Copyright (C) 2009 - MARTINEAU Emeric'
     ParentColor = False
   end
   object Label1: TLabel
     Left = 64
-    Height = 16
+    Height = 14
     Top = 72
-    Width = 205
+    Width = 191
     Caption = 'Web Site : http://www.bubulemaster.fr'
     ParentColor = False
   end
   object PowerByLabel: TLabel
     Left = 64
-    Height = 16
+    Height = 14
     Top = 104
-    Width = 270
+    Width = 252
     Caption = 'Powered by FreePascal/Lazarus and Synapse library'
     ParentColor = False
   end
   object Label2: TLabel
     Left = 64
-    Height = 16
+    Height = 14
     Top = 137
-    Width = 389
+    Width = 349
     Caption = 'Icon by Media Design (Ben Fleming - http://mediadesign.deviantart.com)'
     ParentColor = False
   end
   object GroupBox1: TGroupBox
     Left = 64
-    Height = 97
+    Height = 113
     Top = 167
     Width = 345
     Caption = 'Compilation informations'
-    ClientHeight = 79
+    ClientHeight = 95
     ClientWidth = 341
     TabOrder = 0
     object CompiledWithLabel: TLabel
@@ -246,11 +246,19 @@ object AboutForm2: TAboutForm2
       Caption = 'Date/Time compilation : '
       ParentColor = False
     end
+    object ServerTypeLabel: TLabel
+      Left = 8
+      Height = 14
+      Top = 80
+      Width = 68
+      Caption = 'Server type : '
+      ParentColor = False
+    end
   end
   object Button1: TButton
     Left = 328
     Height = 25
-    Top = 272
+    Top = 288
     Width = 75
     Caption = 'Close'
     OnClick = Button1Click

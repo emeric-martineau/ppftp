@@ -4,3 +4,5 @@ lib/ftp/ftpconst.pas
 lib/ftp/ftpmessages.pas
 lib/ftp/ftptypes.pas
 lib/ftp/ftpclient.pas
+lib/ftp/ftpunixdirectory.pas
+lib/ftp/ftpwindowsdirectory.pas

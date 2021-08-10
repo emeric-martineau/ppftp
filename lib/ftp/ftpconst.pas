@@ -113,6 +113,9 @@ const
      // Linger delay in millisecond
      LINGER_ENABLE : Boolean = True ;
      LINGER_DELAY : Integer = 10000 ;
+     // Linger delay in millisecond for client connect
+     LINGER_ENABLE_CLIENT : Boolean = True ;
+     LINGER_DELAY_CLIENT : Integer = 1000 ;
      // Time out for read connection in millisecond
      READ_CONNECTION : Integer = 1000 ;
 
@@ -146,6 +149,9 @@ const
      // If user disabled
      // @seealso(DEFAULT_USER_DISABLED)
      USER_CONF_DISABLED : String = 'Disabled' ;
+     // If user can modify file time
+     // @seealso(DEFAULT_USER_MODIFY_FILE_TIME)
+     USER_CONF_MODIFY_FILE_TIME : String = 'ModifyFileTime' ;
 
      // Default password. If empty, just list right
      DEFAULT_USER_PASSWORD : String = '' ;
@@ -167,7 +173,25 @@ const
      DEFAULT_USER_SUB_DIR : String = 'no' ;
      // Default disabled user
      DEFAULT_USER_DISABLED : String = 'yes' ;
+     // Default modify file time
+     DEFAULT_USER_MODIFY_FILE_TIME : String = 'no' ;
 
+     // FOLDER download rigth
+     FOLDER_CONF_DOWNLOAD : String = 'Download' ;
+     // FOLDER upload right
+     FOLDER_CONF_UPLOAD : String = 'Upload' ;
+     // Rename right
+     FOLDER_CONF_RENAME : String = 'Rename' ;
+     // Delete right
+     FOLDER_CONF_DELETE : String = 'Delete' ;
+     // Make directory right
+     FOLDER_CONF_MAKE_DIRECTORY : String = 'MakeDirectory' ;
+     // Delete directory right
+     FOLDER_CONF_DELETE_DIRECTORY : String = 'DeleteDirectory' ;
+     // Show sub right
+     FOLDER_CONF_SUB_DIR : String = 'SubDir' ;
+     // If FOLDER disabled
+     FOLDER_CONF_DISABLED : String = 'Readable' ;
 implementation
 
 end.

@@ -111,7 +111,7 @@ This unit contain all messages</p>
 <td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_CMD_NOT_UNDERSTOOD">MSG_FTP_CMD_NOT_UNDERSTOOD</a></b> : String = '500 Command not understood.' ;</code></td>
 </tr>
 <tr class="list2">
-<td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_SYST">MSG_FTP_SYST</a></b> : String = '215 UNIX Type: L8' ;</code></td>
+<td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_SYST">MSG_FTP_SYST</a></b> : String = '215 ' ;</code></td>
 </tr>
 <tr class="list">
 <td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_UTF8_ON">MSG_FTP_UTF8_ON</a></b> : String = '200 UTF8 mode enabled' ;</code></td>
@@ -121,6 +121,75 @@ This unit contain all messages</p>
 </tr>
 <tr class="list">
 <td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_UTF8_BAD">MSG_FTP_UTF8_BAD</a></b> : String = '501 Invalid UFT8 options' ;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_FEAT_START">MSG_FTP_FEAT_START</a></b> : String = '211-Features:' ;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_FEAT_STOP">MSG_FTP_FEAT_STOP</a></b> : String = '211 End' ;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_PWD">MSG_FTP_PWD</a></b> : String = '257 &quot;%s&quot; is current directory.' ;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_ACCESS_DENIED">MSG_FTP_ACCESS_DENIED</a></b> : String = '501 Permission Denied.' ;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_PASSWORD_REQUIERED">MSG_FTP_PASSWORD_REQUIERED</a></b> : String = '503 Password requiered. Use PASS' ;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_ACCESS_DIRECTORY_DENIED">MSG_FTP_ACCESS_DIRECTORY_DENIED</a></b> : String = '550 Permission Denied.' ;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_FILE_OR_DIR_NOT_FOUND">MSG_FTP_FILE_OR_DIR_NOT_FOUND</a></b> : String = '550 No such file or directory.' ;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_CWD_OK">MSG_FTP_CWD_OK</a></b> : String = '250 CWD command successful.' ;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_PORT_INVALID">MSG_FTP_PORT_INVALID</a></b> : String = '501 ''PORT'': Invalid number of parameters' ;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_PORT_1024">MSG_FTP_PORT_1024</a></b> : String = '500 PORT argument must be 1024 or greater.' ;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_PORT_OK">MSG_FTP_PORT_OK</a></b> : String = '200 PORT command successful.' ;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_PASSIVE_PORT_FAIL">MSG_FTP_PASSIVE_PORT_FAIL</a></b> : String = '500 PASV exception: ''No available PASV Ports''.' ;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_PASSIVE_PORT_SOCKET_FAIL">MSG_FTP_PASSIVE_PORT_SOCKET_FAIL</a></b> : String = '500 Internal server error.' ;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_PASSIVE_PORT_OK">MSG_FTP_PASSIVE_PORT_OK</a></b> : String = '227 Entering Passive Mode (%s).' ;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_LIST_NO_FOUND">MSG_FTP_LIST_NO_FOUND</a></b> : String = '550 %s: No such file or directory.' ;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_DATA_CONNECTION_FAIL">MSG_FTP_DATA_CONNECTION_FAIL</a></b> : String = '425 Can''t build data connection: Connection refused.' ;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_DATA_CONNECTION_IP_FAIL">MSG_FTP_DATA_CONNECTION_IP_FAIL</a></b> : String = '425 IP address creator connection is not the same to IP address connction.' ;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_OPEN_ASCII_DATA_CONNECTION">MSG_FTP_OPEN_ASCII_DATA_CONNECTION</a></b> : String = '150 Opening ASCII mode data connection.' ;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_END_DATA_CONNECTION">MSG_FTP_END_DATA_CONNECTION</a></b> : String = '226 Transfer complete.' ;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_TYPE_I">MSG_FTP_TYPE_I</a></b> : String = '200 Type set to I.' ;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_TYPE_A">MSG_FTP_TYPE_A</a></b> : String = '200 Type set to A.' ;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_TYPE_ERROR">MSG_FTP_TYPE_ERROR</a></b> : String = '504 TYPE must be A or I.' ;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a   href="ftpmessages.html#MSG_FTP_NOT_A_DIRECTORY">MSG_FTP_NOT_A_DIRECTORY</a></b> : String = '550 %s: Not a directory.' ;</code></td>
 </tr>
 </table>
 <h2 class="description">Description</h2>
@@ -350,7 +419,7 @@ Ftp message</p>
 </table>
 <table class="detail wide_list">
 <tr class="list">
-<td class="itemcode"><a name="MSG_FTP_SYST"></a><code><b>MSG_FTP_SYST</b> : String = '215 UNIX Type: L8' ;</code></td>
+<td class="itemcode"><a name="MSG_FTP_SYST"></a><code><b>MSG_FTP_SYST</b> : String = '215 ' ;</code></td>
 </tr>
 <tr><td colspan="1">
 &nbsp;</td></tr>
@@ -360,7 +429,9 @@ Ftp message</p>
 <td class="itemcode"><a name="MSG_FTP_UTF8_ON"></a><code><b>MSG_FTP_UTF8_ON</b> : String = '200 UTF8 mode enabled' ;</code></td>
 </tr>
 <tr><td colspan="1">
-&nbsp;</td></tr>
+<p>
+215 Windows_NT</p>
+</td></tr>
 </table>
 <table class="detail wide_list">
 <tr class="list">
@@ -376,6 +447,167 @@ Ftp message</p>
 <tr><td colspan="1">
 &nbsp;</td></tr>
 </table>
-<hr noshade size="1"><span class="appinfo"><em>Generated by <a  target="_parent" href="http://pasdoc.sourceforge.net/">PasDoc 0.11.0</a> on 2010-01-19 20:17:03</em>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MSG_FTP_FEAT_START"></a><code><b>MSG_FTP_FEAT_START</b> : String = '211-Features:' ;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MSG_FTP_FEAT_STOP"></a><code><b>MSG_FTP_FEAT_STOP</b> : String = '211 End' ;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MSG_FTP_PWD"></a><code><b>MSG_FTP_PWD</b> : String = '257 &quot;%s&quot; is current directory.' ;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MSG_FTP_ACCESS_DENIED"></a><code><b>MSG_FTP_ACCESS_DENIED</b> : String = '501 Permission Denied.' ;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MSG_FTP_PASSWORD_REQUIERED"></a><code><b>MSG_FTP_PASSWORD_REQUIERED</b> : String = '503 Password requiered. Use PASS' ;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MSG_FTP_ACCESS_DIRECTORY_DENIED"></a><code><b>MSG_FTP_ACCESS_DIRECTORY_DENIED</b> : String = '550 Permission Denied.' ;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MSG_FTP_FILE_OR_DIR_NOT_FOUND"></a><code><b>MSG_FTP_FILE_OR_DIR_NOT_FOUND</b> : String = '550 No such file or directory.' ;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MSG_FTP_CWD_OK"></a><code><b>MSG_FTP_CWD_OK</b> : String = '250 CWD command successful.' ;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MSG_FTP_PORT_INVALID"></a><code><b>MSG_FTP_PORT_INVALID</b> : String = '501 ''PORT'': Invalid number of parameters' ;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MSG_FTP_PORT_1024"></a><code><b>MSG_FTP_PORT_1024</b> : String = '500 PORT argument must be 1024 or greater.' ;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MSG_FTP_PORT_OK"></a><code><b>MSG_FTP_PORT_OK</b> : String = '200 PORT command successful.' ;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MSG_FTP_PASSIVE_PORT_FAIL"></a><code><b>MSG_FTP_PASSIVE_PORT_FAIL</b> : String = '500 PASV exception: ''No available PASV Ports''.' ;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MSG_FTP_PASSIVE_PORT_SOCKET_FAIL"></a><code><b>MSG_FTP_PASSIVE_PORT_SOCKET_FAIL</b> : String = '500 Internal server error.' ;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MSG_FTP_PASSIVE_PORT_OK"></a><code><b>MSG_FTP_PASSIVE_PORT_OK</b> : String = '227 Entering Passive Mode (%s).' ;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MSG_FTP_LIST_NO_FOUND"></a><code><b>MSG_FTP_LIST_NO_FOUND</b> : String = '550 %s: No such file or directory.' ;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MSG_FTP_DATA_CONNECTION_FAIL"></a><code><b>MSG_FTP_DATA_CONNECTION_FAIL</b> : String = '425 Can''t build data connection: Connection refused.' ;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MSG_FTP_DATA_CONNECTION_IP_FAIL"></a><code><b>MSG_FTP_DATA_CONNECTION_IP_FAIL</b> : String = '425 IP address creator connection is not the same to IP address connction.' ;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MSG_FTP_OPEN_ASCII_DATA_CONNECTION"></a><code><b>MSG_FTP_OPEN_ASCII_DATA_CONNECTION</b> : String = '150 Opening ASCII mode data connection.' ;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MSG_FTP_END_DATA_CONNECTION"></a><code><b>MSG_FTP_END_DATA_CONNECTION</b> : String = '226 Transfer complete.' ;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MSG_FTP_TYPE_I"></a><code><b>MSG_FTP_TYPE_I</b> : String = '200 Type set to I.' ;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MSG_FTP_TYPE_A"></a><code><b>MSG_FTP_TYPE_A</b> : String = '200 Type set to A.' ;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MSG_FTP_TYPE_ERROR"></a><code><b>MSG_FTP_TYPE_ERROR</b> : String = '504 TYPE must be A or I.' ;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="MSG_FTP_NOT_A_DIRECTORY"></a><code><b>MSG_FTP_NOT_A_DIRECTORY</b> : String = '550 %s: Not a directory.' ;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<hr noshade size="1"><span class="appinfo"><em>Generated by <a  target="_parent" href="http://pasdoc.sourceforge.net/">PasDoc 0.11.0</a> on 2010-01-26 16:45:52</em>
 </span>
 </body></html>

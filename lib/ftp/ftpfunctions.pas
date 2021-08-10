@@ -16,7 +16,7 @@ unit ftpfunctions;
 interface
 
 uses
-  Classes, SysUtils, FtpConst, blcksock;
+  Classes, SysUtils, StrUtils, FileUtil, LCLProc, FtpConst, blcksock, synacode;
 
 //
 // Try parse a integer value
@@ -28,10 +28,12 @@ uses
 function TryIntParse(const asIntegerString : String; var aiInteger : Integer) : Boolean ;
 
 //
-// Add \ or / at end if no yet
+// Add a char at end if no yet
 //
 // @param asString string
-function AddTrailingEndSlash(const asString : String) : String ;
+// @param char to add
+function AddTrailing(const asString : String; const asChar : String) : String ;
+
 
 //
 // Convert string with \n into xxx
@@ -92,6 +94,79 @@ function CheckTStringsWithJocker(const aoList1 : TStringList; const aoList2 : TS
 // @param asString string to send
 procedure SendString(const aoClientSock : TTCPBlockSocket; const asString : String) ;
 
+//
+// Escape a char
+//
+// @param asString string to read
+// @param asEscapeChar escape char
+// @param asCharToEscape char to escape
+function EscapeChar(const asString : String; const asEscapeChar : String;
+    const asCharToEscape : String) : String ;
+
+// Convert a FTP path to OS path
+//
+// @param asRootPath sys user root. Must and by DirectorySeparator
+// @param asFtpCurrentPath current ftp path
+// @param asFtpPath ftp path
+// @param abUtf8 true if use Utf8 file name
+function ConvertFtpPathToSysPath(const asRootPath : String;
+    const asFtpCurrentPath : String; const asFtpPath : String;
+    const abUtf8 : Boolean) : String ;
+
+//
+// Recherche un chaine dans une autre
+//
+// @param asNeedle seach string
+// @param asStringToCheck string to check
+// @param abUtf8 true if utf8
+// @param asCaseSensitive if seach in case sensitive
+function StrPos(const asNeedle : String; const asStringToCheck : String;
+    const abUtf8 : Boolean; const abCaseSensitive : Boolean) : Integer ;
+
+//
+// Check if directory exists
+//
+// @param asDirectoryName directory to find
+// @param abUtf8 True if check in utf8
+function CheckDirectoryExists(const asDirectoryName : String;
+    const abUtf8 : Boolean) : Boolean ;
+
+//
+// Get absolute path for ftp path
+//
+// @asFtpPath FTP path (/truc/gmachi/../)
+function GetAbsoluteFtpPath(const asFtpPath : String) : String ;
+
+//
+// Check if root in path
+//
+// @param asRoot root of path
+// @param asPath path to check
+function IsRootInPath(asRoot : String;
+    asPath : String; const abUtf8 : Boolean) : Boolean ;
+
+//
+// Get humain readable md5
+//
+// @param asString string to parse
+function MD5(const asString : String) : String ;
+
+//
+// Translate to passive port
+//
+// @param asIpAddress ip address '127.0.0.1'
+// @param aiPort port number
+function TranslateToPassivePort(const asIpAddress : String;
+    const aiPort : Integer) : String ;
+
+//
+// Check if file exists
+//
+// @param asFileName directory to find
+// @param abUtf8 True if check in utf8
+function CheckFileExists(const asFileName : String;
+    const abUtf8 : Boolean) : Boolean ;
+
 implementation
 
 //
@@ -111,8 +186,8 @@ begin
 end ;
 
 //
-// Add \ or / at end if no yet
-function AddTrailingEndSlash(const asString : String) : String ;
+// Add a char at end if no yet
+function AddTrailing(const asString : String; const asChar : String) : String ;
 var
    liLength : Integer ;
 begin
@@ -120,16 +195,16 @@ begin
 
     if liLength > 0
     then begin
-        if (asString[liLength] <> DirectorySeparator)
+        if (asString[liLength] <> asChar)
         then begin
-            Result := asString + DirectorySeparator ;
+            Result := asString + asChar ;
         end
         else begin
             Result := asString ;
         end ;
     end
     else begin
-        Result := DirectorySeparator
+        Result := asChar
     end ;
 end ;
 
@@ -357,6 +432,251 @@ end ;
 procedure SendString(const aoClientSock : TTCPBlockSocket; const asString : String) ;
 begin
     aoClientSock.SendString(asString + FTP_EOL) ;
+end ;
+
+//
+// Escape a char
+function EscapeChar(const asString : String; const asEscapeChar : String;
+    const asCharToEscape : String) : String ;
+var
+    // Index of string
+    liIndex : Integer ;
+begin
+    Result := '' ;
+
+    for liIndex := 1 to Length(asString) do
+    begin
+        if asString[liIndex] = asCharToEscape
+        then begin
+            Result := Result + asEscapeChar ;
+        end ;
+
+        Result := Result + asString[liIndex] ;
+    end ;
+end ;
+
+//
+// Convert a FTP path to OS path
+function ConvertFtpPathToSysPath(const asRootPath : String;
+    const asFtpCurrentPath : String; const asFtpPath : String;
+    const abUtf8 : Boolean) : String ;
+var
+    // New path
+    lsPath : String ;
+    // Ftp path
+    lsFtpPath : String ;
+    // Length of lsPath
+    liLengthPath : Integer ;
+    // Ftp path
+    lsFtpCurrentPath : String ;
+    // Lenght of current path
+    liLength : Integer ;
+begin
+    liLength := Length(asFtpCurrentPath) ;
+
+    // Make sure end '/' exists
+    if (liLength > 0) and
+        (asFtpCurrentPath[liLength] <> '/')
+    then begin
+        lsFtpCurrentPath := AddTrailing(asFtpCurrentPath, '/') ;
+    end
+    else begin
+        lsFtpCurrentPath := asFtpCurrentPath ;
+    end ;
+
+//    liLength := Length(asFtpPath) ;
+
+//    // check if path start by '/'. If not, add current ftp path
+//    if (liLength > 0) and (asFtpPath[1] = '/')
+//    then begin
+//        lsFtpPath := asFtpPath ;
+//   end
+//    else begin
+        lsFtpPath := lsFtpCurrentPath + asFtpPath ;
+//    end ;
+
+    // Convert all '/' to '\'
+    {$IFDEF WINDOWS}
+    lsPath := AnsiReplaceStr(lsFtpPath, '/', DirectorySeparator) ;
+    {$ENDIF}
+
+    liLengthPath := Length(lsPath) ;
+
+    // If lsPath convert in lsPath start by DirectorySeparator, we
+    // delete it.
+    if (liLengthPath > 0) and (lsPath[1] = DirectorySeparator)
+    then begin
+        lsPath := Copy(lsPath, 2, liLengthPath) ;
+    end ;
+
+    lsPath := AddTrailing(asRootPath, DirectorySeparator) + lsPath ;
+
+    if abUtf8
+    then begin
+        Result := ExpandFileNameUTF8(lsPath) ;
+    end
+    else begin
+        Result := ExpandFileName(lsPath) ;
+    end ;
+end;
+
+//
+// Recherche un chaine dans une autre
+function StrPos(const asNeedle : String; const asStringToCheck : String;
+    const abUtf8 : Boolean; const abCaseSensitive : Boolean) : Integer ;
+begin
+    if abCaseSensitive
+    then begin
+        if abUtf8
+        then begin
+            Result := UTF8Pos(asNeedle, asStringToCheck) ;
+        end
+        else begin
+            Result := Pos(asNeedle, asStringToCheck) ;
+        end;
+    end
+    else begin
+        if abUtf8
+        then begin
+            Result := UTF8Pos(UTF8LowerCase(asNeedle),
+                UTF8LowerCase(asStringToCheck)) ;
+        end
+        else begin
+            Result := Pos(LowerCase(asNeedle), LowerCase(asStringToCheck)) ;
+        end;
+    end ;
+end ;
+
+//
+// Check if directory exists
+function CheckDirectoryExists(const asDirectoryName : String;
+    const abUtf8 : Boolean) : Boolean ;
+begin
+    if abUtf8
+    then begin
+        Result := DirectoryExistsUTF8(asDirectoryName) ;
+    end
+    else begin
+        Result := DirectoryExists(asDirectoryName) ;
+    end;
+end;
+
+//
+// Get absolute path for ftp path
+function GetAbsoluteFtpPath(const asFtpPath : String) : String ;
+var
+    // String list
+    loStringList : TStringList ;
+    // Index of list
+    liIndexList : Integer ;
+begin
+    loStringList := StringToTStringList(asFtpPath, '/') ;
+
+    liIndexList := 0 ;
+
+    while liIndexList < loStringList.Count do
+    begin
+        if loStringList[liIndexList] = '.'
+        then begin
+            loStringList.Delete(liIndexList) ;
+        end
+        else if loStringList[liIndexList] = '..'
+        then begin
+            loStringList.Delete(liIndexList) ;
+
+            if liIndexList > 0
+            then begin
+                loStringList.Delete(liIndexList - 1) ;
+
+                Dec(liIndexList) ;
+            end ;
+        end
+        else begin
+            Inc(liIndexList) ;
+        end ;
+    end ;
+
+    Result := '/' ;
+
+    for liIndexList := 0 to loStringList.Count - 1 do
+    begin
+        // If path start by /, we have blank line
+        if loStringList[liIndexList] <> ''
+        then begin
+            Result := Result + loStringList[liIndexList] + '/' ;
+        end ;
+    end ;
+end ;
+
+//
+// Check if root in path
+function IsRootInPath(asRoot : String; asPath : String;
+    const abUtf8 : Boolean) : Boolean ;
+var
+    // pos string
+    liPosOfRootPath : Integer ;
+begin
+    asRoot := AddTrailing(asRoot, DirectorySeparator) ;
+    asPath := AddTrailing(asPath, DirectorySeparator) ;
+
+    // Check if start by root
+    {$IFDEF WINDOWS}
+    liPosOfRootPath := StrPos(asRoot, asPath, abUtf8,
+        false) ;
+    {$ELSE}
+    liPosOfRootPath := StrPos(asRoot, asPath, abUtf8,
+        true) ;
+    {$ENDIF}
+
+    Result := liPosOfRootPath <> 0 ;
+end;
+
+//
+// Get humain readable md5
+//
+// @param asString string to parse
+function MD5(const asString : String) : String ;
+var
+    //
+    lsPassword : String ;
+    // Counter
+    liIndex : Integer ;
+begin
+    lsPassword := synacode.MD5(asString) ;
+
+    Result := '' ;
+
+    for liIndex := 1 to Length(lsPassword) do
+    begin
+        Result := Result + Format('%.2x', [byte(lsPassword[liIndex])]) ;
+    end ;
+
+    Result := LowerCase(Result) ;
+end ;
+
+//
+// Translate to passive port
+function TranslateToPassivePort(const asIpAddress : String;
+    const aiPort : Integer) : String ;
+begin
+    Result := AnsiReplaceStr(asIpAddress, '.', ',') ;
+
+    Result := Result + ',' + IntToStr(aiPort shr 8) + ',' +
+        IntToStr(aiPort and $FF) ;
+end ;
+
+//
+// Check if file exists
+function CheckFileExists(const asFileName : String;
+    const abUtf8 : Boolean) : Boolean ;
+begin
+    if abUtf8
+    then begin
+        Result := FileExistsUTF8(asFileName) ;
+    end
+    else begin
+        Result := FileExists(asFileName) ;
+    end ;
 end ;
 
 end.

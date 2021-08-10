@@ -15,9 +15,9 @@ uses
   {$IFDEF UNIX}{$IFDEF UseCThreads}
   cthreads,
   {$ENDIF}{$ENDIF}
-  Classes
+  Classes, SysUtils
   { you can add units after this },
-  MD5Api ;
+  ftpfunctions ;
 
 {$IFDEF WINDOWS}{$R ppftp_pg.rc}{$ENDIF}
 
@@ -31,6 +31,8 @@ var
     liIndexPassword : Integer ;
     // Index of password string
     liIndexPasswordString : Integer ;
+    // Index
+    liIndex : Integer ;
 begin
     write('Enter password (blank for automatic generation) : ') ;
     readln(lsPassword) ;

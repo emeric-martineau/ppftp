@@ -15,22 +15,24 @@ unit ftpmain;
 
 interface
 
+{$I ftpconfig.inc}
+
 uses
   Classes, SysUtils, FtpTypes, FtpFunctions, FtpMessages, FtpConst, FtpClient,
-  blcksock, synsock, ssl_openssl, contnrs ;
-
-{$I config.inc}
+  blcksock, synsock,  contnrs,
+  {$IFDEF TYPE_SERVER_UNIX}
+  ftpunixdirectory
+  {$ELSE}
+      {$IFDEF TYPE_SERVER_WINDOWS}
+      ftpwindowsdirectory
+      {$ENDIF}
+  {$ENDIF}
+   ;
 
 type
     // Mother class of FTP server
     TFtpMain = class(TThread)
       protected
-        // Log
-        FOnLog : TLogProcedure ;
-        // Error
-        FOnError : TLogProcedure ;
-        // Main config reader
-        FOnMainConfigRead : TMainConfigReader ;
         // Number of current client
         FClientCount : Integer ;
         // Config reader
@@ -47,6 +49,19 @@ type
         FRunning : Boolean ;
         // Ture if ok, false if an error occur
         FExitStatus : Boolean ;
+
+        // Log
+        FOnLog : TLogProcedure ;
+        // Error
+        FOnError : TLogProcedure ;
+        // Main config reader
+        FOnMainConfigRead : TMainConfigReader ;
+        // If local config exists
+        FOnLocalConfigExists : TFolderLocalConfigExists ;
+        // Check password
+        FOnClientCheckPassword : TClientCheckPassword ;
+        // File protected
+        FOnFileProtected : TFileProtected ;
 
         // Port
         piListenPort : Integer ;
@@ -79,6 +94,8 @@ type
         piUserByteRate : Integer ;
         // Utf8 support
         pbUtf8Support : Boolean ;
+        // Folder config file name
+        psFolderConfigFile : String ;
 
         // Block size
         piBlockSize : Integer ;
@@ -102,6 +119,17 @@ type
         psLoginName : String ;
         // Count of login for synchronization
         piLoginCount : Integer ;
+
+        // First passive port free
+        prFirstPassivePortFree : PFtpPassivePort ;
+        // Last passive port free
+        //prLastPassivePortFree : PFtpPassivePort ;
+        // First passive port used
+        prFirstPassivePortUsed : PFtpPassivePort ;
+        // First passive port used
+        //prLastPassivePortUsed : PFtpPassivePort ;
+        // Critical section for count
+        poLockPassivePort : TRTLCriticalSection ;
 
         // Call FOnLog if set
         procedure Log(const asMessage : String) ;
@@ -136,6 +164,18 @@ type
         procedure RemoveAllClient ;
         // Remove all login
         procedure RemoveAllLogin ;
+        // Init passive port list
+        procedure InitPassivePortList ;
+        // Free all passive port
+        procedure FreeAllPassivePort(const apCurrentPassivePort : PFtpPassivePort) ;
+        // Free all passive port
+        procedure FreePassivePortList ;
+        // Get passive port
+        function GetPassivePort : PFtpPassivePort ;
+        // Free passive port
+        procedure FreePassivePort(const asPort : PFtpPassivePort)  ;
+
+        //procedure DiplayPassivePortList(const apCurrentPassivePort : PFtpPassivePort) ;
       public
         // Number of connection
         property ClientCount : Integer read FClientCount ;
@@ -159,6 +199,13 @@ type
         property OnLogin : TLoginLogoutProcedure read FOnLogin write FOnLogin ;
         // Callback procedure for logout. Must be shortest possible
         property OnLogout : TLoginLogoutProcedure read FOnLogout write FOnLogout ;
+        // Local folder config
+        property OnLocalConfigExists : TFolderLocalConfigExists read FOnLocalConfigExists write FOnLocalConfigExists ;
+        // Check password
+        property OnClientCheckPassword : TClientCheckPassword read FOnClientCheckPassword write FOnClientCheckPassword ;
+        // If file protected
+        property OnFileProtected : TFileProtected read FOnFileProtected write FOnFileProtected ;
+
         // Constructor
         constructor Create(const abCreateSuspended : Boolean) ;
         // Destructor
@@ -171,6 +218,8 @@ type
         function AddLogin(const asLoginName : String) : Boolean ;
         // Remove login. Internal using only
         procedure RemoveLogin(const asLoginName : String) ;
+        // Return type server
+        class function GetServerType : String ;
     end ;
 
 implementation
@@ -198,6 +247,8 @@ begin
 
     InitCriticalSection(poLockLoginLogout) ;
 
+    InitCriticalSection(poLockPassivePort) ;
+
     poListLoginCount := TFPHashList.Create ;
 
     FOnLogin := nil ;
@@ -205,6 +256,10 @@ begin
     FOnLogout := nil ;
 
     FRunning := False ;
+
+    FOnLocalConfigExists := nil ;
+
+    FOnClientCheckPassword := nil ;
 end ;
 
 //
@@ -223,6 +278,10 @@ begin
 
     poListLoginCount.Free ;
 
+    FreePassivePortList ;
+
+    DoneCriticalsection(poLockPassivePort) ;
+
     //inherited Free ;
 end ;
 
@@ -232,7 +291,7 @@ end ;
 // @param asMessage message to display
 procedure TFtpMain.Log(const asMessage : String) ;
 begin
-    if (asMessage <> '') and (FOnLog <> nil)
+    if (asMessage <> '') and Assigned(FOnLog)
     then begin
         {$IFDEF GUI_APPLICATION_SUPPORT}
         if FGuiApplication
@@ -256,7 +315,7 @@ end ;
 // @param asMessage message to display
 procedure TFtpMain.Error(const asMessage : String) ;
 begin
-    if (asMessage <> '') and (FOnError <> nil)
+    if (asMessage <> '') and Assigned(FOnError)
     then begin
         {$IFDEF GUI_APPLICATION_SUPPORT}
         if FGuiApplication
@@ -561,6 +620,7 @@ begin
         end ;
     end ;
 
+    // 12 - Utf8 support
     if Result
     then begin
         pbUtf8Support := ConvertBoolean(MAIN_CONF_UTF8, DEFAULT_UTF8) ;
@@ -574,7 +634,7 @@ procedure TFtpMain.AddClient(const aoClientFtp : TFtpClient) ;
 begin
     Inc(FClientCount) ;
 
-    if poFirstFtpClient = nil
+    if not Assigned(poFirstFtpClient)
     then begin
         poFirstFtpClient := aoClientFtp ;
 
@@ -644,7 +704,7 @@ begin
     // supprimer la methode de deconnexion
     // Terminate = true
     // Que se passe-t-il si un client termine
-    if poFirstFtpClient <> nil
+    if Assigned(poFirstFtpClient)
     then begin
        // Delete disconect procedure for no call
        poFirstFtpClient.OnClientDisconnect := nil ;
@@ -699,6 +759,11 @@ begin
         loClientFtp.OnClientDisconnect := @RemoveClient ;
         loClientFtp.OnLogin := @AddLogin ;
         loClientFtp.OnLogout := @RemoveLogin ;
+        loClientFtp.OnLocalConfigExists := FOnLocalConfigExists ;
+        loClientFtp.OnGetPassivePort := @GetPassivePort ;
+        loClientFtp.OnFreePassivePort := @FreePassivePort ;
+        loClientFtp.OnCheckPassword := FOnClientCheckPassword ;
+        loClientFtp.OnFileProtected := FOnFileProtected ;
 
         loClientFtp.FullLog := pbFullLog ;
         loClientFtp.Utf8Support := pbUtf8Support ;
@@ -759,7 +824,7 @@ begin
 
         lpCurrentCounter := poListLoginCount.Find(lsLogin) ;
 
-        if lpCurrentCounter = nil
+        if not Assigned(lpCurrentCounter)
         then begin
             // First connction
             New(lpCurrentCounter) ;
@@ -775,7 +840,7 @@ begin
         then begin
             lpCurrentCounter^ := lpCurrentCounter^ + 1 ;
 
-            if FOnLogin <> nil
+            if Assigned(FOnLogin)
             then begin
                 {$IFDEF GUI_APPLICATION_SUPPORT}
                 if FGuiApplication = True
@@ -820,12 +885,12 @@ begin
 
         lpCurrentCounter := poListLoginCount.Find(lsLogin) ;
 
-        if lpCurrentCounter <> nil
+        if Assigned(lpCurrentCounter)
         then begin
             lpCurrentCounter^ := lpCurrentCounter^ - 1 ;
 
             // Must be in critical section for syncronize
-            if (FOnLogout <> nil) and (lpCurrentCounter <> nil)
+            if Assigned(FOnLogout)
             then begin
                 {$IFDEF GUI_APPLICATION_SUPPORT}
                 if FGuiApplication = True
@@ -871,6 +936,289 @@ begin
 end ;
 
 //
+// Init passive port list
+procedure TFtpMain.InitPassivePortList ;
+var
+    // Current passive port
+    lpCurrentPassivePort : PFtpPassivePort ;
+    // Current port
+    liCurrentPort : Integer ;
+    // Previous passive port
+    lpPreviousPassivePort : PFtpPassivePort ;
+begin
+    lpPreviousPassivePort := nil ;
+
+    for liCurrentPort := piPassivePortStart to piPassivePortStop do
+    begin
+        New(lpCurrentPassivePort) ;
+
+        // Previous.Next := Current
+        if Assigned(lpPreviousPassivePort)
+        then begin
+            lpPreviousPassivePort^.Next := lpCurrentPassivePort ;
+        end;
+
+        lpCurrentPassivePort^.Port := liCurrentPort ;
+        lpCurrentPassivePort^.Previous := lpPreviousPassivePort ;
+        lpCurrentPassivePort^.Next := nil ;
+
+        // If first creating port, it's first port
+        if liCurrentPort = piPassivePortStart
+        then begin
+            prFirstPassivePortFree := lpCurrentPassivePort ;
+        end ;
+
+        lpPreviousPassivePort := lpCurrentPassivePort ;
+    end ;
+
+    if lpCurrentPassivePort = prFirstPassivePortFree
+    then begin
+        // One pasive port
+        prFirstPassivePortFree^.Previous := nil ;
+    end
+    else begin
+        // Next of last is first
+        lpCurrentPassivePort^.Next := prFirstPassivePortFree ;
+
+        // Previous of first is last
+        prFirstPassivePortFree^.Previous := lpCurrentPassivePort ;
+    end ;
+
+    prFirstPassivePortUsed := nil ;
+    //prLastPassivePortUsed := nil ;
+end ;
+
+//
+// Free all passive port
+procedure TFtpMain.FreeAllPassivePort(const apCurrentPassivePort : PFtpPassivePort) ;
+var
+    // Next
+    lpNextPassivePort : PFtpPassivePort ;
+    // Current passive port
+    lpCurrentPassivePort : PFtpPassivePort ;
+begin
+    if Assigned(apCurrentPassivePort)
+    then begin
+        lpCurrentPassivePort := apCurrentPassivePort ;
+
+        while Assigned(lpCurrentPassivePort) do
+        begin
+            lpNextPassivePort := lpCurrentPassivePort^.Next ;
+
+            Dispose(lpCurrentPassivePort) ;
+
+            lpCurrentPassivePort := lpNextPassivePort ;
+
+            // If we return at first pos
+            if (lpCurrentPassivePort = apCurrentPassivePort)
+            then begin
+                break ;
+            end ;
+        end ;
+    end ;
+end ;
+
+//
+// Free all passive port
+procedure TFtpMain.FreePassivePortList ;
+begin
+    EnterCriticalsection(poLockPassivePort) ;
+
+    FreeAllPassivePort(prFirstPassivePortFree) ;
+
+    FreeAllPassivePort(prFirstPassivePortUsed) ;
+
+    LeaveCriticalsection(poLockPassivePort) ;
+end;
+{
+procedure TFtpMain.DiplayPassivePortList(const apCurrentPassivePort : PFtpPassivePort) ;
+var
+    // Next
+    lpNextPassivePort : PFtpPassivePort ;
+    // Current passive port
+    lpCurrentPassivePort : PFtpPassivePort ;
+begin
+    writeln('-----------------------------------') ;
+
+    lpCurrentPassivePort := apCurrentPassivePort ;
+
+    if apCurrentPassivePort <> nil
+    then begin
+        while (lpCurrentPassivePort <> nil) do
+        begin
+            lpNextPassivePort := lpCurrentPassivePort^.Next ;
+
+            writeln(Format('%p', [lpCurrentPassivePort])) ;
+            writeln(Format('  previous : %p', [lpCurrentPassivePort^.Previous])) ;
+            writeln(Format('  next : %p', [lpCurrentPassivePort^.Next])) ;
+
+            lpCurrentPassivePort := lpNextPassivePort ;
+
+            // If we return at first pos
+            if (lpCurrentPassivePort = apCurrentPassivePort)
+            then begin
+                break ;
+            end ;
+        end ;
+    end ;
+
+    writeln('-----------------------------------') ;
+end ;
+}
+//
+// Get passive port
+function TFtpMain.GetPassivePort : PFtpPassivePort ;
+begin
+    //writeln('== GetPassivePort') ;
+    //DiplayPassivePortList(prFirstPassivePortUsed) ;
+
+    EnterCriticalsection(poLockPassivePort) ;
+
+    Result := prFirstPassivePortFree ;
+
+    if Assigned(Result)
+    then begin
+        // If not last free port
+        if Assigned(prFirstPassivePortFree^.Next)
+        then begin
+            // Next port is first port
+            prFirstPassivePortFree := prFirstPassivePortFree^.Next ;
+            // Previous port is previous of result
+            prFirstPassivePortFree^.Previous := Result^.Previous ;
+
+            // The previous item is on first
+            prFirstPassivePortFree^.Previous^.Next := prFirstPassivePortFree ;
+
+            // If we are alone
+            if prFirstPassivePortFree^.Previous = prFirstPassivePortFree
+            then begin
+                prFirstPassivePortFree^.Previous := nil ;
+                prFirstPassivePortFree^.Next := nil ;
+            end;
+        end
+        else begin
+            prFirstPassivePortFree := nil ;
+        end ;
+
+        if Assigned(prFirstPassivePortUsed)
+        then begin
+            // Insert new used port
+            Result^.Next := prFirstPassivePortUsed ;
+
+            // If more then one item in used list
+            if Assigned(prFirstPassivePortUsed^.Previous)
+            then begin
+                prFirstPassivePortUsed^.Previous^.Next := Result ;
+                Result^.Previous := prFirstPassivePortUsed^.Previous ;
+            end
+            else begin
+                Result^.Previous := prFirstPassivePortUsed ;
+                prFirstPassivePortUsed^.Next := Result ;
+            end ;
+
+            prFirstPassivePortUsed^.Previous := Result ;
+        end
+        else begin
+            prFirstPassivePortUsed := Result ;
+
+            prFirstPassivePortUsed^.Next := nil ;
+            prFirstPassivePortUsed^.Previous := nil ;
+        end ;
+    end ;
+
+    LeaveCriticalsection(poLockPassivePort) ;
+
+    //DiplayPassivePortList(prFirstPassivePortUsed) ;
+
+    Result := Result ;
+end ;
+
+//
+// Free a passive port
+//
+// @param asPort record of port
+procedure TFtpMain.FreePassivePort(const asPort : PFtpPassivePort)  ;
+var
+   // Old next
+   prOldNext : PFtpPassivePort ;
+   // Old previous
+   prOldPrevious : PFtpPassivePort ;
+begin
+    if Assigned(asPort)
+    then begin
+        EnterCriticalsection(poLockPassivePort) ;
+
+        //writeln('** FreePassivePort') ;
+
+        //DiplayPassivePortList(prFirstPassivePortUsed) ;
+
+        prOldNext := asPort^.Next ;
+        prOldPrevious := asPort^.Previous ;
+
+        // If it's first used port, we take next for first port
+        if prFirstPassivePortUsed = asPort
+        then begin
+            prFirstPassivePortUsed := asPort^.Next ;
+
+            // WARNING : first can be nil !
+        end ;
+
+        // If first free passive port
+        if not Assigned(prFirstPassivePortFree)
+        then begin
+            prFirstPassivePortFree := asPort ;
+
+            prFirstPassivePortFree^.Next := nil ;
+            prFirstPassivePortFree^.Previous := nil ;
+        end
+        else begin
+            asPort^.Next := prFirstPassivePortFree ;
+            asPort^.Previous := prFirstPassivePortFree^.Previous ;
+
+            prFirstPassivePortFree^.Previous := asPort ;
+
+            // Nil if one item in free list
+            if not Assigned(asPort^.Previous)
+            then begin
+                asPort^.Previous := prFirstPassivePortFree ;
+                prFirstPassivePortFree^.Next := asPort ;
+            end
+            else begin
+                asPort^.Previous^.Next := asPort ;
+            end ;
+        end ;
+
+        // Close empty item
+        if Assigned(prOldNext)
+        then begin
+            prOldNext^.Previous := prOldPrevious ;
+            prOldPrevious^.Next := prOldNext ;
+        end ;
+
+        // If one item in list
+        if Assigned(prFirstPassivePortUsed) and
+            (prFirstPassivePortUsed^.Next = prFirstPassivePortUsed)
+        then begin
+            prFirstPassivePortUsed^.Next := nil ;
+            prFirstPassivePortUsed^.Previous := nil ;
+        end ;
+
+        //DiplayPassivePortList(prFirstPassivePortUsed) ;
+
+        LeaveCriticalsection(poLockPassivePort) ;
+    end ;
+end ;
+
+//
+// Return type server
+//
+// @return type server
+class function TFtpMain.GetServerType : String ;
+begin
+    Result := FTP_SERVER_TYPE ;
+end;
+
+//
 // Execute ftp server
 procedure TFtpMain.Execute ;
 begin
@@ -879,6 +1227,8 @@ begin
 
     if FExitStatus
     then begin
+        InitPassivePortList ;
+
         FRunning := True ;
 
         Run ;
@@ -912,16 +1262,16 @@ begin
 
     try
         loServerSock.Bind(psListenHost, IntToStr(piListenPort)) ;
-        loServerSock.SetLinger(LINGER_ENABLE, LINGER_DELAY);
+        loServerSock.SetLinger(LINGER_ENABLE, LINGER_DELAY) ;
         //loServerSock.NonBlockMode := True ;
-
-        loServerSock.Listen ;
-
-        Log(Format(MSG_LOG_SERVER_START, [loServerSock.GetLocalSinIP,
-           piListenPort])) ;
 
         if loServerSock.LastError = 0
         then begin
+            loServerSock.Listen ;
+
+            Log(Format(MSG_LOG_SERVER_START, [loServerSock.GetLocalSinIP,
+               piListenPort])) ;
+
             while (Terminated = False) and (pbShutDownInProgress = False) do
             begin
                 // I don't understand why it doesn't work
@@ -934,6 +1284,7 @@ begin
                     then begin
                         loClientSock := TTCPBlockSocket.Create ;
                         loClientSock.Socket := loSock ;
+                        loClientSock.SetLinger(LINGER_ENABLE, LINGER_DELAY) ;
 
                         // Check ip address
                         lbAllowedIpAddress :=
@@ -955,6 +1306,8 @@ begin
                             CreateNewClient(loClientSock) ;
                         end
                         else begin
+                            loClientSock.Free ;
+
                             SendString(loClientSock, MSG_FTP_UNAUTHORIZED) ;
                         end ;
                     end ;

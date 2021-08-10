@@ -23,12 +23,14 @@ uses
   SysUtils,
   StrUtils,
   FileUtil,
+  LCLProc,
   FtpFunctions,
   Math,
   IniFiles,
   ftpclient,
   ftptypes,
-  ftpconst ;
+  ftpconst,
+  ftpversion ;
 
 {$IFDEF WINDOWS}{$R ftpserver.rc}{$ENDIF}
 
@@ -36,8 +38,10 @@ uses
 {$IOChecks off}
 
 const
-    VERSION : String = '0.1' ;
-    
+    FOLDER_IN_SECTION : String = 'folder' ;
+    MAIN_INI_SECTION : String = 'main' ;
+    USER_SECTION : String = 'user' ;
+
 var
     // File to be write
     gfLogFile : TextFile ;
@@ -57,6 +61,8 @@ var
     goMainConfig : TIniFile ;
     // Root config directory
     giRootConfigDirectory : String ;
+    // Local config file name
+    gsFolderLocalConfigName : String ;
 
     // Index of param count
     liIndexParamStr : Integer ;
@@ -209,7 +215,7 @@ end ;
 // @return value or ''
 function ReadMainConfig(const asKey : String) : String ;
 begin
-    Result := goMainConfig.ReadString('main', asKey, '') ;
+    Result := goMainConfig.ReadString(MAIN_INI_SECTION, asKey, '') ;
 end ;
 
 //
@@ -220,8 +226,6 @@ var
     loUserConfig : TIniFile ;
     // File to read
     lsFile : String ;
-const
-    USER_SECTION : String = 'user' ;
 begin
     lsFile := ExpandFileName(giRootConfigDirectory + 'users' +
         DirectorySeparator + asLoginName + '.ini') ;
@@ -238,8 +242,6 @@ begin
     loUserConfig.CaseSensitive := False ;
     loUserConfig.StripQuotes := True ;
 
-    Result.Password := loUserConfig.ReadString(USER_SECTION, USER_CONF_PASSWORD,
-        DEFAULT_USER_PASSWORD) ;
     Result.Root := loUserConfig.ReadString(USER_SECTION, USER_CONF_ROOT,
         DEFAULT_USER_ROOT) ;
     Result.Download := loUserConfig.ReadString(USER_SECTION, USER_CONF_DOWNLOAD,
@@ -256,10 +258,115 @@ begin
         DEFAULT_USER_DELETE_DIRECTORY) ;
     Result.ListSubDir := loUserConfig.ReadString(USER_SECTION, USER_CONF_SUB_DIR,
         DEFAULT_USER_SUB_DIR) ;
+    Result.ModifyFileTime := loUserConfig.ReadString(USER_SECTION, USER_CONF_MODIFY_FILE_TIME ,
+        DEFAULT_USER_MODIFY_FILE_TIME) ;
     Result.Disabled := loUserConfig.ReadString(USER_SECTION, USER_CONF_DISABLED,
         DEFAULT_USER_DISABLED) ;
 
     loUserConfig.Free ;
+end ;
+
+//
+// File portected
+//
+function FileProtected(const asPathAndFileName : String;
+    const abUtf8 : Boolean) : Boolean ;
+var
+    // Current file name
+    lsFileName : String ;
+begin
+    lsFileName := ExtractFileName(asPathAndFileName) ;
+
+    if abUtf8
+    then begin
+        lsFileName := UTF8ToSys(lsFileName) ;
+    end ;
+
+    {$IFDEF WINDOWS}
+    Result := CompareFilenamesIgnoreCase(gsFolderLocalConfigName, lsFileName)
+        = 0 ;
+    {$ELSE}
+    Result := CompareFilenames(gsFolderLocalConfigName, lsFileName) = 0 ;
+    {$ENDIF}
+end ;
+
+//
+// Read local folder config
+//
+// @param asFolderName name of folder
+// @param abUtf8 True if utf8 folder name
+// @param asKey keyname of local config to read
+// @param asValue value of key
+//
+// @return True if local config found
+function FolderLocalConfigReader(const asFolderName : String;
+        const abUtf8 : Boolean; const asKey : String;
+        var asValue : String) : Boolean ;
+var
+    // File name
+    lsFileName : String ;
+    // Ini file
+    loFolderConfig : TIniFile ;
+begin
+    if abUtf8
+    then begin
+        lsFileName := UTF8ToSys(asFolderName) ;
+    end
+    else begin
+        lsFileName := asFolderName ;
+    end;
+
+    lsFileName := AddTrailing(lsFileName, DirectorySeparator) +
+        gsFolderLocalConfigName ;
+
+    Result := FileExists(lsFileName) ;
+
+    if Result
+    then begin
+        loFolderConfig := TIniFile.Create(lsFileName) ;
+
+        loFolderConfig.CaseSensitive := False ;
+        loFolderConfig.StripQuotes := True ;
+
+        Result := loFolderConfig.ValueExists(FOLDER_IN_SECTION, asKey) ;
+
+        if Result
+        then begin
+            asValue := loFolderConfig.ReadString(FOLDER_IN_SECTION, asKey, '');
+        end ;
+
+        loFolderConfig.Free ;
+    end ;
+end ;
+
+// Check client password
+function CheckPassword(const asLoginName : String;
+    const asPassword : String) : Boolean ;
+var
+    // Ini file
+    loUserConfig : TIniFile ;
+    // File to read
+    lsFile : String ;
+    // Password
+    lsIniPassword : String ;
+begin
+    lsFile := ExpandFileName(giRootConfigDirectory + 'users' +
+        DirectorySeparator + asLoginName + '.ini') ;
+
+    Result := False ;
+
+    if FileExists(lsFile)
+    then begin
+        loUserConfig := TIniFile.Create(lsFile) ;
+
+        loUserConfig.CaseSensitive := False ;
+        loUserConfig.StripQuotes := True ;
+
+        lsIniPassword := loUserConfig.ReadString(USER_SECTION, USER_CONF_PASSWORD,
+            DEFAULT_USER_PASSWORD) ;
+
+        Result := FtpFunctions.MD5(asPassword) = LowerCase(lsIniPassword) ;
+    end ;
 end ;
 
 //
@@ -279,6 +386,8 @@ begin
     lbQuit := False ;
     // Defaut log format
     gsLogFormat := '%Y/%M/%d %H:%m:%s ' ;
+    // Local config name
+    gsFolderLocalConfigName := 'ftp.access' ;
     
     liIndexParamStr := 1 ;
 
@@ -288,8 +397,8 @@ begin
         then begin
             Inc(liIndexParamStr) ;
             
-            giRootConfigDirectory := AddTrailingEndSlash(
-                ParamStr(liIndexParamStr)) ;
+            giRootConfigDirectory := AddTrailing(
+                ParamStr(liIndexParamStr), DirectorySeparator) ;
         end
         else if (ParamStr(liIndexParamStr) = '-logfile')
         then begin
@@ -371,7 +480,7 @@ begin
         else if (ParamStr(liIndexParamStr) = '--version') or
             (ParamStr(liIndexParamStr) = '-v')
         then begin
-            WriteLn(VERSION) ;
+            WriteLn(FTP_VERSION) ;
             
             lbQuit := True ;
         end
@@ -382,21 +491,21 @@ begin
         else if (ParamStr(liIndexParamStr) = '--help') or
             (ParamStr(liIndexParamStr) = '-h')
         then begin
-            WriteLn('Portable and Pascal FTP Server v' + VERSION) ;
+            WriteLn('Portable and Pascal FTP Server v' + FTP_VERSION) ;
             WriteLn('') ;
-            WriteLn('  -root           : root directory who contain configuration') ;
-            WriteLn('  -logfile        : log file name') ;
-            WriteLn('                    %Y : year 4 digit') ;
-            WriteLn('                    %M : month 2 digit') ;
-            WriteLn('                    %d : day 2 digit') ;
-            WriteLn('                    %H : hours 2 digit') ;
-            WriteLn('                    %m : minutes 2 digit') ;
-            WriteLn('                    %s : seconds 2 digit') ;
-            WriteLn('   -logformat     : log format. Default "' + gsLogFormat + '". See -logfile') ;
-            WriteLn('  -logsize        : size of log in byte or') ;
+            WriteLn('  -root            : root directory who contain configuration') ;
+            WriteLn('  -logfile         : log file name') ;
+            WriteLn('                     %Y : year 4 digit') ;
+            WriteLn('                     %M : month 2 digit') ;
+            WriteLn('                     %d : day 2 digit') ;
+            WriteLn('                     %H : hours 2 digit') ;
+            WriteLn('                     %m : minutes 2 digit') ;
+            WriteLn('                     %s : seconds 2 digit') ;
+            WriteLn('  -logformat       : log format. Default "' + gsLogFormat + '". See -logfile') ;
+            WriteLn('  -logsize         : size of log in byte or') ;
             WriteLn('                    k : kilo, g : giga, t : tetra') ;
-            WriteLn('  -h or --help    : display this help') ;
-            WriteLn('  -v or --version : display version number') ;
+            WriteLn('  -h or --help     : display this help') ;
+            WriteLn('  -v or --version  : display version number') ;
             
             lbQuit := True ;
         end ;
@@ -406,11 +515,12 @@ begin
     
     if lbQuit = False
     then begin
-        WriteLn('Portable and Pascal FTP Server v' + VERSION) ;
+        WriteLn('Portable and Pascal FTP Server v' + FTP_VERSION) ;
         WriteLn('CopyLeft (C) MARTINEAU Emeric (bubulemaster@yahoo.fr)') ;
         WriteLn('Web site : http://www.bubulemaster.fr') ;
         WriteLn('License : GNU LGPL v3') ;
         WriteLn('Powered by FreePascal/Lazarus and Synapse library') ;
+        WriteLn('Server type : ' + TFtpMain.GetServerType) ;
         WriteLn('') ;
 
         if not FileExists(giRootConfigDirectory + 'ppftpconf.ini')
@@ -423,12 +533,23 @@ begin
         goMainConfig.CaseSensitive := False ;
         goMainConfig.StripQuotes := True ;
 
+        // Read folder config file
+        gsFolderLocalConfigName :=
+            goMainConfig.ReadString(MAIN_INI_SECTION, 'FtpAccessFile', gsFolderLocalConfigName) ;
+
+        {$IFDEF WINDOWS}
+        gsFolderLocalConfigName := LowerCase(gsFolderLocalConfigName) ;
+        {$ENDIF}
+
         loFtpMain := TFtpMain.Create(true) ;
 
         loFtpMain.OnMainConfigRead := @ReadMainConfig ;
         loFtpMain.OnLog := @LogMsg ;
         loFtpMain.OnError := @ErrorMsg ;
         loFtpMain.OnClientConfigRead := @ReadUserConfig ;
+        loFtpMain.OnLocalConfigExists := @FolderLocalConfigReader ;
+        loFtpMain.OnClientCheckPassword := @CheckPassword ;
+        loFtpMain.OnFileProtected := @FileProtected ;
 
         loFtpMain.FreeOnTerminate := True ;
         // Set False if console application, else true

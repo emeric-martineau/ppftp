@@ -26,11 +26,11 @@ object FormMain: TFormMain
     TabOrder = 0
     object LogTabSheet: TTabSheet
       Caption = 'Log'
-      ClientHeight = 252
+      ClientHeight = 254
       ClientWidth = 392
       object LogMemo: TMemo
         Left = 0
-        Height = 229
+        Height = 231
         Top = 0
         Width = 392
         Align = alClient
@@ -41,7 +41,7 @@ object FormMain: TFormMain
       object StatusBar1: TStatusBar
         Left = 0
         Height = 23
-        Top = 229
+        Top = 231
         Width = 392
         Panels = <>
         SimpleText = 'Server stopped'
@@ -49,11 +49,11 @@ object FormMain: TFormMain
     end
     object UserTabSheet: TTabSheet
       Caption = 'Users'
-      ClientHeight = 252
+      ClientHeight = 254
       ClientWidth = 392
       object LoginListView: TListView
         Left = 0
-        Height = 252
+        Height = 254
         Top = 0
         Width = 392
         Align = alClient
@@ -77,11 +77,11 @@ object FormMain: TFormMain
     end
     object ErrorTabSheet: TTabSheet
       Caption = 'Errors'
-      ClientHeight = 252
+      ClientHeight = 254
       ClientWidth = 392
       object ErrorMemo: TMemo
         Left = 0
-        Height = 252
+        Height = 254
         Top = 0
         Width = 392
         Align = alClient

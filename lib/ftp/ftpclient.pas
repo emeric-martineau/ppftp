@@ -15,11 +15,19 @@ unit ftpclient;
 
 interface
 
+{$I ftpconfig.inc}
+
 uses
   Classes, SysUtils, FtpTypes, FtpFunctions, FtpMessages, FtpConst
-  , blcksock, synsock, MD5Api ;
-
-{$I config.inc}
+  , blcksock, synsock, FileUtil,
+  {$IFDEF TYPE_SERVER_UNIX}
+  ftpunixdirectory
+  {$ELSE}
+      {$IFDEF TYPE_SERVER_WINDOWS}
+      ftpwindowsdirectory
+      {$ENDIF}
+  {$ENDIF}
+  ;
 
 type
   TFtpClient = class ;
@@ -56,9 +64,19 @@ type
     // Gui application for non-freeze log in console mode
     FGuiApplication : Boolean ;
     {$ENDIF}
+    // If local config exists
+    FOnLocalConfigExists : TFolderLocalConfigExists ;
+    // Get passive port
+    FOnGetPassivePort : TGetPassivePort ;
+    // Free passive port
+    FOnFreePassivePort : TFreePassivePort ;
+    // Check password
+    FOnCheckPassword : TClientCheckPassword ;
+    // File protected
+    FOnFileProtected : TFileProtected ;
 
     // Command socket
-    poClientSock:     TTCPBlockSocket;
+    poClientSock : TTCPBlockSocket;
     // Welcome message
     psWelcomeMessage : String;
     // Goodbye message
@@ -74,9 +92,20 @@ type
 
     // Message to show
     psMessageLogOrError : String ;
-
     // Current directory
-    psCurrentDirectory : String ;
+    psFtpCurrentDirectory : String ;
+    // If passive mode
+    pbPassiveMode : Boolean ;
+    // Active ip addresse
+    psActiveModeIpAddresse : String ;
+    // Active mode port
+    psActiveModePort : String ;
+    // Passive socket
+    poPassivePortSock : TTCPBlockSocket ;
+    // Passive port
+    prPassivePort : PFtpPassivePort ;
+    // Binary transfert
+    pbTransfertMode : TTransfertMode ;
 
     // Return True if can login
     function CheckLogin(const asLoginName : String) : Boolean ;
@@ -107,14 +136,53 @@ type
     procedure SendAnswer(const asString : String) ;
     // Valide user login and password
     procedure ValideUserPassword(const asPassword : String) ;
+    // Read local folder config
+    function FolderLocalConfigReader(const asFolderName : String;
+        const abUtf8 : Boolean; const asKey : String;
+        var asValue : String) : Boolean ;
     // Execute user command
     procedure ExecuteUserCommand(const asCommand : String;
         const asParameter : String) ;
+    // Connect to data socket
+    function GetDataSocket : TTCPBlockSocket ;
+    // Get passive port
+    function GetPassivePort : PFtpPassivePort ;
+    // Return passive port
+    procedure FreePassivePort(const asPort : PFtpPassivePort) ;
+    // Check password
+    function CheckPassword(const asLoginName : String;
+        const asPassword : String) : Boolean ;
+    // Close and free passive port socket and port
+    procedure ClosePassiveSocket ;
+    // Check if directory is readable
+    function CanReadDirectory(const asRoot : String;
+        asCurrentPath : String) : Boolean ;
+    // List a directory
+    procedure ListDirectory(const asFtpFolderName : String;
+        const aoCommandSocket : TTCPBlockSocket;
+        const aoDataSocket : TTCPBlockSocket; const abNlst : Boolean) ;
+    // File protected
+    function IsFileProtected(const asPathAndFileName : String) : Boolean ;
+    // Close data connection
+    procedure CloseDataConnection(aoDataSocket : TTCPBlockSocket) ;
 
     // FEAT command
     procedure FeatCommand ;
     // UTF8 command
     procedure Utf8Command(const asParameter : String) ;
+    // PWD command
+    procedure PwdCommand ;
+    // CWD/CDUP/XCDUP command
+    procedure ChangeDirectoryCommand(const asParameter : String;
+        const abCDUP : Boolean) ;
+    // Port feature
+    procedure PortCommand(const asParameter : String) ;
+    // PASV command
+    procedure PasvCommand ;
+    // LIST/NLST feature
+    procedure ListCommand(const asParameter : String; const abNlst : Boolean) ;
+    // TYPE command
+    procedure TypeCommand(const asParameter : String) ;
 
   public
     // Previous client
@@ -144,6 +212,16 @@ type
     property OnLogin : TClientLogin read FOnLogin write FOnLogin ;
     // Logout
     property OnLogout : TClientLogout read FOnLogout write FOnLogout ;
+    // Local folder config
+    property OnLocalConfigExists : TFolderLocalConfigExists read FOnLocalConfigExists write FOnLocalConfigExists ;
+    // Get passive port
+    property OnGetPassivePort : TGetPassivePort read FOnGetPassivePort write FOnGetPassivePort ;
+    // Free passive port
+    property OnFreePassivePort : TFreePassivePort read FOnFreePassivePort write FOnFreePassivePort ;
+    // Check password
+    property OnCheckPassword : TClientCheckPassword read FOnCheckPassword write FOnCheckPassword ;
+    // If file protected
+    property OnFileProtected : TFileProtected read FOnFileProtected write FOnFileProtected ;
 
     // Constructor
     constructor Create(const abCreateSuspended: boolean;
@@ -199,6 +277,14 @@ begin
 
     pbUtf8 := False ;
 
+    pbPassiveMode := False ;
+
+    psActiveModeIpAddresse := '' ;
+
+    psActiveModePort := '' ;
+
+    FUtf8Support := False ;
+
     FOnClientDisconnect := nil;
 
     FOnLog := nil;
@@ -206,6 +292,18 @@ begin
     FOnError := nil;
 
     FOnClientConfigRead := nil;
+
+    FOnGetPassivePort := nil ;
+
+    FOnCheckPassword := nil ;
+
+    FOnFileProtected := nil ;
+
+    poPassivePortSock := nil ;
+
+    prPassivePort := nil ;
+
+    pbTransfertMode := tmAscii ;
 
     InitDefaultUser ;
 end;
@@ -218,7 +316,7 @@ function TFtpClient.CheckLogin(const asLoginName : String) : Boolean ;
 begin
     Result := True ;
 
-    if FOnLogin <> nil
+    if Assigned(FOnLogin)
     then begin
         Result := FOnLogin(asLoginName) ;
     end ;
@@ -230,7 +328,7 @@ end ;
 // @param asLoginName login name
 procedure TFtpClient.Logout(const asLoginName : String) ;
 begin
-    if FOnLogout <> nil
+    if Assigned(FOnLogout)
     then begin
         FOnLogout(asLoginName) ;
     end ;
@@ -247,7 +345,6 @@ end;
 // Default user
 procedure TFtpClient.InitDefaultUser ;
 begin
-    prUserConfig.Password := DEFAULT_USER_PASSWORD ;
     prUserConfig.Root := DEFAULT_USER_ROOT ;
     prUserConfig.Download := DEFAULT_USER_DOWNLOAD = YES_VALUE ;
     prUserConfig.Upload := DEFAULT_USER_UPLOAD = YES_VALUE ;
@@ -269,12 +366,11 @@ procedure TFtpClient.ReadConfig(const asLoginName : String) ;
 var
     lrUserConfig : TUserConfig ;
 begin
-    if FOnClientConfigRead <> nil
+    if Assigned(FOnClientConfigRead)
     then begin
         lrUserConfig := FOnClientConfigRead(asLoginName) ;
 
-        prUserConfig.Password := lrUserConfig.Password ;
-        prUserConfig.Root := lrUserConfig.Root ;
+        prUserConfig.Root := AddTrailing(lrUserConfig.Root, DirectorySeparator) ;
         prUserConfig.Download := lrUserConfig.Download = YES_VALUE ;
         prUserConfig.Upload := lrUserConfig.Upload = YES_VALUE ;
         prUserConfig.Rename := lrUserConfig.Rename = YES_VALUE ;
@@ -402,7 +498,7 @@ end ;
 procedure TFtpClient.Logout ;
 begin
     // Send logout to the parent
-    if (FOnLogout <> nil) and (prUserConfig.Connected)
+    if Assigned(FOnLogout) and prUserConfig.Connected
     then begin
         FOnLogout(prUserConfig.Login) ;
     end ;
@@ -416,7 +512,7 @@ end ;
 // @param asMessage message to display
 procedure TFtpClient.Log(const asMessage : String) ;
 begin
-    if (asMessage <> '') and (FOnLog <> nil)
+    if (asMessage <> '') and Assigned(FOnLog)
     then begin
         {$IFDEF GUI_APPLICATION_SUPPORT}
         if FGuiApplication
@@ -440,7 +536,7 @@ end ;
 // @param asMessage message to display
 procedure TFtpClient.Error(const asMessage : String) ;
 begin
-    if (asMessage <> '') and (FOnError <> nil)
+    if (asMessage <> '') and Assigned(FOnError)
     then begin
         {$IFDEF GUI_APPLICATION_SUPPORT}
         if FGuiApplication
@@ -515,7 +611,7 @@ begin
             prUserConfig.Connected :=
                 (prUserConfig.UserFound = True) and
                 (prUserConfig.Disabled = False) and
-                (MD5(asPassword) = prUserConfig.Password) ;
+                CheckPassword(prUserConfig.Login, asPassword) ;
         end ;
 
         // If not connected
@@ -541,6 +637,201 @@ begin
     end
     else begin
         SendAnswer(Format(MSG_FTP_MAXIMUM_LOGIN, [piMaximumLogin])) ;
+    end ;
+end ;
+
+//
+// Read local folder config
+//
+// @param asFolderName name of folder
+// @param abUtf8 True if utf8 folder name
+// @param asKey keyname of local config to read
+// @param asValue value of key
+//
+// @return True if local config found
+function TFtpClient.FolderLocalConfigReader(const asFolderName : String;
+        const abUtf8 : Boolean; const asKey : String;
+        var asValue : String) : Boolean ;
+begin
+    if Assigned(FOnLocalConfigExists)
+    then begin
+        Result := FOnLocalConfigExists(asFolderName, pbUtf8, asKey,
+            asValue) ;
+    end
+    else begin
+        Result := False ;
+    end ;
+end;
+
+//
+// Connect to data socket
+//
+// @return socket or nil if any error
+function TFtpClient.GetDataSocket : TTCPBlockSocket ;
+var
+    // Client socket
+    loSock : TSocket ;
+begin
+    Result := nil ;
+
+    if pbPassiveMode
+    then begin
+        if poPassivePortSock.CanRead(READ_CONNECTION)
+        then begin
+            loSock := poPassivePortSock.Accept ;
+
+            if poPassivePortSock.LastError = 0
+            then begin
+                Result := TTCPBlockSocket.Create ;
+                Result.Socket := loSock ;
+                Result.SetLinger(LINGER_ENABLE, LINGER_DELAY) ;
+            end ;
+        end ;
+
+        // If any error close passive socket
+        ClosePassiveSocket ;
+    end
+    else begin
+        Result := TTCPBlockSocket.Create ;
+
+        Result.SetLinger(LINGER_ENABLE_CLIENT, LINGER_DELAY_CLIENT) ;
+        // If not good ip or port, wait time out define by set linger
+        Result.Connect(psActiveModeIpAddresse, psActiveModePort) ;
+
+        if Result.LastError <> 0
+        then begin
+            FreeAndNil(Result) ;
+        end
+        else begin
+            Result.SetLinger(LINGER_ENABLE, LINGER_DELAY) ;
+        end ;
+    end ;
+
+    // If no socket
+    if Result = nil
+    then begin
+        SendAnswer(MSG_FTP_DATA_CONNECTION_FAIL) ;
+    end
+    else if poClientSock.GetRemoteSinIP <> Result.GetRemoteSinIP
+    then begin
+        // No same IP address
+        Result.CloseSocket ;
+
+        Result.Free ;
+
+        Result := nil ;
+
+        SendAnswer(MSG_FTP_DATA_CONNECTION_IP_FAIL) ;
+    end ;
+end ;
+
+//
+// Return passive port
+//
+// @return free port
+function TFtpClient.GetPassivePort : PFtpPassivePort ;
+begin
+    Result := nil ;
+
+    if Assigned(FOnGetPassivePort)
+    then begin
+        Result := FOnGetPassivePort() ;
+    end;
+end ;
+
+//
+// Free passive port
+//
+// @param asPort passive port
+procedure TFtpClient.FreePassivePort(const asPort : PFtpPassivePort) ;
+begin
+    if Assigned(FOnFreePassivePort)
+    then begin
+        FOnFreePassivePort(asPort) ;
+    end;
+end;
+
+// Check password
+//
+// @param asLoginName login name
+// @param asPassword password
+//
+// @return true if ok
+function TFtpClient.CheckPassword(const asLoginName : String;
+    const asPassword : String) : Boolean ;
+begin
+    Result := False ;
+
+    if Assigned(FOnCheckPassword)
+    then begin
+        Result := FOnCheckPassword(asLoginName, asPassword) ;
+    end ;
+end ;
+
+//
+// Close and free passive port socket and port
+procedure TFtpClient.ClosePassiveSocket ;
+begin
+    // Passive socket
+    FreeAndNil(poPassivePortSock) ;
+
+    // Passive port
+    FreePassivePort(prPassivePort) ;
+
+    prPassivePort := nil ;
+
+    pbPassiveMode := False ;
+end;
+
+function TFtpClient.CanReadDirectory(const asRoot : String;
+    asCurrentPath : String) : Boolean ;
+var
+    // local config
+    lsLocalConfigValue : String ;
+begin
+    // Check if local config exist and if we can go
+    lsLocalConfigValue := NO_VALUE ;
+    Result := True ;
+
+    while IsRootInPath(asRoot, asCurrentPath, pbUtf8) and
+        Result do
+    begin
+        if FolderLocalConfigReader(asCurrentPath, pbUtf8,
+             FOLDER_CONF_DISABLED, lsLocalConfigValue)
+        then begin
+            Result := lsLocalConfigValue <> NO_VALUE ;
+        end ;
+
+        asCurrentPath := ExtractFileDir(asCurrentPath) ;
+    end ;
+end ;
+
+// Close data connection
+//
+// @param aoDataSocket : data socket
+procedure TFtpClient.CloseDataConnection(aoDataSocket : TTCPBlockSocket) ;
+begin
+    aoDataSocket.CloseSocket ;
+    aoDataSocket.Free ;
+end ;
+
+// List a directory
+procedure TFtpClient.ListDirectory(const asFtpFolderName : String;
+    const aoCommandSocket : TTCPBlockSocket;
+    const aoDataSocket : TTCPBlockSocket; const abNlst : Boolean) ;
+{$I ftplistdirectory.inc}
+
+// If file is protected and therefore we say doesn't exists
+//
+// @param asPathAndFileName complete file name with path
+// @param asUtf8 utf8 mode enabled
+function TFtpClient.IsFileProtected(const asPathAndFileName : String) : Boolean ;
+begin
+    Result := False ;
+
+    if Assigned(FOnFileProtected)
+    then begin
+        Result := FOnFileProtected(asPathAndFileName, pbUtf8) ;
     end ;
 end ;
 
@@ -628,8 +919,12 @@ begin
 
                 if prUserConfig.Connected
                 then begin
-                    psCurrentDirectory := prUserConfig.Root ;
+                    psFtpCurrentDirectory := '/' ;
                 end ;
+            end
+            else if not prUserConfig.Connected
+            then begin
+                SendAnswer(MSG_FTP_PASSWORD_REQUIERED) ;
             end
             else if prUserConfig.Connected = True
             then begin
@@ -654,10 +949,12 @@ begin
 
     poClientSock.Free;
 
+    ClosePassiveSocket ;
+
     Logout ;
 
     // Send disconnect to the parent
-    if FOnClientDisconnect <> nil
+    if Assigned(FOnClientDisconnect)
     then begin
       FOnClientDisconnect(Self) ;
     end ;
@@ -670,6 +967,11 @@ end ;
 // @param asParameter user parameter
 procedure TFtpClient.ExecuteUserCommand(const asCommand : String;
     const asParameter : String) ;
+var
+    // Command
+    lsCommand : String ;
+    // Parameter
+    lsParameter : String ;
 begin
     if (asCommand = 'NOP') or (asCommand = 'NOOP')
     then begin
@@ -677,15 +979,58 @@ begin
     end
     else if asCommand = 'SYST'
     then begin
-        SendAnswer(MSG_FTP_SYST) ;
+        SendAnswer(MSG_FTP_SYST + FTP_SERVER_TYPE) ;
     end
     else if asCommand = 'FEAT'
     then begin
         FeatCommand ;
     end
-    else if asCommand = 'UTF8'
+    else if asCommand = 'OPTS'
     then begin
-        Utf8Command(asParameter) ;
+        lsCommand := '' ;
+        lsParameter := '' ;
+
+        ExplodeCommand(asParameter, lsCommand, lsParameter) ;
+
+        if (lsCommand = 'UTF8') and Utf8Support
+        then begin
+            Utf8Command(lsParameter) ;
+        end
+        else begin
+            SendAnswer(MSG_FTP_CMD_NOT_UNDERSTOOD) ;
+        end ;
+    end
+    else if (asCommand = 'PWD') or (asCommand = 'XPWD')
+    then begin
+        PwdCommand ;
+    end
+    else if asCommand = 'CWD'
+    then begin
+        ChangeDirectoryCommand(asParameter, False) ;
+    end
+    else if (asCommand = 'CDUP') or (asCommand = 'XCUP')
+    then begin
+        ChangeDirectoryCommand(asParameter, True) ;
+    end
+    else if (asCommand = 'PORT')
+    then begin
+        PortCommand(asParameter) ;
+    end
+    else if asCommand = 'PASV'
+    then begin
+        PasvCommand ;
+    end
+    else if (asCommand = 'LIST')
+    then begin
+        ListCommand(asParameter, false) ;
+    end
+    else if (asCommand = 'NLST')
+    then begin
+        ListCommand(asParameter, true) ;
+    end
+    else if (asCommand = 'TYPE')
+    then begin
+        TypeCommand(asParameter) ;
     end
     else begin
         SendAnswer(MSG_FTP_CMD_NOT_UNDERSTOOD) ;
@@ -703,6 +1048,45 @@ procedure TFtpClient.FeatCommand ;
 // @param asParameter parameter (ON or OFF)
 procedure TFtpClient.Utf8Command(const asParameter : String) ;
 {$I ftputf8cmd.inc}
+
+//
+// PWD/XPWD feature
+procedure TFtpClient.PwdCommand ;
+{$I ftppwdcmd.inc}
+
+//
+// CWD/CDUP/XCDUP command
+//
+// @param asParameter parameter
+procedure TFtpClient.ChangeDirectoryCommand(const asParameter : String;
+    const abCDUP : Boolean) ;
+{$I ftpcwdcmd.inc}
+
+//
+// Port feature
+//
+// @param asParameter parameter 127,0,0,1,0,2
+procedure TFtpClient.PortCommand(const asParameter : String) ;
+{$I ftpportcmd.inc}
+
+//
+// PASV feature
+procedure TFtpClient.PasvCommand ;
+{$I ftppasvcmd.inc}
+
+//
+// List/Nlst feature
+//
+// @param asParameter file name
+procedure TFtpClient.ListCommand(const asParameter : String; const abNlst : Boolean) ;
+{$I ftplistcmd.inc}
+
+//
+// Type feature
+//
+// @param asParameter parameter (ON or OFF)
+procedure TFtpClient.TypeCommand(const asParameter : String) ;
+{$I ftptypecmd.inc}
 
 end.
 

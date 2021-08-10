@@ -8,16 +8,16 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 begin
-    SendAnswer('211-Features:') ;
+    SendAnswer(MSG_FTP_FEAT_START) ;
     //SendAnswer(' MDTM') ;
     //SendAnswer(' SIZE') ;
 
     if FUtf8Support
     then begin
-        SendAnswer(' UTF8 ON|OFF') ;
+        SendAnswer(' UTF8') ;
     end ;
 
     //SendAnswer(' CLNT') ;
     //SendAnswer(' MFMT') ;
-    SendAnswer('211 End') ;
+    SendAnswer(MSG_FTP_FEAT_STOP) ;
 end ;

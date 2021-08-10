@@ -8,19 +8,19 @@ LazarusResources.Add('TFormMain','FORMDATA',[
   +'on'#6#8'0.9.28.2'#0#12'TPageControl'#12'PageControl1'#4'Left'#2#0#6'Height'
   +#3#24#1#3'Top'#2#0#5'Width'#3#144#1#10'ActivePage'#7#11'LogTabSheet'#5'Align'
   +#7#8'alClient'#8'TabIndex'#2#0#8'TabOrder'#2#0#0#9'TTabSheet'#11'LogTabSheet'
-  +#7'Caption'#6#3'Log'#12'ClientHeight'#3#252#0#11'ClientWidth'#3#136#1#0#5'TM'
-  +'emo'#7'LogMemo'#4'Left'#2#0#6'Height'#3#229#0#3'Top'#2#0#5'Width'#3#136#1#5
+  +#7'Caption'#6#3'Log'#12'ClientHeight'#3#254#0#11'ClientWidth'#3#136#1#0#5'TM'
+  +'emo'#7'LogMemo'#4'Left'#2#0#6'Height'#3#231#0#3'Top'#2#0#5'Width'#3#136#1#5
   +'Align'#7#8'alClient'#10'ScrollBars'#7#6'ssBoth'#8'TabOrder'#2#0#8'WordWrap'
-  +#8#0#0#10'TStatusBar'#10'StatusBar1'#4'Left'#2#0#6'Height'#2#23#3'Top'#3#229
+  +#8#0#0#10'TStatusBar'#10'StatusBar1'#4'Left'#2#0#6'Height'#2#23#3'Top'#3#231
   +#0#5'Width'#3#136#1#6'Panels'#14#0#10'SimpleText'#6#14'Server stopped'#0#0#0
-  +#9'TTabSheet'#12'UserTabSheet'#7'Caption'#6#5'Users'#12'ClientHeight'#3#252#0
+  +#9'TTabSheet'#12'UserTabSheet'#7'Caption'#6#5'Users'#12'ClientHeight'#3#254#0
   +#11'ClientWidth'#3#136#1#0#9'TListView'#13'LoginListView'#4'Left'#2#0#6'Heig'
-  +'ht'#3#252#0#3'Top'#2#0#5'Width'#3#136#1#5'Align'#7#8'alClient'#7'Columns'#14
+  +'ht'#3#254#0#3'Top'#2#0#5'Width'#3#136#1#5'Align'#7#8'alClient'#7'Columns'#14
   +#1#7'Caption'#6#9'User name'#5'Width'#2'F'#0#1#7'Caption'#6#7'Session'#5'Wid'
   +'th'#2'7'#0#1#7'Caption'#6#26'File transfert in progress'#5'Width'#3#150#0#0
   +#0#8'SortType'#7#6'stText'#8'TabOrder'#2#0#9'ViewStyle'#7#8'vsReport'#0#0#0#9
-  +'TTabSheet'#13'ErrorTabSheet'#7'Caption'#6#6'Errors'#12'ClientHeight'#3#252#0
-  +#11'ClientWidth'#3#136#1#0#5'TMemo'#9'ErrorMemo'#4'Left'#2#0#6'Height'#3#252
+  +'TTabSheet'#13'ErrorTabSheet'#7'Caption'#6#6'Errors'#12'ClientHeight'#3#254#0
+  +#11'ClientWidth'#3#136#1#0#5'TMemo'#9'ErrorMemo'#4'Left'#2#0#6'Height'#3#254
   +#0#3'Top'#2#0#5'Width'#3#136#1#5'Align'#7#8'alClient'#8'TabOrder'#2#0#0#0#0#0
   +#9'TMainMenu'#9'MainMenu1'#4'left'#2's'#3'top'#3#130#0#0#9'TMenuItem'#10'Ser'
   +'verMenu'#7'Caption'#6#6'Server'#7'OnClick'#7#15'ServerMenuClick'#0#9'TMenuI'

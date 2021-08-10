@@ -1,6 +1,6 @@
 LazarusResources.Add('TAboutForm2','FORMDATA',[
-  'TPF0'#11'TAboutForm2'#10'AboutForm2'#4'Left'#3'_'#1#6'Height'#3'1'#1#3'Top'#3
-  +'o'#1#5'Width'#3#157#1#7'Caption'#6#10'AboutForm2'#12'ClientHeight'#3'1'#1#11
+  'TPF0'#11'TAboutForm2'#10'AboutForm2'#4'Left'#3'_'#1#6'Height'#3'>'#1#3'Top'#3
+  +'o'#1#5'Width'#3#157#1#7'Caption'#6#10'AboutForm2'#12'ClientHeight'#3'>'#1#11
   +'ClientWidth'#3#157#1#8'OnCreate'#7#10'FormCreate'#6'OnShow'#7#8'FormShow'#10
   +'LCLVersion'#6#8'0.9.28.2'#0#6'TImage'#6'Image1'#4'Left'#2#0#6'Height'#2'0'#3
   +'Top'#2')'#5'Width'#2'8'#12'Picture.Data'#10#10#18#0#0#23'TPortableNetworkGr'
@@ -197,28 +197,30 @@ LazarusResources.Add('TAboutForm2','FORMDATA',[
   +'j'#239'l;'#238'i'#191#5#159'1P<'#254#4#196#159#0'&'#4'8'#145'E'#155#156''''
   +#142'o'#194#194#190'La'#245#183#13#192#4#0'r'#180#255':'#182#228#252#29#3#240
   +#209#159#255#2'Vf'#141'b%'#5#192#152#0#0#0#0'IEND'#174'B`'#130#11'Transparen'
-  +'t'#9#0#0#6'TLabel'#10'TitleLabel'#4'Left'#2'@'#6'Height'#2#16#3'Top'#2#8#5
-  +'Width'#3#161#0#7'Caption'#6#29'Portable && Pascal FTP Server'#10'Font.Style'
+  +'t'#9#0#0#6'TLabel'#10'TitleLabel'#4'Left'#2'@'#6'Height'#2#14#3'Top'#2#8#5
+  +'Width'#3#164#0#7'Caption'#6#29'Portable && Pascal FTP Server'#10'Font.Style'
   +#11#6'fsBold'#0#11'ParentColor'#8#10'ParentFont'#8#0#0#6'TLabel'#12'VersionL'
-  +'abel'#4'Left'#2'@'#6'Height'#2#16#3'Top'#2')'#5'Width'#2'I'#7'Caption'#6#15
-  +'Version : 0.1.2'#11'ParentColor'#8#0#0#6'TLabel'#14'CopyrightLabel'#4'Left'
-  +#2'@'#6'Height'#2#16#3'Top'#2'8'#5'Width'#3#217#0#7'Caption'#6'%Copyright (C'
-  +') 2009 - MARTINEAU Emeric'#11'ParentColor'#8#0#0#6'TLabel'#6'Label1'#4'Left'
-  +#2'@'#6'Height'#2#16#3'Top'#2'H'#5'Width'#3#205#0#7'Caption'#6'%Web Site : h'
-  +'ttp://www.bubulemaster.fr'#11'ParentColor'#8#0#0#6'TLabel'#12'PowerByLabel'
-  +#4'Left'#2'@'#6'Height'#2#16#3'Top'#2'h'#5'Width'#3#14#1#7'Caption'#6'1Power'
-  +'ed by FreePascal/Lazarus and Synapse library'#11'ParentColor'#8#0#0#6'TLabe'
-  +'l'#6'Label2'#4'Left'#2'@'#6'Height'#2#16#3'Top'#3#137#0#5'Width'#3#133#1#7
-  +'Caption'#6'FIcon by Media Design (Ben Fleming - http://mediadesign.devianta'
-  +'rt.com)'#11'ParentColor'#8#0#0#9'TGroupBox'#9'GroupBox1'#4'Left'#2'@'#6'Hei'
-  +'ght'#2'a'#3'Top'#3#167#0#5'Width'#3'Y'#1#7'Caption'#6#24'Compilation inform'
-  +'ations'#12'ClientHeight'#2'O'#11'ClientWidth'#3'U'#1#8'TabOrder'#2#0#0#6'TL'
-  +'abel'#17'CompiledWithLabel'#4'Left'#2#9#6'Height'#2#14#3'Top'#2#8#5'Width'#2
-  +'u'#7'Caption'#6#24'Compiled with Lazarus : '#11'ParentColor'#8#0#0#6'TLabel'
-  +#22'FreePascalVersionLabel'#4'Left'#2#10#6'Height'#2#14#3'Top'#2#31#5'Width'
-  +#2'c'#7'Caption'#6#20'Compiled with FPC : '#11'ParentColor'#8#0#0#6'TLabel'
-  +#24'CompilationDateTimeLabel'#4'Left'#2#8#6'Height'#2#14#3'Top'#2'9'#5'Width'
-  +#2't'#7'Caption'#6#24'Date/Time compilation : '#11'ParentColor'#8#0#0#0#7'TB'
-  +'utton'#7'Button1'#4'Left'#3'H'#1#6'Height'#2#25#3'Top'#3#16#1#5'Width'#2'K'
-  +#7'Caption'#6#5'Close'#7'OnClick'#7#12'Button1Click'#8'TabOrder'#2#1#0#0#0
+  +'abel'#4'Left'#2'@'#6'Height'#2#14#3'Top'#2')'#5'Width'#2'.'#7'Caption'#6#10
+  +'Version : '#11'ParentColor'#8#0#0#6'TLabel'#14'CopyrightLabel'#4'Left'#2'@'
+  +#6'Height'#2#14#3'Top'#2'8'#5'Width'#3#196#0#7'Caption'#6'%Copyright (C) 200'
+  +'9 - MARTINEAU Emeric'#11'ParentColor'#8#0#0#6'TLabel'#6'Label1'#4'Left'#2'@'
+  +#6'Height'#2#14#3'Top'#2'H'#5'Width'#3#191#0#7'Caption'#6'%Web Site : http:/'
+  +'/www.bubulemaster.fr'#11'ParentColor'#8#0#0#6'TLabel'#12'PowerByLabel'#4'Le'
+  +'ft'#2'@'#6'Height'#2#14#3'Top'#2'h'#5'Width'#3#252#0#7'Caption'#6'1Powered '
+  +'by FreePascal/Lazarus and Synapse library'#11'ParentColor'#8#0#0#6'TLabel'#6
+  +'Label2'#4'Left'#2'@'#6'Height'#2#14#3'Top'#3#137#0#5'Width'#3']'#1#7'Captio'
+  +'n'#6'FIcon by Media Design (Ben Fleming - http://mediadesign.deviantart.com'
+  +')'#11'ParentColor'#8#0#0#9'TGroupBox'#9'GroupBox1'#4'Left'#2'@'#6'Height'#2
+  +'q'#3'Top'#3#167#0#5'Width'#3'Y'#1#7'Caption'#6#24'Compilation informations'
+  +#12'ClientHeight'#2'_'#11'ClientWidth'#3'U'#1#8'TabOrder'#2#0#0#6'TLabel'#17
+  +'CompiledWithLabel'#4'Left'#2#9#6'Height'#2#14#3'Top'#2#8#5'Width'#2'u'#7'Ca'
+  +'ption'#6#24'Compiled with Lazarus : '#11'ParentColor'#8#0#0#6'TLabel'#22'Fr'
+  +'eePascalVersionLabel'#4'Left'#2#10#6'Height'#2#14#3'Top'#2#31#5'Width'#2'c'
+  +#7'Caption'#6#20'Compiled with FPC : '#11'ParentColor'#8#0#0#6'TLabel'#24'Co'
+  +'mpilationDateTimeLabel'#4'Left'#2#8#6'Height'#2#14#3'Top'#2'9'#5'Width'#2't'
+  +#7'Caption'#6#24'Date/Time compilation : '#11'ParentColor'#8#0#0#6'TLabel'#15
+  +'ServerTypeLabel'#4'Left'#2#8#6'Height'#2#14#3'Top'#2'P'#5'Width'#2'D'#7'Cap'
+  +'tion'#6#14'Server type : '#11'ParentColor'#8#0#0#0#7'TButton'#7'Button1'#4
+  +'Left'#3'H'#1#6'Height'#2#25#3'Top'#3' '#1#5'Width'#2'K'#7'Caption'#6#5'Clos'
+  +'e'#7'OnClick'#7#12'Button1Click'#8'TabOrder'#2#1#0#0#0
 ]);

@@ -1,0 +1,21 @@
+211-Microsoft FTP Service status:
+     Logged in user: anonymous
+     TYPE: ASCII; FORM: NONPRINT; STRUcture: FILE; transfer MODE: STREAM
+     Data connection: none
+211 End of status.
+
+stat 213-status of /:
+    05-09-07  12:02PM       <DIR>          bussys
+    02-01-06  04:47PM       <DIR>          deskapps
+    02-01-06  04:52PM       <DIR>          developr
+    02-01-06  04:52PM       <DIR>          KBHelp
+    02-01-06  05:14PM       <DIR>          MISC
+    02-01-06  05:21PM       <DIR>          MISC1
+    02-07-06  05:01PM       <DIR>          mscomtest
+    02-01-06  05:23PM       <DIR>          peropsys
+    07-18-06  05:50PM       <DIR>          Products
+    02-01-06  05:26PM       <DIR>          PSS
+    02-01-06  05:27PM       <DIR>          ResKit
+    02-01-06  05:36PM       <DIR>          Services
+    02-01-06  06:56PM       <DIR>          Softlib
+213 End of status.

@@ -1,3 +1,7 @@
+0.2.0 - 2010/01/26
+  - suppot PWD/XPWD, CDUP/XCUP, PORT, PASV, TYPE, LIIST/NLST,
+  - support of local folder configuration,
+
 0.1.3 - 2010/01/19
   - end query support,
   - better hide form support,

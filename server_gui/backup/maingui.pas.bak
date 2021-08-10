@@ -17,7 +17,6 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   Menus, ComCtrls, StdCtrls, ExtCtrls, IniFiles, StrUtils, LCLType, contnrs,
-  LMessages,
   CommandLine, aboutform, FtpFunctions, FtpMain, FtpTypes, FtpConst ;
 
 type
@@ -95,9 +94,13 @@ var
   gbShutdown : Boolean ;
   // HashMap for login count on file transfert
   goListLogin : TFPHashList ;
+  // Local folder conf file
+  gsFolderLocalConfigName : String ;
 
 const
   TIMER_DELAY : Cardinal = 500 ;
+  MAIN_INI_SECTION : String = 'main' ;
+  USER_SECTION : String = 'user' ;
 
 procedure ErrorMsg(const asMessage : String) ;
 procedure LogMsg(const asMessage : String) ;
@@ -105,12 +108,14 @@ function ReadMainConfig(const asKey : String) : String ;
 function ReadUserConfig(const asLoginName : String) : TUserConfig ;
 function ParseDatePattern(const asPattern : String) : String ;
 procedure UpdateLoginCount(const asLogin : String; const aiNumberOfLogin : Integer) ;
+function CheckPassword(const asLoginName : String;
+    const asPassword : String) : Boolean ;
+function FileProtected(const asPathAndFileName : String;
+    const abUtf8 : Boolean) : Boolean ;
 
 implementation
 
 { TFormMain }
-
-// TODO if close and server running and not end session query, prompt to quit
 
 //
 // Constructor
@@ -143,14 +148,14 @@ begin
         then begin
             Inc(liIndexParamStr) ;
 
-            giRootConfigDirectory := AddTrailingEndSlash(
-                ParamStr(liIndexParamStr)) ;
+            giRootConfigDirectory := AddTrailing(
+                ParamStr(liIndexParamStr), DirectorySeparator) ;
         end
         else if (ParamStr(liIndexParamStr) = '-notrayicon')
         then begin
             pbSystray := False ;
         end
-        else if (ParamStr(liIndexParamStr) = '-lauch')
+        else if (ParamStr(liIndexParamStr) = '-launch')
         then begin
             lbLauch := True ;
         end
@@ -186,7 +191,6 @@ begin
         if pbMinimizeOnStartup and not pbSystray
         then begin
             Self.WindowState := wsMinimized ;
-            Self.Perform(LM_SIZE, SIZEICONIC, SIZEICONIC) ;
         end ;
 
         pbMinimizeOnStartup:= False ;
@@ -296,13 +300,24 @@ begin
 
     if goFtpMain <> nil
     then begin
-        goFtpMain.FreeOnTerminate := True ;
+        goFtpMain.OnMainConfigRead := nil ;
+        goFtpMain.OnLog := nil ;
+        goFtpMain.OnError := nil ;
+        goFtpMain.OnClientConfigRead := nil ;
+        goFtpMain.OnLogin := nil ;
+        goFtpMain.OnLogout := nil ;
+        goFtpMain.OnClientCheckPassword := nil ;
+        goFtpMain.OnFileProtected := nil ;
+
+        //goFtpMain.FreeOnTerminate := True ;
         goFtpMain.Terminate ;
+
+        FreeAndNil(goFtpMain) ;
     end ;
 
-    goMainConfig.Free ;
+    FreeAndNil(goMainConfig) ;
 
-    goListLogin.Free ;
+    FreeAndNil(goListLogin) ;
 end;
 
 //
@@ -369,6 +384,9 @@ begin
         ErrorMsg('Main config file ''' + giRootConfigDirectory + 'ppftpconf.ini' + ''' not found !');
     end ;
 
+    // Lacal config name
+    gsFolderLocalConfigName := 'ftp.access' ;
+
     // Create ini file reader
     goMainConfig := TIniFile.Create(giRootConfigDirectory + 'ppftpconf.ini') ;
     goMainConfig.CaseSensitive := False ;
@@ -382,12 +400,17 @@ begin
 
     goFtpMain := TFtpMain.Create(true) ;
 
+    // Read folder config file
+    gsFolderLocalConfigName :=
+        goMainConfig.ReadString(MAIN_INI_SECTION, 'FtpAccessFile', gsFolderLocalConfigName) ;
+
     goFtpMain.OnMainConfigRead := @ReadMainConfig ;
     goFtpMain.OnLog := @LogMsg ;
     goFtpMain.OnError := @ErrorMsg ;
     goFtpMain.OnClientConfigRead := @ReadUserConfig ;
     goFtpMain.OnLogin := @UpdateLoginCount ;
     goFtpMain.OnLogout := @UpdateLoginCount ;
+    goFtpMain.OnClientCheckPassword := @CheckPassword ;
 
     //goFtpMain.FreeOnTerminate := True ;
     // Set False if console application, else true
@@ -464,8 +487,6 @@ var
     loUserConfig : TIniFile ;
     // File to read
     lsFile : String ;
-const
-    USER_SECTION : String = 'user' ;
 begin
     if gbShutdown
     then begin
@@ -487,8 +508,6 @@ begin
         loUserConfig.CaseSensitive := False ;
         loUserConfig.StripQuotes := True ;
 
-        Result.Password := loUserConfig.ReadString(USER_SECTION, USER_CONF_PASSWORD,
-            DEFAULT_USER_PASSWORD) ;
         Result.Root := loUserConfig.ReadString(USER_SECTION, USER_CONF_ROOT,
             DEFAULT_USER_ROOT) ;
         Result.Download := loUserConfig.ReadString(USER_SECTION, USER_CONF_DOWNLOAD,
@@ -505,6 +524,8 @@ begin
             DEFAULT_USER_DELETE_DIRECTORY) ;
         Result.ListSubDir := loUserConfig.ReadString(USER_SECTION, USER_CONF_SUB_DIR,
             DEFAULT_USER_SUB_DIR) ;
+        Result.ModifyFileTime := loUserConfig.ReadString(USER_SECTION, USER_CONF_MODIFY_FILE_TIME ,
+            DEFAULT_USER_MODIFY_FILE_TIME) ;            
         Result.Disabled := loUserConfig.ReadString(USER_SECTION, USER_CONF_DISABLED,
             DEFAULT_USER_DISABLED) ;
 
@@ -545,31 +566,95 @@ procedure UpdateLoginCount(const asLogin : String; const aiNumberOfLogin : Integ
 var
     loListViewLine : TListItem ;
 begin
-    // Seach if login is already register
-    loListViewLine := TListItem(goListLogin.Find(asLogin)) ;
-
-    if loListViewLine = nil
+    if not gbShutdown
     then begin
-        // Create line
-        loListViewLine := FormMain.LoginListView.Items.Add ; //TListItem.Create(FormMain.LoginListView) ;
+        // Seach if login is already register
+        loListViewLine := TListItem(goListLogin.Find(asLogin)) ;
 
-        loListViewLine.Caption := asLogin ;
-
-        loListViewLine.SubItems.Add(IntToStr(aiNumberOfLogin)) ;
-        loListViewLine.SubItems.Add('no');
-
-        goListLogin.Add(asLogin, loListViewLine) ;
-    end
-    else begin
-        if aiNumberOfLogin = 0
+        if loListViewLine = nil
         then begin
-            // Remove user from list
-            loListViewLine.Free ;
+            // Create line
+            loListViewLine := FormMain.LoginListView.Items.Add ; //TListItem.Create(FormMain.LoginListView) ;
+
+            loListViewLine.Caption := asLogin ;
+
+            loListViewLine.SubItems.Add(IntToStr(aiNumberOfLogin)) ;
+            loListViewLine.SubItems.Add('no');
+
+            goListLogin.Add(asLogin, loListViewLine) ;
         end
         else begin
-            loListViewLine.SubItems[0] := IntToStr(aiNumberOfLogin) ;
+            if aiNumberOfLogin = 0
+            then begin
+                goListLogin.Delete(goListLogin.FindIndexOf(asLogin)) ;
+
+                // Remove user from list
+                loListViewLine.Free ;
+            end
+            else begin
+                loListViewLine.SubItems[0] := IntToStr(aiNumberOfLogin) ;
+            end ;
         end ;
     end ;
+end ;
+
+// Check client password
+function CheckPassword(const asLoginName : String;
+    const asPassword : String) : Boolean ;
+var
+    // Ini file
+    loUserConfig : TIniFile ;
+    // File to read
+    lsFile : String ;
+    // Password
+    lsIniPassword : String ;
+begin
+    Result := False ;
+
+    if not gbShutdown
+    then begin
+        lsFile := ExpandFileName(giRootConfigDirectory + 'users' +
+            DirectorySeparator + asLoginName + '.ini') ;
+
+
+
+        if FileExists(lsFile)
+        then begin
+            loUserConfig := TIniFile.Create(lsFile) ;
+
+            loUserConfig.CaseSensitive := False ;
+            loUserConfig.StripQuotes := True ;
+
+            lsIniPassword := loUserConfig.ReadString(USER_SECTION, USER_CONF_PASSWORD,
+                DEFAULT_USER_PASSWORD) ;
+
+            Result := FtpFunctions.MD5(asPassword) = LowerCase(lsIniPassword) ;
+        end ;
+    end ;
+end ;
+
+//
+// File portected
+//
+function FileProtected(const asPathAndFileName : String;
+    const abUtf8 : Boolean) : Boolean ;
+var
+    // Current file name
+    lsFileName : String ;
+begin
+    lsFileName := ExtractFileName(asPathAndFileName) ;
+
+    if abUtf8
+    then begin
+        lsFileName := UTF8ToSys(lsFileName) ;
+    end ;
+
+    {$IFDEF WINDOWS}
+    Result := CompareFilenamesIgnoreCase(gsFolderLocalConfigName, lsFileName)
+        = 0 ;
+    {$ELSE}
+    Result := CompareFilenames(gsFolderLocalConfigName, lsFileName) = 0 ;
+    {$ENDIF}
 end ;
 
 initialization

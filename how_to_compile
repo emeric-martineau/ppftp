@@ -1,1 +1,16 @@
-For compile, use Lazarus 0.98.2
+What do you need ?
+------------------
+For compile, use Lazarus 0.98.2 with Synabse 39 or above.
+
+Note : Synabse 39 not supporte Win64 compilation. Use trunk version or lasted
+version.
+
+Configure
+---------
+In ftpconfig.inc, you can conigure if you application is GUI (must be set to
+update all visual component).
+
+You can define type of list server Unix (TYPE_SERVER_UNIX) or Windows
+(TYPE_SERVER_WINDOWS).
+You can simulate a Windows FTP server on Unix or Unix FTP server on Windows, as
+you want.

@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  ExtCtrls, StdCtrls;
+  ExtCtrls, StdCtrls, ftpversion, ftpmain ;
 
 type
 
@@ -22,6 +22,7 @@ type
     Label1: TLabel;
     Label2: TLabel;
     CompiledWithLabel: TLabel;
+    ServerTypeLabel: TLabel;
     PowerByLabel: TLabel;
     TitleLabel: TLabel;
     VersionLabel: TLabel;
@@ -73,6 +74,10 @@ begin
 
         loLabel := (GroupBox1.ControlByName('CompilationDateTimeLabel') as TLabel) ;
         loLabel.Caption := loLabel.Caption + lsDate ;
+
+        VersionLabel.Caption := VersionLabel.Caption + FTP_VERSION ;
+
+        ServerTypeLabel.Caption := ServerTypeLabel.Caption + TFtpMain.GetServerType ;
 
         pbUpdated := True ;
     end ;

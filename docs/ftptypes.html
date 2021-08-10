@@ -29,6 +29,10 @@ This file contain all type</p>
 <td class="itemname">record&nbsp;<a class="bold"  href="ftptypes.TFtpClientConfig.html"><code>TFtpClientConfig</code></a></td>
 <td class="itemdesc">&nbsp;</td>
 </tr>
+<tr class="list">
+<td class="itemname">record&nbsp;<a class="bold"  href="ftptypes.TFtpPassivePort.html"><code>TFtpPassivePort</code></a></td>
+<td class="itemdesc">&nbsp;</td>
+</tr>
 </table>
 <a name="%40Types"></a><h3 class="summary">Types</h3>
 <table class="summary wide_list">
@@ -39,16 +43,37 @@ This file contain all type</p>
 <td class="itemcode"><code><b><a   href="ftptypes.html#TLoginLogoutProcedure">TLoginLogoutProcedure</a></b> = procedure(const asLogin : String; const aiNumberOfLogin : Integer) ;</code></td>
 </tr>
 <tr class="list">
-<td class="itemcode"><code><b><a   href="ftptypes.html#TMainConfigReader">TMainConfigReader</a></b> = function(const asKey : String) : String ;</code></td>
+<td class="itemcode"><code><b><a   href="ftptypes.html#TFolderLocalConfigExists">TFolderLocalConfigExists</a></b> = function(const asFolderName : String; const abUtf8 : Boolean; const asKey : String; var asValue : String) : Boolean ;</code></td>
 </tr>
 <tr class="list2">
+<td class="itemcode"><code><b><a   href="ftptypes.html#TMainConfigReader">TMainConfigReader</a></b> = function(const asKey : String) : String ;</code></td>
+</tr>
+<tr class="list">
 <td class="itemcode"><code><b><a   href="ftptypes.html#TClientConfigReader">TClientConfigReader</a></b> = function(const asLoginName : String) : <a   href="ftptypes.TUserConfig.html">TUserConfig</a> ;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a   href="ftptypes.html#TClientCheckPassword">TClientCheckPassword</a></b> = function(const asLoginName : String; const asPassword : String) : Boolean ;</code></td>
 </tr>
 <tr class="list">
 <td class="itemcode"><code><b><a   href="ftptypes.html#TClientLogin">TClientLogin</a></b> = function(const asLoginName : String) : Boolean of object ;</code></td>
 </tr>
 <tr class="list2">
 <td class="itemcode"><code><b><a   href="ftptypes.html#TClientLogout">TClientLogout</a></b> = procedure(const asLoginName : String) of object ;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a   href="ftptypes.html#PFtpPassivePort">PFtpPassivePort</a></b> = &circ;<a   href="ftptypes.TFtpPassivePort.html">TFtpPassivePort</a> ;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a   href="ftptypes.html#TGetPassivePort">TGetPassivePort</a></b> = function() : <a   href="ftptypes.html#PFtpPassivePort">PFtpPassivePort</a> of object ;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a   href="ftptypes.html#TFreePassivePort">TFreePassivePort</a></b> = procedure(const asPort : <a   href="ftptypes.html#PFtpPassivePort">PFtpPassivePort</a>) of object ;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a   href="ftptypes.html#TFileProtected">TFileProtected</a></b> = function(const asPathAndFileName : String; const abUtf8 : Boolean) : Boolean ;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a   href="ftptypes.html#TTransfertMode">TTransfertMode</a></b> = (...);</code></td>
 </tr>
 </table>
 <h2 class="description">Description</h2>
@@ -63,7 +88,12 @@ This file is part of the Portabl and Pascal FTP Server Copyright (c) 2010 MARTIN
 
 <p>See the file license, included in this distribution, for details about the license.
 
-<p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. uses Classes, SysUtils; Procedure of log</p>
+<p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. uses Classes, SysUtils; Procedure of log </p>
+<h6 class="description_section">Parameters</h6>
+<dl class="parameters">
+<dt>asMessage</dt>
+<dd>message to log</dd>
+</dl>
 </td></tr>
 </table>
 <table class="detail wide_list">
@@ -72,8 +102,42 @@ This file is part of the Portabl and Pascal FTP Server Copyright (c) 2010 MARTIN
 </tr>
 <tr><td colspan="1">
 <p>
-Login/Logout call back</p>
+Login/Logout call back
+
+<p> </p>
+<h6 class="description_section">Parameters</h6>
+<dl class="parameters">
+<dt>asLogin</dt>
+<dd>login name</dd>
+<dt>aiNumberOfLogin</dt>
+<dd>number of login</dd>
+</dl>
 </td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="TFolderLocalConfigExists"></a><code><b>TFolderLocalConfigExists</b> = function(const asFolderName : String; const abUtf8 : Boolean; const asKey : String; var asValue : String) : Boolean ;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Local config exists for folder
+
+<p>   
+
+<p></p>
+<h6 class="description_section">Parameters</h6>
+<dl class="parameters">
+<dt>asFolderName</dt>
+<dd>folder name</dd>
+<dt>abUtf8</dt>
+<dd>utf8 mode on</dd>
+<dt>asKey</dt>
+<dd>key to read in local folder config</dd>
+<dt>asValue</dt>
+<dd>return value in config file</dd>
+</dl>
+<h6 class="description_section">Returns</h6>
+<p class="return">True if local folder config exists</p></td></tr>
 </table>
 <table class="detail wide_list">
 <tr class="list">
@@ -81,7 +145,9 @@ Login/Logout call back</p>
 </tr>
 <tr><td colspan="1">
 <p>
-Procedure to read main configuration 
+Procedure to read main configuration
+
+<p>
 
 <p>List of values of asKey :              </p>
 <h6 class="description_section">Parameters</h6>
@@ -128,7 +194,9 @@ Procedure to read main configuration
 </tr>
 <tr><td colspan="1">
 <p>
-Procedure ro read user configuration  
+Procedure ro read user configuration
+
+<p> 
 
 <p>List of value of asKey          </p>
 <h6 class="description_section">Parameters</h6>
@@ -165,11 +233,34 @@ Procedure ro read user configuration
 </table>
 <table class="detail wide_list">
 <tr class="list">
+<td class="itemcode"><a name="TClientCheckPassword"></a><code><b>TClientCheckPassword</b> = function(const asLoginName : String; const asPassword : String) : Boolean ;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+check if password is good
+
+<p> 
+
+<p></p>
+<h6 class="description_section">Parameters</h6>
+<dl class="parameters">
+<dt>asLoginName</dt>
+<dd>login name</dd>
+<dt>asPassword</dt>
+<dd>sending password</dd>
+</dl>
+<h6 class="description_section">Returns</h6>
+<p class="return">True if password match ok</p></td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
 <td class="itemcode"><a name="TClientLogin"></a><code><b>TClientLogin</b> = function(const asLoginName : String) : Boolean of object ;</code></td>
 </tr>
 <tr><td colspan="1">
 <p>
-Login function call to know if we can login 
+Login function call to know if we can login
+
+<p>
 
 <p></p>
 <h6 class="description_section">Parameters</h6>
@@ -186,7 +277,9 @@ Login function call to know if we can login
 </tr>
 <tr><td colspan="1">
 <p>
-Logout procedure </p>
+Logout procedure
+
+<p></p>
 <h6 class="description_section">Parameters</h6>
 <dl class="parameters">
 <dt>asLoginName</dt>
@@ -194,6 +287,89 @@ Logout procedure </p>
 </dl>
 </td></tr>
 </table>
-<hr noshade size="1"><span class="appinfo"><em>Generated by <a  target="_parent" href="http://pasdoc.sourceforge.net/">PasDoc 0.11.0</a> on 2010-01-19 20:17:03</em>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="PFtpPassivePort"></a><code><b>PFtpPassivePort</b> = &circ;<a   href="ftptypes.TFtpPassivePort.html">TFtpPassivePort</a> ;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Passive port</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="TGetPassivePort"></a><code><b>TGetPassivePort</b> = function() : <a   href="ftptypes.html#PFtpPassivePort">PFtpPassivePort</a> of object ;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Get passive port
+
+<p>
+
+<p></p>
+<h6 class="description_section">Returns</h6>
+<p class="return">port</p><h6 class="description_section">See also</h6>
+<dl class="see_also">
+  <dt><a class="normal"  href="ftptypes.html#TFreePassivePort">TFreePassivePort</a></dt>
+  <dd></dd>
+</dl>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="TFreePassivePort"></a><code><b>TFreePassivePort</b> = procedure(const asPort : <a   href="ftptypes.html#PFtpPassivePort">PFtpPassivePort</a>) of object ;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Free passive port
+
+<p>
+
+<p></p>
+<h6 class="description_section">Parameters</h6>
+<dl class="parameters">
+<dt>asPort</dt>
+<dd>port return by TGetPassivePort</dd>
+</dl>
+<h6 class="description_section">See also</h6>
+<dl class="see_also">
+  <dt><a class="normal"  href="ftptypes.html#TGetPassivePort">TGetPassivePort</a></dt>
+  <dd></dd>
+</dl>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="TFileProtected"></a><code><b>TFileProtected</b> = function(const asPathAndFileName : String; const abUtf8 : Boolean) : Boolean ;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+If file is protected and therefore we say doesn't exists
+
+<p> </p>
+<h6 class="description_section">Parameters</h6>
+<dl class="parameters">
+<dt>asPathAndFileName</dt>
+<dd>complete file name with path</dd>
+<dt>asUtf8</dt>
+<dd>utf8 mode enabled</dd>
+</dl>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="TTransfertMode"></a><code><b>TTransfertMode</b> = (...);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;<h6 class="description_section">Values</h6>
+<ul>
+<li>
+tmBinary: &nbsp;</li>
+<li>
+tmAscii: &nbsp;</li>
+</ul>
+</td></tr>
+</table>
+<hr noshade size="1"><span class="appinfo"><em>Generated by <a  target="_parent" href="http://pasdoc.sourceforge.net/">PasDoc 0.11.0</a> on 2010-01-26 16:45:52</em>
 </span>
 </body></html>

@@ -22,7 +22,7 @@ object CommandLineForm: TCommandLineForm
       'file'
       '-notrayicon : don''t reduce the form in trayicon'
       '-minimize : start at minimize'
-      '-lauch : lauch server at startup'
+      '-launch : launch server at startup'
     )
     ReadOnly = True
     ScrollBars = ssBoth

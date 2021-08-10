@@ -132,6 +132,12 @@ This file contain all const</p>
 <td class="itemcode"><code><b><a   href="ftpconst.html#LINGER_DELAY">LINGER_DELAY</a></b> : Integer = 10000 ;</code></td>
 </tr>
 <tr class="list">
+<td class="itemcode"><code><b><a   href="ftpconst.html#LINGER_ENABLE_CLIENT">LINGER_ENABLE_CLIENT</a></b> : Boolean = True ;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a   href="ftpconst.html#LINGER_DELAY_CLIENT">LINGER_DELAY_CLIENT</a></b> : Integer = 1000 ;</code></td>
+</tr>
+<tr class="list">
 <td class="itemcode"><code><b><a   href="ftpconst.html#READ_CONNECTION">READ_CONNECTION</a></b> : Integer = 1000 ;</code></td>
 </tr>
 <tr class="list2">
@@ -165,34 +171,64 @@ This file contain all const</p>
 <td class="itemcode"><code><b><a   href="ftpconst.html#USER_CONF_DISABLED">USER_CONF_DISABLED</a></b> : String = 'Disabled' ;</code></td>
 </tr>
 <tr class="list2">
+<td class="itemcode"><code><b><a   href="ftpconst.html#USER_CONF_MODIFY_FILE_TIME">USER_CONF_MODIFY_FILE_TIME</a></b> : String = 'ModifyFileTime' ;</code></td>
+</tr>
+<tr class="list">
 <td class="itemcode"><code><b><a   href="ftpconst.html#DEFAULT_USER_PASSWORD">DEFAULT_USER_PASSWORD</a></b> : String = '' ;</code></td>
 </tr>
-<tr class="list">
+<tr class="list2">
 <td class="itemcode"><code><b><a   href="ftpconst.html#DEFAULT_USER_ROOT">DEFAULT_USER_ROOT</a></b> : String = '.' ;</code></td>
 </tr>
-<tr class="list2">
+<tr class="list">
 <td class="itemcode"><code><b><a   href="ftpconst.html#DEFAULT_USER_DOWNLOAD">DEFAULT_USER_DOWNLOAD</a></b> : String = 'no' ;</code></td>
 </tr>
-<tr class="list">
+<tr class="list2">
 <td class="itemcode"><code><b><a   href="ftpconst.html#DEFAULT_USER_UPLOAD">DEFAULT_USER_UPLOAD</a></b> : String = 'no' ;</code></td>
 </tr>
-<tr class="list2">
+<tr class="list">
 <td class="itemcode"><code><b><a   href="ftpconst.html#DEFAULT_USER_RENAME">DEFAULT_USER_RENAME</a></b> : String = 'no' ;</code></td>
 </tr>
-<tr class="list">
+<tr class="list2">
 <td class="itemcode"><code><b><a   href="ftpconst.html#DEFAULT_USER_DELETE">DEFAULT_USER_DELETE</a></b> : String = 'no' ;</code></td>
 </tr>
-<tr class="list2">
+<tr class="list">
 <td class="itemcode"><code><b><a   href="ftpconst.html#DEFAULT_USER_MAKE_DIRECTORY">DEFAULT_USER_MAKE_DIRECTORY</a></b> : String = 'no' ;</code></td>
 </tr>
-<tr class="list">
+<tr class="list2">
 <td class="itemcode"><code><b><a   href="ftpconst.html#DEFAULT_USER_DELETE_DIRECTORY">DEFAULT_USER_DELETE_DIRECTORY</a></b> : String = 'no' ;</code></td>
 </tr>
-<tr class="list2">
+<tr class="list">
 <td class="itemcode"><code><b><a   href="ftpconst.html#DEFAULT_USER_SUB_DIR">DEFAULT_USER_SUB_DIR</a></b> : String = 'no' ;</code></td>
 </tr>
-<tr class="list">
+<tr class="list2">
 <td class="itemcode"><code><b><a   href="ftpconst.html#DEFAULT_USER_DISABLED">DEFAULT_USER_DISABLED</a></b> : String = 'yes' ;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a   href="ftpconst.html#DEFAULT_USER_MODIFY_FILE_TIME">DEFAULT_USER_MODIFY_FILE_TIME</a></b> : String = 'no' ;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a   href="ftpconst.html#FOLDER_CONF_DOWNLOAD">FOLDER_CONF_DOWNLOAD</a></b> : String = 'Download' ;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a   href="ftpconst.html#FOLDER_CONF_UPLOAD">FOLDER_CONF_UPLOAD</a></b> : String = 'Upload' ;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a   href="ftpconst.html#FOLDER_CONF_RENAME">FOLDER_CONF_RENAME</a></b> : String = 'Rename' ;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a   href="ftpconst.html#FOLDER_CONF_DELETE">FOLDER_CONF_DELETE</a></b> : String = 'Delete' ;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a   href="ftpconst.html#FOLDER_CONF_MAKE_DIRECTORY">FOLDER_CONF_MAKE_DIRECTORY</a></b> : String = 'MakeDirectory' ;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a   href="ftpconst.html#FOLDER_CONF_DELETE_DIRECTORY">FOLDER_CONF_DELETE_DIRECTORY</a></b> : String = 'DeleteDirectory' ;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a   href="ftpconst.html#FOLDER_CONF_SUB_DIR">FOLDER_CONF_SUB_DIR</a></b> : String = 'SubDir' ;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a   href="ftpconst.html#FOLDER_CONF_DISABLED">FOLDER_CONF_DISABLED</a></b> : String = 'Readable' ;</code></td>
 </tr>
 </table>
 <h2 class="description">Description</h2>
@@ -614,6 +650,22 @@ Linger delay in millisecond</p>
 </table>
 <table class="detail wide_list">
 <tr class="list">
+<td class="itemcode"><a name="LINGER_ENABLE_CLIENT"></a><code><b>LINGER_ENABLE_CLIENT</b> : Boolean = True ;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Linger delay in millisecond for client connect</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="LINGER_DELAY_CLIENT"></a><code><b>LINGER_DELAY_CLIENT</b> : Integer = 1000 ;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
 <td class="itemcode"><a name="READ_CONNECTION"></a><code><b>READ_CONNECTION</b> : Integer = 1000 ;</code></td>
 </tr>
 <tr><td colspan="1">
@@ -763,6 +815,20 @@ If user disabled </p>
 </table>
 <table class="detail wide_list">
 <tr class="list">
+<td class="itemcode"><a name="USER_CONF_MODIFY_FILE_TIME"></a><code><b>USER_CONF_MODIFY_FILE_TIME</b> : String = 'ModifyFileTime' ;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+If user can modify file time </p>
+<h6 class="description_section">See also</h6>
+<dl class="see_also">
+  <dt><a class="normal"  href="ftpconst.html#DEFAULT_USER_MODIFY_FILE_TIME">DEFAULT_USER_MODIFY_FILE_TIME</a></dt>
+  <dd></dd>
+</dl>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
 <td class="itemcode"><a name="DEFAULT_USER_PASSWORD"></a><code><b>DEFAULT_USER_PASSWORD</b> : String = '' ;</code></td>
 </tr>
 <tr><td colspan="1">
@@ -851,6 +917,87 @@ Default sub dir right</p>
 Default disabled user</p>
 </td></tr>
 </table>
-<hr noshade size="1"><span class="appinfo"><em>Generated by <a  target="_parent" href="http://pasdoc.sourceforge.net/">PasDoc 0.11.0</a> on 2010-01-19 20:17:02</em>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="DEFAULT_USER_MODIFY_FILE_TIME"></a><code><b>DEFAULT_USER_MODIFY_FILE_TIME</b> : String = 'no' ;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Default modify file time</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="FOLDER_CONF_DOWNLOAD"></a><code><b>FOLDER_CONF_DOWNLOAD</b> : String = 'Download' ;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+FOLDER download rigth</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="FOLDER_CONF_UPLOAD"></a><code><b>FOLDER_CONF_UPLOAD</b> : String = 'Upload' ;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+FOLDER upload right</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="FOLDER_CONF_RENAME"></a><code><b>FOLDER_CONF_RENAME</b> : String = 'Rename' ;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Rename right</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="FOLDER_CONF_DELETE"></a><code><b>FOLDER_CONF_DELETE</b> : String = 'Delete' ;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Delete right</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="FOLDER_CONF_MAKE_DIRECTORY"></a><code><b>FOLDER_CONF_MAKE_DIRECTORY</b> : String = 'MakeDirectory' ;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Make directory right</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="FOLDER_CONF_DELETE_DIRECTORY"></a><code><b>FOLDER_CONF_DELETE_DIRECTORY</b> : String = 'DeleteDirectory' ;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Delete directory right</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="FOLDER_CONF_SUB_DIR"></a><code><b>FOLDER_CONF_SUB_DIR</b> : String = 'SubDir' ;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Show sub right</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="FOLDER_CONF_DISABLED"></a><code><b>FOLDER_CONF_DISABLED</b> : String = 'Readable' ;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+If FOLDER disabled</p>
+</td></tr>
+</table>
+<hr noshade size="1"><span class="appinfo"><em>Generated by <a  target="_parent" href="http://pasdoc.sourceforge.net/">PasDoc 0.11.0</a> on 2010-01-26 16:45:52</em>
 </span>
 </body></html>
